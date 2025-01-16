@@ -57,17 +57,6 @@ Remove the repo if not planned to modify raylib source code.
 rm -rf raylib
 ```
 
-If you're using VS Code, you might want to add these include paths to your c_cpp_properties.json:
-
-```
- {
-       "includePath": [
-           "${workspaceFolder}/**",
-           "/usr/local/include"
-       ]
-   }
-```
-
 Intalling imgui and rlImGui
 
 ```
