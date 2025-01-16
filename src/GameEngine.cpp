@@ -17,7 +17,7 @@ void GameEngine::run() {
 	int frame = 0;
 	float lastTime = GetTime();
 	float lag = 0.0f;
-	float SECONDS_PER_UPDATE = 1.0f / 60.0f; // fps
+	float SECONDS_PER_UPDATE = 1.0f / 10.0f; // fps
     while (!WindowShouldClose())   
     {
         BeginDrawing();
@@ -37,6 +37,18 @@ void GameEngine::run() {
 				v = 0;
 			}
 			lag -= SECONDS_PER_UPDATE;
+			updates++;
+		}
+		if (updates == 0 && lag > 0.0f) {
+			x += v * lag;
+			if (x > screenWidth - 30) v = 0;
+			// Colisión
+			if (x >= screenWidth/2 - 50 && x <= screenWidth/2 - 40 && 
+				screenHeight/2 - 10 <= screenHeight/2 + 50 && screenHeight/2 + 10 >= screenHeight/2 - 50) {
+				x = screenWidth/2 - 60;
+				v = 0;
+			}
+			lag = 0.0f;
 			updates++;
 		}
 		frame += 1;
