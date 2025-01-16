@@ -76,3 +76,11 @@ sudo make install
 Esto instalará `raylib` en `usr/local/lib` y `usr/local/include`.
 
 Puedes ver en el `Makefille` como se ha configurado el proyecto para que se compile tanto en Windows como en macOS.
+
+# Instalación `raygui`
+
+```
+git clone https://github.com/raysan5/raygui.git
+cp raygui/src/*.h include/
+rm -rf raygui
+```

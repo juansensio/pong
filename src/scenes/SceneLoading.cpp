@@ -4,6 +4,8 @@
 void SceneLoading::init()
 {
 	_elapsedTime = 0.0f;
+	// TODO: asset manager en GameEngine
+	_texture = LoadTexture("assets/janus.png");
 }
 
 void SceneLoading::update(const float& elapsed)
@@ -16,9 +18,6 @@ void SceneLoading::update(const float& elapsed)
 
 void SceneLoading::render()
 {
-	// TODO: asset manager
-	Texture2D texture = LoadTexture("assets/janus.png");
-	
 	// Calculate progress (0 to 1) for the first 2 seconds
 	float progress = _elapsedTime / 2.0f;
 	if (progress > 1.0f) progress = 1.0f;  // Clamp at 1.0 to hold final state
@@ -39,8 +38,8 @@ void SceneLoading::render()
 	
 	// Calculate position based on current scale
 	Vector2 position = {
-		GetScreenWidth() / 2.0f - (texture.width * scale) / 2.0f,
-		GetScreenHeight() / 2.0f - (texture.height * scale) / 2.0f
+		GetScreenWidth() / 2.0f - (_texture.width * scale) / 2.0f,
+		GetScreenHeight() / 2.0f - (_texture.height * scale) / 2.0f
 	};
 	
 	// Apply the same easing to opacity
@@ -48,7 +47,7 @@ void SceneLoading::render()
 	Color tint = { 255, 255, 255, alpha };
 	
 	DrawTextureEx(
-		texture,
+		_texture,
 		position,
 		0.0f,
 		scale,
