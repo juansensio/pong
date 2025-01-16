@@ -1,0 +1,30 @@
+# Build directories
+build/
+out/
+Debug/
+Release/
+x64/
+
+# IDE specific
+.vs/
+.vscode/
+*.sln
+*.vcxproj*
+.DS_Store
+
+# Dependencies (since we'll build them)
+external/raylib/
+external/imgui/
+external/rlImGui/
+
+# Build artifacts
+*.o
+*.obj
+*.exe
+game
+game.app
+
+# CMake
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
