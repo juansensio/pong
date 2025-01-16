@@ -5,7 +5,7 @@
 void GameEngine::init() {
 	SetConfigFlags(FLAG_MSAA_4X_HINT | FLAG_VSYNC_HINT | FLAG_WINDOW_RESIZABLE);
 	InitWindow(1270, 720, "pong");
-    SetTargetFPS(3);               
+    SetTargetFPS(120);               
 }
 
 void GameEngine::run() {
@@ -16,6 +16,8 @@ void GameEngine::run() {
 	float v = 300; // px/s
 	int frame = 0;
 	float lastTime = GetTime();
+	float lag = 0.0f;
+	float SECONDS_PER_UPDATE = 1.0f / 60.0f; // fps
     while (!WindowShouldClose())   
     {
         BeginDrawing();
@@ -23,19 +25,26 @@ void GameEngine::run() {
 		float currentTime = GetTime();
 		float deltaTime = currentTime - lastTime;
 		lastTime = currentTime;
-		x += v * deltaTime;
-		if (x > screenWidth - 30) v = 0;
+		lag += deltaTime;
+		int updates = 0;
+		while (lag >= SECONDS_PER_UPDATE) {
+			x += v * SECONDS_PER_UPDATE;
+			if (x > screenWidth - 30) v = 0;
+			// Colisión
+			if (x >= screenWidth/2 - 50 && x <= screenWidth/2 - 40 && 
+				screenHeight/2 - 10 <= screenHeight/2 + 50 && screenHeight/2 + 10 >= screenHeight/2 - 50) {
+				x = screenWidth/2 - 60;
+				v = 0;
+			}
+			lag -= SECONDS_PER_UPDATE;
+			updates++;
+		}
 		frame += 1;
-		// Colisión
-		// if (x >= screenWidth/2 - 50 && x <= screenWidth/2 - 40 && 
-		// 	screenHeight/2 - 10 <= screenHeight/2 + 50 && screenHeight/2 + 10 >= screenHeight/2 - 50) {
-		// 	x = screenWidth/2 - 60;
-		// 	v = 0;
-		// }
 		DrawCircle(x, screenHeight/2, 10, WHITE);
-		// DrawRectangle(screenWidth/2 - 50, screenHeight/2 - 50, 10, 100, WHITE);
+		DrawRectangle(screenWidth/2 - 50, screenHeight/2 - 50, 10, 100, WHITE);
 		DrawText(TextFormat("Frame %d", frame), 10, 10, 20, WHITE);
         DrawFPS(10, 40);
+        DrawText(TextFormat("Updates %d", updates), 10, 60, 20, WHITE);
         EndDrawing();
     }
     CloseWindow();                  
