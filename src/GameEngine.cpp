@@ -17,7 +17,7 @@ void GameEngine::run() {
 	int frame = 0;
 	float lastTime = GetTime();
 	float lag = 0.0f;
-	float SECONDS_PER_UPDATE = 1.0f / 10.0f; // fps
+	float SECONDS_PER_UPDATE = 1.0f / 30.0f; // fps
     while (!WindowShouldClose())   
     {
         BeginDrawing();
