@@ -1,4 +1,3 @@
-# Use different extension for Windows executables
 ifeq ($(OS),Windows_NT)
     EXT = .exe
     INCLUDES = -I./include
@@ -18,7 +17,7 @@ endif
 CC = g++
 CFLAGS = -Wall -std=c++20 -O3 -Wno-unused-result
 
-TARGET = game$(EXT)
+TARGET = main$(EXT)
 SRCS = $(wildcard src/*.cpp)
 OBJS = $(SRCS:.cpp=.o)
 

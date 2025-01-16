@@ -21,5 +21,4 @@ rlImGui/
 *.o
 *.obj
 *.exe
-game
-game.app
+main
