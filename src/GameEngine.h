@@ -21,5 +21,9 @@ public:
     std::shared_ptr<Scene> getCurrentScene() const { return _scenes.at(_current_scene); }
 	
     template<typename T> 
-    void changeScene(const std::string& name);
+    void changeScene(const std::string& name) {
+        _scenes[name] = std::make_shared<T>(*this);
+        _current_scene = name;
+        _scenes[name]->init();
+    }
 };
