@@ -1,15 +1,18 @@
 # Use different extension for Windows executables
 ifeq ($(OS),Windows_NT)
     EXT = .exe
+    INCLUDES = -I./include
+    LDFLAGS = -L./lib
+    LIBS = -lraylib -lgdi32 -lwinmm
 else
     EXT =
+    INCLUDES = -I/usr/local/include -I./include
+    LDFLAGS = -L/usr/local/lib -L./lib
+    LIBS = -lraylib
 endif
 
 CC = g++
-CFLAGS = -Wall -std=c++11
-INCLUDES = -I/usr/local/include -I./include
-LDFLAGS = -L/usr/local/lib
-LIBS = -lraylib
+CFLAGS = -Wall -std=c++20
 
 # On Windows, we need additional libraries
 ifeq ($(OS),Windows_NT)

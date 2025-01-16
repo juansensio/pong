@@ -5,6 +5,8 @@
 #define RAYGUI_IMPLEMENTATION        // Define the implementation of raygui here
 #include "raygui.h"                 // Include raygui after the implementation define
 
+#include "raymath.h"
+
 int main() {
     // Initialize window
     const int screenWidth = 800;

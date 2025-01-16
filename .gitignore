@@ -13,9 +13,9 @@ x64/
 .DS_Store
 
 # Dependencies (since we'll build them)
-external/raylib/
-external/imgui/
-external/rlImGui/
+raylib/
+imgui/
+rlImGui/
 
 # Build artifacts
 *.o
@@ -23,8 +23,3 @@ external/rlImGui/
 *.exe
 game
 game.app
-
-# CMake
-CMakeFiles/
-CMakeCache.txt
-cmake_install.cmake
