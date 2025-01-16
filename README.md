@@ -1,28 +1,5 @@
 Install raylib
 
-on mac
-
-```
-# Install Xcode Command Line Tools if you haven't already
-xcode-select --install
-
-# Install Homebrew if you haven't already
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
-# Install CMake using Homebrew
-brew install cmake
-
-# Clone the raylib repository
-git clone https://github.com/raysan5/raylib.git
-cd raylib
-
-# Build raylib using CMake
-mkdir build && cd build
-cmake -DBUILD_SHARED_LIBS=ON ..
-make
-sudo make install
-```
-
 on windows
 
 Download w64devkit from https://github.com/skeeto/w64devkit/releases, extract and move to C\
@@ -50,6 +27,31 @@ cp raylib/src/rlgl.h include/        # required for raygui
 cp raylib/src/rcamera.h include/
 # ...
 ```
+
+on mac
+
+```
+# Install Xcode Command Line Tools if you haven't already
+xcode-select --install
+
+# Install Homebrew if you haven't already
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# Install CMake using Homebrew
+brew install cmake
+
+# Clone the raylib repository
+git clone https://github.com/raysan5/raylib.git
+cd raylib
+
+# Build raylib using CMake
+mkdir build && cd build
+cmake -DBUILD_SHARED_LIBS=ON ..
+make
+sudo make install
+```
+
+> Se puede seguir el mismo proceso que en windows, pero de esta manera se pueden tener las dependencias para ambas plataformas en diferentes carpetas y simplificar el proceso de desarrollo.
 
 Remove the repo if not planned to modify raylib source code.
 
