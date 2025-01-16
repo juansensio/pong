@@ -8,6 +8,10 @@ else
     EXT =
     INCLUDES = -I/usr/local/include -I./include
     LDFLAGS = -L/usr/local/lib -L./lib
+    # Add rpath for macOS
+    ifeq ($(shell uname),Darwin)
+        LDFLAGS += -Wl,-rpath,/usr/local/lib
+    endif
     LIBS = -lraylib
 endif
 
@@ -28,3 +32,6 @@ $(TARGET): $(SRCS)
 .PHONY: clean
 clean:
 	rm -f $(TARGET)
+
+run:
+	./$(TARGET)
