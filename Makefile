@@ -18,7 +18,7 @@ CC = g++
 CFLAGS = -Wall -std=c++20 -O3 -Wno-unused-result
 
 TARGET = main$(EXT)
-SRCS = $(wildcard src/*.cpp)
+SRCS = $(wildcard src/*.cpp) $(wildcard src/scenes/*.cpp)
 OBJS = $(SRCS:.cpp=.o)
 
 all: $(TARGET)
