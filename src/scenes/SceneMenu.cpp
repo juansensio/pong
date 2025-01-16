@@ -1,9 +1,6 @@
 #include "SceneMenu.h"
 #include "../GameEngine.h"
 
-#define RAYGUI_IMPLEMENTATION
-#include "raygui.h"
-
 void SceneMenu::init()
 {
 }

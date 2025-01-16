@@ -1,5 +1,3 @@
-#include "raylib.h"
-
 #include "GameEngine.h"
 
 void GameEngine::init() {
@@ -36,8 +34,8 @@ void GameEngine::run() {
 		}
 		frame += 1;
 		getCurrentScene()->render();
-		DrawText(TextFormat("Frame %d", frame), 10, 10, 20, WHITE);
-        DrawFPS(10, 40);
+		// DrawText(TextFormat("Frame %d", frame), 10, 10, 20, WHITE);
+        DrawFPS(10, 10);
         // DrawText(TextFormat("Updates %d", updates), 10, 60, 20, WHITE);
         EndDrawing();
     }

@@ -1,5 +1,3 @@
-#include "raylib.h"
-
 #include "SceneLoading.h"
 #include "../GameEngine.h"
 

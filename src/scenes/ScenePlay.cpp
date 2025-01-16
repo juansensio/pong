@@ -1,6 +1,5 @@
-#include "raylib.h"
-
 #include "ScenePlay.h"
+#include "../GameEngine.h"
 
 void ScenePlay::init()
 {
@@ -28,4 +27,7 @@ void ScenePlay::render()
 	float screenHeight = GetScreenHeight();
 	DrawCircle(x, screenHeight/2, 10, WHITE);
 	DrawRectangle(screenWidth/2 - 50, screenHeight/2 - 50, 10, 100, WHITE);
+	if (GuiButton(Rectangle{(float)GetScreenWidth() - 60, 10, 50, 25}, "MENU")) {
+		_game_engine.changeScene<SceneMenu>("menu");
+	}
 }
