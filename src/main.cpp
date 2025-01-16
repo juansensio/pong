@@ -54,7 +54,7 @@ int main() {
             // Your regular raylib drawing code can go here
             // DrawText("Welcome to Raylib + ImGui!", 190, 200, 20, LIGHTGRAY);
 
-            GuiButton(Rectangle{ 10, 10, 100, 50 }, "Click me");
+            GuiButton(Rectangle{ 10, 10, 100, 50 }, "Hola");
         EndDrawing();
     }
 

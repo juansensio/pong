@@ -3,7 +3,7 @@ ifeq ($(OS),Windows_NT)
     EXT = .exe
     INCLUDES = -I./include
     LDFLAGS = -L./lib
-    LIBS = -lraylib -lgdi32 -lwinmm
+    LIBS = -lraylib -lopengl32 -lgdi32 -lwinmm
 else
     EXT =
     INCLUDES = -I/usr/local/include -I./include
@@ -16,22 +16,24 @@ else
 endif
 
 CC = g++
-CFLAGS = -Wall -std=c++20
-
-# On Windows, we need additional libraries
-ifeq ($(OS),Windows_NT)
-    LIBS += -lopengl32 -lgdi32 -lwinmm
-endif
+CFLAGS = -Wall -std=c++20 -O3 -Wno-unused-result
 
 TARGET = game$(EXT)
-SRCS = src/*.cpp 
+SRCS = $(wildcard src/*.cpp)
+OBJS = $(SRCS:.cpp=.o)
 
-$(TARGET): $(SRCS)
-	$(CC) $(CFLAGS) $(INCLUDES) $(SRCS) -o $(TARGET) $(LDFLAGS) $(LIBS)
+all: $(TARGET)
+
+$(TARGET): $(OBJS)
+	$(CC) $(CFLAGS) $(INCLUDES) $(OBJS) -o $(TARGET) $(LDFLAGS) $(LIBS)
+
+%.o: %.cpp
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 .PHONY: clean
 clean:
 	rm -f $(TARGET)
 
-run:
+run: $(TARGET)
 	./$(TARGET)
+
