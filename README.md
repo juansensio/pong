@@ -50,25 +50,11 @@ cp raylib/src/rlgl.h include/        # required for raygui
 cp raylib/src/rcamera.h include/
 # ...
 ```
+
 Remove the repo if not planned to modify raylib source code.
 
 ```
 rm -rf raylib
-```
-
-Troubleshooting:
-
-If you get linking errors, make sure raylib was installed correctly by checking:
-
-```
-ls /usr/local/lib/libraylib*
-ls /usr/local/include/raylib.h
-```
-
-If the library isn't found, you might need to update your dynamic library path:
-
-```
-pkg-config: command not found
 ```
 
 If you're using VS Code, you might want to add these include paths to your c_cpp_properties.json:
