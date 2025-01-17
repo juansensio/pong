@@ -12,5 +12,6 @@ public:
 
 	void moveUp();
 	void moveDown();
-	void stop();
+	void stopUp();
+	void stopDown();
 };

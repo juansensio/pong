@@ -2,7 +2,7 @@
 
 void Player::init()
 {
-	Paddle::init();
+	Paddle::init(10, (float)GetScreenHeight() / 2);
 }
 
 void Player::update(const float& dt)
@@ -28,8 +28,12 @@ void Player::moveDown()
 	_entity->get<CInput>().down = true;
 }
 
-void Player::stop()
+void Player::stopUp()
 {
 	_entity->get<CInput>().up = false;
+}
+
+void Player::stopDown()
+{
 	_entity->get<CInput>().down = false;
 }

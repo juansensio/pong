@@ -8,21 +8,20 @@ void ScenePlay::init()
 	_entity_manager = EntityManager();
 
 	_player = Player(_entity_manager.addEntity(EntityType::PLAYER));
-	// _enemy = Enemy(_entity_manager.addEntity(EntityType::ENEMY));
-	// _ball = Ball(_entity_manager.addEntity(EntityType::BALL));
-	// _walls = {
-	// 	Wall(_entity_manager.addEntity(EntityType::WALL)),
-	// 	Wall(_entity_manager.addEntity(EntityType::WALL)),
-	// };
+	_enemy = Enemy(_entity_manager.addEntity(EntityType::ENEMY));
+	_ball = Ball(_entity_manager.addEntity(EntityType::BALL));
+	_walls = {
+		Wall(_entity_manager.addEntity(EntityType::WALL)),
+		Wall(_entity_manager.addEntity(EntityType::WALL)),
+	};
 	// _goal = Goal(_entity_manager.addEntity(EntityType::GOAL));
 	// _death = Death(_entity_manager.addEntity(EntityType::DEATH));
 
 	_player.init();
-	// _enemy.init();
-	// _ball.init();
-	// for (auto& wall : _walls) {
-	// 	wall.init();
-	// }
+	_enemy.init();
+	_ball.init();
+	_walls[0].init(10);
+	_walls[1].init(GetScreenHeight() - 10);
 	// _goal.init();
 	// _death.init();
 
@@ -95,10 +94,10 @@ void ScenePlay::doAction(const Action& action)
 	}
 	else if (action.getType() == ActionType::END) {
 		if (action.getName() == ActionName::UP) {
-			_player.stop();
+			_player.stopUp();
 		}
 		else if (action.getName() == ActionName::DOWN) {
-			_player.stop();
+			_player.stopDown();
 		}
 	}
 }

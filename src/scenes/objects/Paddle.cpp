@@ -1,12 +1,7 @@
 #include "Paddle.h"
 
-void Paddle::init()
+void Paddle::init(const float& x, const float& y)
 {
-	float screen_width = (float)GetScreenWidth();
-	float screen_height = (float)GetScreenHeight();
-
-	float x = 10;
-	float y = screen_height / 2;
 	float width = 10;
 	float height = 100;
 

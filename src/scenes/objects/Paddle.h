@@ -10,6 +10,6 @@ public:
 	Paddle() = default;
 	Paddle(const std::shared_ptr<Entity>& entity) : Object(entity) {}
 
-	void init();
+	void init(const float& x, const float& y);
 	void update(const float& dt);
 };
