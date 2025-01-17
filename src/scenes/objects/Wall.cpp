@@ -7,7 +7,7 @@ void Wall::init(const float& y)
 
 	_entity->add<CTransform>(Vector2{(float)screenWidth/2, y}, Vector2{0, 0});
 	_entity->add<CRectShape>(screenWidth, width, WHITE);
-	_entity->add<CBoundingBox>(Rectangle{0, y - width / 2, screenWidth, width});
+	_entity->add<CBoundingBox>(Vector2{screenWidth, width});
 }
 
 
