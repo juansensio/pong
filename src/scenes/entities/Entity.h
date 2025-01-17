@@ -7,14 +7,19 @@
 
 enum EntityType {
 	PLAYER = 0,
-	WALL = 1
+	WALL = 1,
+	ENEMY = 2,
+	BALL = 3,
+	GOAL = 4,
+	DEATH = 5
 };
 
 using ComponentTuple = std::tuple<
 	CTransform,
 	CCircleShape,
 	CRectShape,
-	CInput
+	CInput,
+	CBoundingBox
 >;
 
 class Entity

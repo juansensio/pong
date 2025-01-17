@@ -7,11 +7,24 @@ void ScenePlay::init()
 {
 	_entity_manager = EntityManager();
 
-	_ball = Ball(_entity_manager.addEntity(EntityType::PLAYER));
-	_ball.init();
-	
-	_wall = Wall(_entity_manager.addEntity(EntityType::WALL));
-	_wall.init();
+	_player = Player(_entity_manager.addEntity(EntityType::PLAYER));
+	// _enemy = Enemy(_entity_manager.addEntity(EntityType::ENEMY));
+	// _ball = Ball(_entity_manager.addEntity(EntityType::BALL));
+	// _walls = {
+	// 	Wall(_entity_manager.addEntity(EntityType::WALL)),
+	// 	Wall(_entity_manager.addEntity(EntityType::WALL)),
+	// };
+	// _goal = Goal(_entity_manager.addEntity(EntityType::GOAL));
+	// _death = Death(_entity_manager.addEntity(EntityType::DEATH));
+
+	_player.init();
+	// _enemy.init();
+	// _ball.init();
+	// for (auto& wall : _walls) {
+	// 	wall.init();
+	// }
+	// _goal.init();
+	// _death.init();
 
 	registerAction(KEY_UP, ActionName::UP);
 	registerAction(KEY_DOWN, ActionName::DOWN);
@@ -19,26 +32,9 @@ void ScenePlay::init()
 
 void ScenePlay::update(const float& dt)
 {
-	// add and remove entities from previous frame
 	_entity_manager.update(); 
-	// update entities (move, inputs, etc)
-	_ball.update(dt);
-	_wall.update(dt);
+	_player.update(dt);
 	movement(dt);
-	// Colisión
-	float screenWidth = GetScreenWidth();
-	float screenHeight = GetScreenHeight();
-	float playerX = _ball.position().x;
-	float playerY = _ball.position().y;
-	float wallX = _wall.position().x;
-	float wallY = _wall.position().y;
-	float wallWidth = _wall.getEntity()->get<CRectShape>().width;
-	float wallHeight = _wall.getEntity()->get<CRectShape>().height;
-	float playerRadius = _ball.getEntity()->get<CCircleShape>().radius;
-	if (playerX >= wallX - wallWidth && playerX <= wallX - wallWidth + 10 &&
-		playerY + playerRadius >= wallY - wallHeight/2 && playerY - playerRadius <= wallY + wallHeight/2) {
-		_ball.destroy();
-	}
 }
 
 void ScenePlay::movement(const float& dt) {
@@ -69,16 +65,24 @@ void ScenePlay::render()
 	if (GuiButton(Rectangle{(float)GetScreenWidth() - 60, 10, 50, 25}, "MENU")) {
 		_game_engine.changeScene<SceneMenu>("menu");
 	}
+
+	// DEBUG: render bounding boxes
+	for (auto& entity : _entity_manager.getEntities()) {
+		if (entity->has<CBoundingBox>()) {
+			CBoundingBox bounding_box = entity->get<CBoundingBox>();
+			DrawRectangleLines(bounding_box.rect.x, bounding_box.rect.y, bounding_box.rect.width, bounding_box.rect.height, RED);
+		}
+	}
 }
 
 void ScenePlay::doAction(const Action& action)
 {
 	if (action.getType() == ActionType::START) {
 		if (action.getName() == ActionName::UP) {
-			_wall.moveUp();
+			_player.moveUp();
 		}
 		else if (action.getName() == ActionName::DOWN) {
-			_wall.moveDown();
+			_player.moveDown();
 		}
 		else if (action.getName() == ActionName::ENTER) {
 			_game_engine.changeScene<SceneMenu>("menu");
@@ -86,10 +90,10 @@ void ScenePlay::doAction(const Action& action)
 	}
 	else if (action.getType() == ActionType::END) {
 		if (action.getName() == ActionName::UP) {
-			_wall.stop();
+			_player.stop();
 		}
 		else if (action.getName() == ActionName::DOWN) {
-			_wall.stop();
+			_player.stop();
 		}
 	}
 }

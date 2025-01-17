@@ -5,8 +5,14 @@
 
 class ScenePlay : public Scene
 {
-	Ball 	_ball;
-	Wall 	_wall;
+	// game objects
+	
+	Player 				_player;
+	Enemy 				_enemy;
+	Ball 				_ball;
+	std::vector<Wall> 	_walls;
+	Goal 				_goal;
+	Death 				_death;
 	
 public:
 	ScenePlay(GameEngine& game_engine) : Scene(game_engine) {}
