@@ -84,3 +84,16 @@ git clone https://github.com/raysan5/raygui.git
 cp raygui/src/*.h include/
 rm -rf raygui
 ```
+
+# Arquitectura
+
+- [assets](assets): Recursos del juego.
+- [include](include): Cabeceras de los componentes (windows).
+- [lib](lib): Librería de raylib (windows).
+- [src](src): Código fuente del juego.
+  - [main.cpp](src/main.cpp): Punto de entrada del juego
+  - [GameEngine.h](src/GameEngine.h): Bucle principal del juego, manejo de escenas, assets, configuración, settings, ...
+  - [scenes](src/scenes): Escenas del juego, con los sistemas para trabajar con entidades y objetos (movimiento, colisiones, renderizado, ...)
+    - [objects](src/scenes/objects): Objetos del juego (jugador, enemigos, ...)
+    - [entities](src/scenes/entities): Funcionalidad para crear entidades y objectos
+      - [components](src/scenes/entities/components): Componentes de las entidades
