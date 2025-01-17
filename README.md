@@ -88,6 +88,8 @@ Puedes ver en el `Makefille` como se ha configurado el proyecto para que se comp
 
 # Instalación `raygui`
 
+En cualquier plataforma, puedes instalar `raygui` de la siguiente manera:
+
 ```
 git clone https://github.com/raysan5/raygui.git
 cp raygui/src/*.h include/
