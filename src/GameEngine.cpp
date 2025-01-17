@@ -12,7 +12,7 @@ void GameEngine::run() {
 	int frame = 0;
 	float lastTime = GetTime();
 	float lag = 0.0f;
-	float SECONDS_PER_UPDATE = 1.0f / 30.0f; // fps
+	float SECONDS_PER_UPDATE = 1.0f / 60.0f; // fps
     while (!WindowShouldClose())   
     {
 		inputs();
@@ -35,9 +35,7 @@ void GameEngine::run() {
 		}
 		frame += 1;
 		getCurrentScene()->render();
-		// DrawText(TextFormat("Frame %d", frame), 10, 10, 20, WHITE);
         DrawFPS(10, 10);
-        // DrawText(TextFormat("Updates %d", updates), 10, 60, 20, WHITE);
         EndDrawing();
     }
     CloseWindow();                  

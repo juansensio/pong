@@ -69,9 +69,6 @@ void ScenePlay::render()
 	if (GuiButton(Rectangle{(float)GetScreenWidth() - 60, 10, 50, 25}, "MENU")) {
 		_game_engine.changeScene<SceneMenu>("menu");
 	}
-
-	// DEBUG
-	DrawText(TextFormat("Entities: %d", _entity_manager.getEntities().size()), 10, 30, 20, RED);
 }
 
 void ScenePlay::doAction(const Action& action)
