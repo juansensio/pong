@@ -10,7 +10,7 @@ void Paddle::init(const float& x, const float& y)
 	_entity->add<CInput>();
 	_entity->add<CBoundingBox>(Rectangle{x - width/2, y - height/2, width, height});
 
-	_paddle_speed = 300;
+	_speed = 300;
 }
 
 void Paddle::update(const float& dt)

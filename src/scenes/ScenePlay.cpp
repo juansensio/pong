@@ -8,8 +8,8 @@ void ScenePlay::init()
 	_entity_manager = EntityManager();
 
 	_player = Player(_entity_manager.addEntity(EntityType::PLAYER));
-	_enemy = Enemy(_entity_manager.addEntity(EntityType::ENEMY));
 	_ball = Ball(_entity_manager.addEntity(EntityType::BALL), _player);
+	_enemy = Enemy(_entity_manager.addEntity(EntityType::ENEMY), _ball);
 	_walls = {
 		Wall(_entity_manager.addEntity(EntityType::WALL)),
 		Wall(_entity_manager.addEntity(EntityType::WALL)),
@@ -38,6 +38,8 @@ void ScenePlay::update(const float& dt)
 	if (_player.getLives() <= 0) {
 		_game_engine.changeScene<SceneMenu>("menu");
 	}
+	_ball.update(dt);
+	_enemy.update(dt);
 	movement(dt);
 	collisions();
 }
@@ -64,6 +66,7 @@ void ScenePlay::collisions() {
 		if (entity->has<CBoundingBox>() && entity->id() != _ball.getEntity()->id()) {
 			CBoundingBox bb2 = entity->get<CBoundingBox>();
 			if (CheckCollisionRecs(bb.rect, bb2.rect)) {
+				// TODO: compute overlap and move ball back
 				_ball.collision(entity);
 			}
 		}

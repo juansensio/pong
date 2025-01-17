@@ -9,9 +9,9 @@ void Player::update(const float& dt)
 {
 	const auto& input = _entity->get<CInput>();
 	if (input.up) {
-		_entity->get<CTransform>().velocity.y = - _paddle_speed;
+		_entity->get<CTransform>().velocity.y = - _speed;
 	} else if (input.down) {
-		_entity->get<CTransform>().velocity.y = _paddle_speed;
+		_entity->get<CTransform>().velocity.y = _speed;
 	} else {
 		_entity->get<CTransform>().velocity.y = 0;
 	}

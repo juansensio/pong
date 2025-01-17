@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../entities/Entity.h"
+#include "raymath.h"
 
 class Object {
 protected:

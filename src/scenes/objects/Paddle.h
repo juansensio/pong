@@ -4,7 +4,7 @@
 
 class Paddle : public Object {
 protected:
-	float _paddle_speed;
+	float _speed;
 	
 public:
 	Paddle() = default;
