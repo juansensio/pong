@@ -9,7 +9,7 @@ Puedes encontrar videos con el proceso de desarrollo en mi canal de YouTube: htt
 
 # Instalación `raylib`
 
-Puedes instalar `raylib` en Windows, macOS y Linux siguiendo los siguientes pasos.
+Puedes instalar `raylib` en Windows, macOS y Linux de diferentes maneras, y encontrarás multitud de tutoriales online de cómo hacerlo. Sin embargo, el sistema más sencillo y portable que he encontrado es siguiendo los siguientes pasos. Además, de esta manera, podrás modificar el código fuente de `raylib` para adaptarlo a tus necesidades (corregir bugs, añadir funcionalidades, optimizaciones, etc.).
 
 ```
 # Clonar raylib
