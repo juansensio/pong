@@ -5,7 +5,7 @@
 
 #include "entities/EntityManager.h"
 #include "Actions.h"
-
+#include "Physics.h"
 // Forward declare GameEngine to break circular dependency
 class GameEngine;
 

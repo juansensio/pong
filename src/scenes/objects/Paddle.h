@@ -12,4 +12,5 @@ public:
 
 	void init(const float& x, const float& y);
 	void update(const float& dt);
+	void collision(const std::shared_ptr<Entity>& entity);
 };
