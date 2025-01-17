@@ -99,8 +99,8 @@ rm -rf raygui
 # Arquitectura
 
 - [assets](assets): Recursos del juego.
-- [include](include): Cabeceras de las librerías externas (windows).
-- [lib](lib): Librería de raylib (windows).
+- [include](include): Cabeceras de las librerías externas.
+- [lib](lib): Librería de raylib.
 - [src](src): Código fuente del juego.
   - [main.cpp](src/main.cpp): Punto de entrada del juego
   - [GameEngine.h](src/GameEngine.h): Bucle principal del juego, manejo de escenas, assets, configuración, settings, ...
