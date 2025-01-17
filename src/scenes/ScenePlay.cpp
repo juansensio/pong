@@ -9,21 +9,21 @@ void ScenePlay::init()
 
 	_player = Player(_entity_manager.addEntity(EntityType::PLAYER));
 	_enemy = Enemy(_entity_manager.addEntity(EntityType::ENEMY));
-	_ball = Ball(_entity_manager.addEntity(EntityType::BALL));
+	_ball = Ball(_entity_manager.addEntity(EntityType::BALL), _player);
 	_walls = {
 		Wall(_entity_manager.addEntity(EntityType::WALL)),
 		Wall(_entity_manager.addEntity(EntityType::WALL)),
 	};
-	// _goal = Goal(_entity_manager.addEntity(EntityType::GOAL));
-	// _death = Death(_entity_manager.addEntity(EntityType::DEATH));
+	_goal = Goal(_entity_manager.addEntity(EntityType::GOAL));
+	_death = Death(_entity_manager.addEntity(EntityType::DEATH));
 
 	_player.init();
 	_enemy.init();
 	_ball.init();
 	_walls[0].init(10);
 	_walls[1].init(GetScreenHeight() - 10);
-	// _goal.init();
-	// _death.init();
+	_goal.init();
+	_death.init();
 
 	registerAction(KEY_UP, ActionName::UP);
 	registerAction(KEY_DOWN, ActionName::DOWN);
@@ -35,6 +35,9 @@ void ScenePlay::update(const float& dt)
 {
 	_entity_manager.update(); 
 	_player.update(dt);
+	if (_player.getLives() <= 0) {
+		_game_engine.changeScene<SceneMenu>("menu");
+	}
 	movement(dt);
 	collisions();
 }

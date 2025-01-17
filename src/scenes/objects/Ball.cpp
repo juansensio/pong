@@ -25,5 +25,11 @@ void Ball::collision(const std::shared_ptr<Entity>& entity) {
 		Vector2 velocity = _entity->get<CTransform>().velocity;
 		velocity.x = -velocity.x;
 		_entity->get<CTransform>().velocity = velocity;
+	} else if (entity->tag() == EntityType::GOAL) {
+		init();
+		_player->score();
+	} else if (entity->tag() == EntityType::DEATH) {
+		init();
+		_player->die();
 	}
 }

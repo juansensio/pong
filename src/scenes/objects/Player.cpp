@@ -37,3 +37,11 @@ void Player::stopDown()
 {
 	_entity->get<CInput>().down = false;
 }
+
+void Player::score() {
+	_score++;
+}
+
+void Player::die() {
+	_lives--;
+}

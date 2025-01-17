@@ -2,7 +2,10 @@
 
 void Death::init()
 {
-	_entity->add<CBoundingBox>(Rectangle{0, 0, 100, 100});
+	float screenHeight = GetScreenHeight();
+	float screenWidth = GetScreenWidth();
+
+	_entity->add<CBoundingBox>(Rectangle{screenWidth - 10, 0, 10, screenHeight});
 }
 
 

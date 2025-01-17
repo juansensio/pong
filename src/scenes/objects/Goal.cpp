@@ -2,7 +2,9 @@
 
 void Goal::init()
 {
-	_entity->add<CBoundingBox>(Rectangle{0, 0, 100, 100});
+	float screenHeight = GetScreenHeight();
+
+	_entity->add<CBoundingBox>(Rectangle{0, 0, 10, screenHeight});
 }
 
 
