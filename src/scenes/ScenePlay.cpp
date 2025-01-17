@@ -40,6 +40,7 @@ void ScenePlay::update(const float& dt)
 void ScenePlay::movement(const float& dt) {
 	for (auto& entity : _entity_manager.getEntities()) {
 		if (entity->has<CTransform>()) {
+			entity->get<CTransform>().prevPosition = entity->get<CTransform>().position;
 			entity->get<CTransform>().position = Vector2Add(
 				entity->get<CTransform>().position,
 				Vector2Scale(entity->get<CTransform>().velocity, dt)
@@ -69,8 +70,9 @@ void ScenePlay::render()
 	// DEBUG: render bounding boxes
 	for (auto& entity : _entity_manager.getEntities()) {
 		if (entity->has<CBoundingBox>()) {
+			auto position = entity->get<CTransform>().position;
 			CBoundingBox bb = entity->get<CBoundingBox>();
-			DrawRectangleLines(bb.min.x, bb.min.y, bb.max.x - bb.min.x, bb.max.y - bb.min.y, RED);
+			DrawRectangleLines(position.x - bb.halfSize.x, position.y - bb.halfSize.y, bb.size.x, bb.size.y, RED);
 		}
 	}
 }
