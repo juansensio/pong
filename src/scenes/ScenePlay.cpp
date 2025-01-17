@@ -7,6 +7,7 @@ void ScenePlay::init()
 {
 	_entity_manager = EntityManager();
 
+	// game objects
 	_player = Player(_entity_manager.addEntity(EntityType::PLAYER));
 	_ball = Ball(_entity_manager.addEntity(EntityType::BALL), _player);
 	_enemy = Enemy(_entity_manager.addEntity(EntityType::ENEMY), _ball);
@@ -17,6 +18,7 @@ void ScenePlay::init()
 	_goal = Goal(_entity_manager.addEntity(EntityType::GOAL));
 	_death = Death(_entity_manager.addEntity(EntityType::DEATH));
 
+	// init game objects
 	_player.init();
 	_enemy.init();
 	_ball.init();
@@ -25,6 +27,7 @@ void ScenePlay::init()
 	_goal.init();
 	_death.init();
 
+	// register actions
 	registerAction(KEY_UP, ActionName::UP);
 	registerAction(KEY_DOWN, ActionName::DOWN);
 	registerAction(KEY_SPACE, ActionName::SPACE);
@@ -102,15 +105,6 @@ void ScenePlay::render()
 
 	if (GuiButton(Rectangle{(float)GetScreenWidth() - 60, 10, 50, 25}, "MENU")) {
 		_game_engine.changeScene<SceneMenu>("menu");
-	}
-
-	// DEBUG: render bounding boxes
-	for (auto& entity : _entity_manager.getEntities()) {
-		if (entity->has<CBoundingBox>()) {
-			auto position = entity->get<CTransform>().position;
-			CBoundingBox bb = entity->get<CBoundingBox>();
-			DrawRectangleLines(position.x - bb.halfSize.x, position.y - bb.halfSize.y, bb.size.x, bb.size.y, RED);
-		}
 	}
 }
 

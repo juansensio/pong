@@ -9,8 +9,8 @@ struct Overlaps {
 
 class Physics {
 public:
-	Physics();
-	~Physics();
+	Physics() = default;
+	~Physics() = default;
 
 	static Overlaps BoundingBoxOverlap(const std::shared_ptr<Entity>& entity1, const std::shared_ptr<Entity>& entity2);
 };
