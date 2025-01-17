@@ -13,22 +13,26 @@ void Ball::init()
 		Vector2{_speed * (rand() % 2 ? 1 : -1), _speed * (rand() % 2 ? 1 : -1)}
 	);
 	_entity->add<CCircleShape>(radius, WHITE);
-	_entity->add<CBoundingBox>(
-		Vector2{x - radius, y - radius}, 
-		Vector2{x + radius, y + radius}
-	);
+	_entity->add<CBoundingBox>(Vector2{radius*2, radius*2});
 }
 
 
-void Ball::collision(const std::shared_ptr<Entity>& entity) {
+
+void Ball::collision(const std::shared_ptr<Entity>& entity, const Vector2& prevOverlap) {
 	if (entity->tag() == EntityType::WALL) {
 		Vector2 velocity = _entity->get<CTransform>().velocity;
 		velocity.y = -velocity.y;
 		_entity->get<CTransform>().velocity = velocity;
 	} else if (entity->tag() == EntityType::PLAYER || entity->tag() == EntityType::ENEMY) {
-		Vector2 velocity = _entity->get<CTransform>().velocity;
-		velocity.x = -velocity.x;
-		_entity->get<CTransform>().velocity = velocity;
+		if (prevOverlap.x > 0 && prevOverlap.y <= 0) { // top/bottom collision
+			Vector2 velocity = _entity->get<CTransform>().velocity;
+			velocity.y = -velocity.y;
+			_entity->get<CTransform>().velocity = velocity;
+		} else { // side and diagonal collision
+			Vector2 velocity = _entity->get<CTransform>().velocity;
+			velocity.x = -velocity.x;
+			_entity->get<CTransform>().velocity = velocity;
+		}
 	}
 }
 	

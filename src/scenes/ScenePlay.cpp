@@ -43,16 +43,11 @@ void ScenePlay::movement(const float& dt) {
 	for (auto& entity : _entity_manager.getEntities()) {
 		if (entity->has<CTransform>()) {
 			auto velocity = Vector2Scale(entity->get<CTransform>().velocity, dt);
+			entity->get<CTransform>().prevPosition = entity->get<CTransform>().position;
 			entity->get<CTransform>().position = Vector2Add(
 				entity->get<CTransform>().position,
 				velocity
 			);
-			if (entity->has<CBoundingBox>()) {
-				entity->get<CBoundingBox>().min.x += velocity.x;
-				entity->get<CBoundingBox>().min.y += velocity.y;
-				entity->get<CBoundingBox>().max.x += velocity.x;
-				entity->get<CBoundingBox>().max.y += velocity.y;
-			}
 		}
 	}
 }
@@ -62,9 +57,51 @@ void ScenePlay::collisions() {
 	for (auto& entity : _entity_manager.getEntities()) {
 		if (entity->has<CBoundingBox>() && entity->id() != _ball.getEntity()->id()) {
 			CBoundingBox bb2 = entity->get<CBoundingBox>();
-			// if (CheckCollisionRecs(bb.rect, bb2.rect)) {
-			// 	_ball.collision(entity);
-			// }
+			auto position1 = _ball.getEntity()->get<CTransform>().position;
+			auto position2 = entity->get<CTransform>().position;
+			// detect collision
+			Vector2 delta = {
+				abs(position1.x - position2.x),
+				abs(position1.y - position2.y)
+			};
+			Vector2 overlap = {
+				bb.halfSize.x + bb2.halfSize.x - abs(delta.x),
+				bb.halfSize.y + bb2.halfSize.y - abs(delta.y)
+			};
+			if (overlap.x > 0 && overlap.y > 0) {
+				// resolve collision
+				auto prevPos1 = _ball.getEntity()->get<CTransform>().prevPosition;
+				auto prevPos2 = entity->get<CTransform>().prevPosition;
+				Vector2 prevDelta = {
+					abs(prevPos1.x - prevPos2.x),
+					abs(prevPos1.y - prevPos2.y)
+				};
+				Vector2 prevOverlap = {
+					bb.halfSize.x + bb2.halfSize.x - abs(prevDelta.x),
+					bb.halfSize.y + bb2.halfSize.y - abs(prevDelta.y)
+				};
+				if (prevOverlap.y > 0 && prevOverlap.x <= 0) { // side collision
+					if (prevPos1.x < prevPos2.x) {
+						_ball.getEntity()->get<CTransform>().position.x -= overlap.x;
+					} else {
+						_ball.getEntity()->get<CTransform>().position.x += overlap.x;
+					}
+				} else if (prevOverlap.x > 0 && prevOverlap.y <= 0) { // top/bottom collision
+					if (prevPos1.y < prevPos2.y) { // bottom collision
+						_ball.getEntity()->get<CTransform>().position.y -= overlap.y;
+					} else { // top collision
+						_ball.getEntity()->get<CTransform>().position.y += overlap.y;
+					}
+				} else { // diagonal collision
+					// move ball to the side since will always be a paddle
+					if (prevPos1.x < prevPos2.x) { 
+						_ball.getEntity()->get<CTransform>().position.x -= overlap.x;
+					} else {
+						_ball.getEntity()->get<CTransform>().position.x += overlap.x;
+					}
+				}
+				_ball.collision(entity, prevOverlap);
+			}
 		}
 	}
 }
@@ -90,8 +127,9 @@ void ScenePlay::render()
 	// DEBUG: render bounding boxes
 	for (auto& entity : _entity_manager.getEntities()) {
 		if (entity->has<CBoundingBox>()) {
+			auto position = entity->get<CTransform>().position;
 			CBoundingBox bb = entity->get<CBoundingBox>();
-			DrawRectangleLines(bb.min.x, bb.min.y, bb.max.x - bb.min.x, bb.max.y - bb.min.y, RED);
+			DrawRectangleLines(position.x - bb.halfSize.x, position.y - bb.halfSize.y, bb.size.x, bb.size.y, RED);
 		}
 	}
 }
