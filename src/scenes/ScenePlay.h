@@ -5,7 +5,7 @@
 
 class ScenePlay : public Scene
 {
-	Player 	_player;
+	Ball 	_ball;
 	Wall 	_wall;
 	
 public:
@@ -14,6 +14,7 @@ public:
 
 	void init() override;
 	void update(const float& elapsed) override;
+	void movement(const float& dt);
 	void render() override;
 	void doAction(const Action& action) override;
 };

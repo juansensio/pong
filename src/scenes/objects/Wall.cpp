@@ -19,7 +19,6 @@ void Wall::update(const float& dt)
 	} else {
 		_entity->get<CTransform>().velocity.y = 0;
 	}
-	_entity->get<CTransform>().position.y += _entity->get<CTransform>().velocity.y * dt;
 }
 
 

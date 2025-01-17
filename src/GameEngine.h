@@ -2,6 +2,7 @@
 
 #include "raylib.h"
 #include "raygui.h"
+#include "raymath.h"
 #include <map>
 
 #include "scenes/Scenes.h"
