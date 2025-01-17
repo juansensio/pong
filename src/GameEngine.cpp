@@ -8,7 +8,7 @@ void GameEngine::init() {
 
 void GameEngine::run() {
 	init();
-	changeScene<SceneLoading>("loading");
+	changeScene<ScenePlay>("play");
 	int frame = 0;
 	float lastTime = GetTime();
 	float lag = 0.0f;

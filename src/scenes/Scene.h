@@ -3,6 +3,8 @@
 #include <memory>
 #include <vector>
 
+#include "entities/EntityManager.h"
+
 // Forward declare GameEngine to break circular dependency
 class GameEngine;
 
@@ -11,8 +13,9 @@ class Scene
 {
 protected:
 	GameEngine& 				_game_engine;
+	EntityManager 				_entity_manager;
 
-	// TODO: entities, actions, ...
+	// TODO: actions, ...
 
 public:
 	Scene(GameEngine& game_engine) : _game_engine(game_engine) {}

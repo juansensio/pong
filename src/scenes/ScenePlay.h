@@ -4,8 +4,7 @@
 
 class ScenePlay : public Scene
 {
-	float x;
-	float v; 
+	std::shared_ptr<Entity> _player;
 
 public:
 	ScenePlay(GameEngine& game_engine) : Scene(game_engine) {}
