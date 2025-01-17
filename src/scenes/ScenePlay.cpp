@@ -56,57 +56,29 @@ void ScenePlay::movement(const float& dt) {
 }
 
 void ScenePlay::collisions() {
-	CBoundingBox bb = _ball.getEntity()->get<CBoundingBox>();
+	// ball vs walls / paddles
 	for (auto& entity : _entity_manager.getEntities()) {
 		if (entity->has<CBoundingBox>() && entity->id() != _ball.getEntity()->id()) {
-			CBoundingBox bb2 = entity->get<CBoundingBox>();
-			auto position1 = _ball.getEntity()->get<CTransform>().position;
-			auto position2 = entity->get<CTransform>().position;
-			// detect collision
-			Vector2 delta = {
-				abs(position1.x - position2.x),
-				abs(position1.y - position2.y)
-			};
-			Vector2 overlap = {
-				bb.halfSize.x + bb2.halfSize.x - abs(delta.x),
-				bb.halfSize.y + bb2.halfSize.y - abs(delta.y)
-			};
-			if (overlap.x > 0 && overlap.y > 0) {
-				// resolve collision
-				auto prevPos1 = _ball.getEntity()->get<CTransform>().prevPosition;
-				auto prevPos2 = entity->get<CTransform>().prevPosition;
-				Vector2 prevDelta = {
-					abs(prevPos1.x - prevPos2.x),
-					abs(prevPos1.y - prevPos2.y)
-				};
-				Vector2 prevOverlap = {
-					bb.halfSize.x + bb2.halfSize.x - abs(prevDelta.x),
-					bb.halfSize.y + bb2.halfSize.y - abs(prevDelta.y)
-				};
-				if (prevOverlap.y > 0 && prevOverlap.x <= 0) { // side collision
-					if (prevPos1.x < prevPos2.x) {
-						_ball.getEntity()->get<CTransform>().position.x -= overlap.x;
-					} else {
-						_ball.getEntity()->get<CTransform>().position.x += overlap.x;
-					}
-				} else if (prevOverlap.x > 0 && prevOverlap.y <= 0) { // top/bottom collision
-					if (prevPos1.y < prevPos2.y) { // bottom collision
-						_ball.getEntity()->get<CTransform>().position.y -= overlap.y;
-					} else { // top collision
-						_ball.getEntity()->get<CTransform>().position.y += overlap.y;
-					}
-				} else { // diagonal collision
-					// move ball to the side since will always be a paddle
-					if (prevPos1.x < prevPos2.x) { 
-						_ball.getEntity()->get<CTransform>().position.x -= overlap.x;
-					} else {
-						_ball.getEntity()->get<CTransform>().position.x += overlap.x;
-					}
-				}
-				_ball.collision(entity, prevOverlap);
+			auto overlaps = Physics::BoundingBoxOverlap(_ball.getEntity(), entity);
+			if (overlaps.overlap.x > 0 && overlaps.overlap.y > 0) {
+				_ball.collision(entity, overlaps.prevOverlap);
 			}
 		}
 	}
+	// paddles vs walls
+	for (auto& entity : _entity_manager.getEntities(EntityType::WALL)) {
+		// player
+		auto overlaps = Physics::BoundingBoxOverlap(_player.getEntity(), entity);
+		if (overlaps.overlap.x > 0 && overlaps.overlap.y > 0) {
+			_player.collision(entity);
+		}
+		// enemy
+		overlaps = Physics::BoundingBoxOverlap(_enemy.getEntity(), entity);
+		if (overlaps.overlap.x > 0 && overlaps.overlap.y > 0) {
+			_enemy.collision(entity);
+		}
+	}
+
 }
 
 void ScenePlay::render()

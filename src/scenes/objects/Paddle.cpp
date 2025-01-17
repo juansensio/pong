@@ -13,6 +13,9 @@ void Paddle::init(const float& x, const float& y)
 	_paddle_speed = 300;
 }
 
-void Paddle::update(const float& dt)
+void Paddle::collision(const std::shared_ptr<Entity>& entity)
 {
+	if (entity->tag() == EntityType::WALL) {
+		_entity->get<CTransform>().velocity.y = 0;
+	}
 }
