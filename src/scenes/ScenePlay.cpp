@@ -40,10 +40,15 @@ void ScenePlay::update(const float& dt)
 void ScenePlay::movement(const float& dt) {
 	for (auto& entity : _entity_manager.getEntities()) {
 		if (entity->has<CTransform>()) {
+			auto velocity = Vector2Scale(entity->get<CTransform>().velocity, dt);
 			entity->get<CTransform>().position = Vector2Add(
 				entity->get<CTransform>().position,
-				Vector2Scale(entity->get<CTransform>().velocity, dt)
+				velocity
 			);
+			if (entity->has<CBoundingBox>()) {
+				entity->get<CBoundingBox>().rect.x += velocity.x;
+				entity->get<CBoundingBox>().rect.y += velocity.y;
+			}
 		}
 	}
 }
