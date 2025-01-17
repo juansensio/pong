@@ -1,3 +1,12 @@
+En este repo encontrarás código de muestra para crear un juego 2D con `raylib` en C++.
+
+La arquitectura del juego sigue el patrón ECS (Entity Component System) y lo he desarrollado a partir de los siguientes recursos:
+
+- https://www.youtube.com/playlist?list=PL_xRyXins84_Sq7yZkxGP_MgYAH-Zo8Uu
+- https://github.com/raysan5/raylib
+
+Puedes encontrar videos con el proceso de desarrollo en mi canal de YouTube: https://www.youtube.com/@janusnoise
+
 # Instalación `raylib`
 
 Puedes instalar `raylib` en Windows, macOS y Linux siguiendo los siguientes pasos.
