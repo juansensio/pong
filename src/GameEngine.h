@@ -19,6 +19,7 @@ public:
 
     void init();
     void run();
+    void inputs();
 
     std::shared_ptr<Scene> getCurrentScene() const { return _scenes.at(_current_scene); }
     

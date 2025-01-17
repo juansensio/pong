@@ -17,3 +17,7 @@ void SceneMenu::render()
 		_game_engine.changeScene<ScenePlay>("play");
 	}
 }
+
+void SceneMenu::doAction(const Action& action)
+{
+}

@@ -13,7 +13,8 @@ enum EntityType {
 using ComponentTuple = std::tuple<
 	CTransform,
 	CCircleShape,
-	CRectShape
+	CRectShape,
+	CInput
 >;
 
 class Entity

@@ -12,12 +12,18 @@ void ScenePlay::init()
 	
 	_wall = Wall(_entity_manager.addEntity(EntityType::WALL));
 	_wall.init();
+
+	registerAction(KEY_UP, ActionName::UP);
+	registerAction(KEY_DOWN, ActionName::DOWN);
 }
 
 void ScenePlay::update(const float& dt)
 {
-	_entity_manager.update(); // add and remove entities from previous frame
+	// add and remove entities from previous frame
+	_entity_manager.update(); 
+	// update entities (move, inputs, etc)
 	_player.update(dt);
+	_wall.update(dt);
 	// Colisión
 	float screenWidth = GetScreenWidth();
 	float screenHeight = GetScreenHeight();
@@ -54,4 +60,27 @@ void ScenePlay::render()
 
 	// DEBUG
 	DrawText(TextFormat("Entities: %d", _entity_manager.getEntities().size()), 10, 30, 20, RED);
+}
+
+void ScenePlay::doAction(const Action& action)
+{
+	if (action.getType() == ActionType::START) {
+		if (action.getName() == ActionName::UP) {
+			_wall.moveUp();
+		}
+		else if (action.getName() == ActionName::DOWN) {
+			_wall.moveDown();
+		}
+		else if (action.getName() == ActionName::ENTER) {
+			_game_engine.changeScene<SceneMenu>("menu");
+		}
+	}
+	else if (action.getType() == ActionType::END) {
+		if (action.getName() == ActionName::UP) {
+			_wall.stop();
+		}
+		else if (action.getName() == ActionName::DOWN) {
+			_wall.stop();
+		}
+	}
 }

@@ -15,7 +15,8 @@ void GameEngine::run() {
 	float SECONDS_PER_UPDATE = 1.0f / 30.0f; // fps
     while (!WindowShouldClose())   
     {
-        BeginDrawing();
+		inputs();
+		BeginDrawing();
         ClearBackground(BLACK);
 		float currentTime = GetTime();
 		float deltaTime = currentTime - lastTime;
@@ -40,4 +41,15 @@ void GameEngine::run() {
         EndDrawing();
     }
     CloseWindow();                  
+}
+
+void GameEngine::inputs() {
+	for (auto& [key, action]: getCurrentScene()->getActionMap())
+	{
+		if (IsKeyPressed(key) || IsKeyReleased(key)) {
+			ActionType type = IsKeyPressed(key) ? ActionType::START : ActionType::END;
+			Action action(getCurrentScene()->getActionMap().at(key), type);
+			getCurrentScene()->doAction(action);
+		}
+	}
 }
