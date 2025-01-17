@@ -13,5 +13,5 @@ public:
 		: Object(entity), _player(&player) {}
 
 	void init();
-	void collision(const std::shared_ptr<Entity>& entity);
+	void collision(const std::shared_ptr<Entity>& entity, const Vector2& prevOverlap);
 };

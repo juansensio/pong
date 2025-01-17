@@ -5,8 +5,9 @@
 class CBoundingBox : public Component
 {
 public:
-    Rectangle rect;
+    Vector2 size;
+    Vector2 halfSize;
 
     CBoundingBox() = default;
-    CBoundingBox(const Rectangle& rect) : rect(rect) {}
+    CBoundingBox(const Vector2& size) : size(size), halfSize(Vector2{size.x / 2, size.y / 2}) {}
 }; 
