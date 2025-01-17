@@ -5,8 +5,9 @@
 class CBoundingBox : public Component
 {
 public:
-    Rectangle rect;
+    Vector2 min;
+    Vector2 max;
 
     CBoundingBox() = default;
-    CBoundingBox(const Rectangle& rect) : rect(rect) {}
+    CBoundingBox(const Vector2& min, const Vector2& max) : min(min), max(max) {}
 }; 

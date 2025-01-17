@@ -13,8 +13,12 @@ void Ball::init()
 		Vector2{_speed * (rand() % 2 ? 1 : -1), _speed * (rand() % 2 ? 1 : -1)}
 	);
 	_entity->add<CCircleShape>(radius, WHITE);
-	_entity->add<CBoundingBox>(Rectangle{x - radius, y - radius, radius * 2, radius * 2});
+	_entity->add<CBoundingBox>(
+		Vector2{x - radius, y - radius}, 
+		Vector2{x + radius, y + radius}
+	);
 }
+
 
 void Ball::collision(const std::shared_ptr<Entity>& entity) {
 	if (entity->tag() == EntityType::WALL) {
@@ -27,3 +31,4 @@ void Ball::collision(const std::shared_ptr<Entity>& entity) {
 		_entity->get<CTransform>().velocity = velocity;
 	}
 }
+	
