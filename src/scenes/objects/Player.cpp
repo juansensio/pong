@@ -10,8 +10,3 @@ void Player::update(const float& dt)
 {
 	_entity->get<CTransform>().position.x += _entity->get<CTransform>().velocity.x * dt;
 }
-
-void Player::destroy()
-{
-	_entity->destroy();
-}
