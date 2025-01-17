@@ -12,12 +12,11 @@ void ScenePlay::init()
 	
 	_wall = Wall(_entity_manager.addEntity(EntityType::WALL));
 	_wall.init();
-
 }
 
 void ScenePlay::update(const float& dt)
 {
-	_entity_manager.update();
+	_entity_manager.update(); // add and remove entities from previous frame
 	_player.update(dt);
 	// Colisión
 	float screenWidth = GetScreenWidth();

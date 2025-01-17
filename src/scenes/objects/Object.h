@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Entity.h"
+#include "../entities/Entity.h"
 
 class Object {
 protected:
@@ -12,7 +12,7 @@ public:
 
 	void init() {}
 	void update(const float& dt) {}
-	void destroy() {}
+	void destroy() { _entity->destroy(); }
 
 	const std::shared_ptr<Entity> getEntity() const { return _entity; }
 	const Vector2 position() const;

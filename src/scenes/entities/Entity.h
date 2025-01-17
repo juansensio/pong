@@ -61,7 +61,4 @@ public:
 	void remove() { 
 		std::get<T>(_components) = T(); 
 	}
-
-	// virtual void init() {}
-	// virtual void update(const float& dt) {}
 };
