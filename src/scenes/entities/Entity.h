@@ -7,11 +7,13 @@
 
 enum EntityType {
 	PLAYER = 0,
+	WALL = 1
 };
 
 using ComponentTuple = std::tuple<
 	CTransform,
-	CCircleShape
+	CCircleShape,
+	CRectShape
 >;
 
 class Entity

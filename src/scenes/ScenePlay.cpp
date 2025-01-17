@@ -1,6 +1,8 @@
 #include "ScenePlay.h"
 #include "../GameEngine.h"
 
+#include <iostream>
+
 void ScenePlay::init()
 {
 	_entity_manager = EntityManager();
@@ -8,32 +10,51 @@ void ScenePlay::init()
 	_player = _entity_manager.addEntity(EntityType::PLAYER);
 	_player->add<CTransform>(Vector2{20, (float)GetScreenHeight()/2}, Vector2{300, 0});
 	_player->add<CCircleShape>(10, WHITE);
+
+	_wall = _entity_manager.addEntity(EntityType::WALL);
+	_wall->add<CTransform>(Vector2{(float)GetScreenWidth()/2, (float)GetScreenHeight()/2}, Vector2{0, 0});
+	_wall->add<CRectShape>(20, 200, WHITE);
 }
 
 void ScenePlay::update(const float& dt)
 {
+	_entity_manager.update();
+	
 	float screenWidth = GetScreenWidth();
 	float screenHeight = GetScreenHeight();
 	_player->get<CTransform>().position.x += _player->get<CTransform>().velocity.x * dt;
 	// Colisión
-	float x = _player->get<CTransform>().position.x;
-	if (x >= screenWidth/2 - 50 && x <= screenWidth/2 - 40 && 
-		screenHeight/2 - 10 <= screenHeight/2 + 50 && screenHeight/2 + 10 >= screenHeight/2 - 50) {
+	float playerX = _player->get<CTransform>().position.x;
+	float playerY = _player->get<CTransform>().position.y;
+	float wallX = _wall->get<CTransform>().position.x;
+	float wallY = _wall->get<CTransform>().position.y;
+	float wallWidth = _wall->get<CRectShape>().width;
+	float wallHeight = _wall->get<CRectShape>().height;
+	float playerRadius = _player->get<CCircleShape>().radius;
+	if (playerX >= wallX - wallWidth && playerX <= wallX - wallWidth + 10 &&
+		playerY + playerRadius >= wallY - wallHeight/2 && playerY - playerRadius <= wallY + wallHeight/2) {
 		_player->destroy();
 	}
 }
 
 void ScenePlay::render()
 {
-	if (_player->isAlive()) {
-		Vector2 position = _player->get<CTransform>().position;
-		CCircleShape circle = _player->get<CCircleShape>();
-		DrawCircle(position.x, position.y, circle.radius, circle.color);
+	for (auto& entity : _entity_manager.getEntities()) {
+		Vector2 position = entity->get<CTransform>().position;
+		if (entity->has<CCircleShape>()) {
+			CCircleShape circle = entity->get<CCircleShape>();
+			DrawCircle(position.x, position.y, circle.radius, circle.color);
+		}
+		if (entity->has<CRectShape>()) {
+			CRectShape rect = entity->get<CRectShape>();
+			DrawRectangle(position.x - rect.width/2, position.y - rect.height/2, rect.width, rect.height, rect.color);
+		}
 	}
-	float screenWidth = GetScreenWidth();
-	float screenHeight = GetScreenHeight();
-	DrawRectangle(screenWidth/2 - 50, screenHeight/2 - 50, 10, 100, WHITE);
+
 	if (GuiButton(Rectangle{(float)GetScreenWidth() - 60, 10, 50, 25}, "MENU")) {
 		_game_engine.changeScene<SceneMenu>("menu");
 	}
+
+	// DEBUG
+	DrawText(TextFormat("Entities: %d", _entity_manager.getEntities().size()), 10, 30, 20, RED);
 }

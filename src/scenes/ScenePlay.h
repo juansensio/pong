@@ -5,7 +5,8 @@
 class ScenePlay : public Scene
 {
 	std::shared_ptr<Entity> _player;
-
+	std::shared_ptr<Entity> _wall;
+	
 public:
 	ScenePlay(GameEngine& game_engine) : Scene(game_engine) {}
 	~ScenePlay() = default;

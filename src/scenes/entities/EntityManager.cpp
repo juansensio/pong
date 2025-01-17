@@ -43,6 +43,7 @@ void EntityManager::removeDeadEntities(EntityList& entities)
         auto it = std::find(_entities.begin(), _entities.end(), dead_entity);
         if (it != _entities.end()) {
             _entities.erase(it);
+			_numEntities--;
         }
 
         // remove the entity from _entityMap if necessary
