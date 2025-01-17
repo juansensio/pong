@@ -8,7 +8,10 @@ void Paddle::init(const float& x, const float& y)
 	_entity->add<CTransform>(Vector2{x, y}, Vector2{0, 0});
 	_entity->add<CRectShape>(width, height, WHITE);
 	_entity->add<CInput>();
-	_entity->add<CBoundingBox>(Rectangle{x - width/2, y - height/2, width, height});
+	_entity->add<CBoundingBox>(
+		Vector2{x - width/2, y - height/2}, 
+		Vector2{x + width/2, y + height/2}
+	);
 
 	_paddle_speed = 300;
 }

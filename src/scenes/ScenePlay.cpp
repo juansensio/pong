@@ -45,8 +45,10 @@ void ScenePlay::movement(const float& dt) {
 				velocity
 			);
 			if (entity->has<CBoundingBox>()) {
-				entity->get<CBoundingBox>().rect.x += velocity.x;
-				entity->get<CBoundingBox>().rect.y += velocity.y;
+				entity->get<CBoundingBox>().min.x += velocity.x;
+				entity->get<CBoundingBox>().min.y += velocity.y;
+				entity->get<CBoundingBox>().max.x += velocity.x;
+				entity->get<CBoundingBox>().max.y += velocity.y;
 			}
 		}
 	}
@@ -73,8 +75,8 @@ void ScenePlay::render()
 	// DEBUG: render bounding boxes
 	for (auto& entity : _entity_manager.getEntities()) {
 		if (entity->has<CBoundingBox>()) {
-			CBoundingBox bounding_box = entity->get<CBoundingBox>();
-			DrawRectangleLines(bounding_box.rect.x, bounding_box.rect.y, bounding_box.rect.width, bounding_box.rect.height, RED);
+			CBoundingBox bb = entity->get<CBoundingBox>();
+			DrawRectangleLines(bb.min.x, bb.min.y, bb.max.x - bb.min.x, bb.max.y - bb.min.y, RED);
 		}
 	}
 }
