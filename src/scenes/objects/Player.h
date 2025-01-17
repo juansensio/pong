@@ -20,4 +20,5 @@ public:
 	void score();
 	void die();
 	int getLives() const { return _lives; }
+	int getScore() const { return _score; }
 };

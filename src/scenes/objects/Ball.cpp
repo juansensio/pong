@@ -16,6 +16,8 @@ void Ball::init()
 	_entity->add<CBoundingBox>(Rectangle{x - radius, y - radius, radius * 2, radius * 2});
 }
 
+#include <iostream>
+
 void Ball::collision(const std::shared_ptr<Entity>& entity) {
 	if (entity->tag() == EntityType::WALL) {
 		Vector2 velocity = _entity->get<CTransform>().velocity;
@@ -26,10 +28,10 @@ void Ball::collision(const std::shared_ptr<Entity>& entity) {
 		velocity.x = -velocity.x;
 		_entity->get<CTransform>().velocity = velocity;
 	} else if (entity->tag() == EntityType::GOAL) {
+		_player->score(); // pq esta al reves ??
 		init();
-		_player->score();
 	} else if (entity->tag() == EntityType::DEATH) {
-		init();
 		_player->die();
+		init();
 	}
 }
