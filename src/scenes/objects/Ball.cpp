@@ -4,7 +4,7 @@ void Ball::init()
 {
 	float x = (float)GetScreenWidth()/2;
 	float y = (float)GetScreenHeight()/2;
-	float radius = 10;
+	float radius = 5;
 
 	_speed = 300;
 
@@ -14,4 +14,16 @@ void Ball::init()
 	);
 	_entity->add<CCircleShape>(radius, WHITE);
 	_entity->add<CBoundingBox>(Rectangle{x - radius, y - radius, radius * 2, radius * 2});
+}
+
+void Ball::collision(const std::shared_ptr<Entity>& entity) {
+	if (entity->tag() == EntityType::WALL) {
+		Vector2 velocity = _entity->get<CTransform>().velocity;
+		velocity.y = -velocity.y;
+		_entity->get<CTransform>().velocity = velocity;
+	} else if (entity->tag() == EntityType::PLAYER || entity->tag() == EntityType::ENEMY) {
+		Vector2 velocity = _entity->get<CTransform>().velocity;
+		velocity.x = -velocity.x;
+		_entity->get<CTransform>().velocity = velocity;
+	}
 }

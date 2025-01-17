@@ -27,6 +27,8 @@ void ScenePlay::init()
 
 	registerAction(KEY_UP, ActionName::UP);
 	registerAction(KEY_DOWN, ActionName::DOWN);
+	registerAction(KEY_SPACE, ActionName::SPACE);
+	registerAction(KEY_ENTER, ActionName::ENTER);
 }
 
 void ScenePlay::update(const float& dt)
@@ -34,6 +36,7 @@ void ScenePlay::update(const float& dt)
 	_entity_manager.update(); 
 	_player.update(dt);
 	movement(dt);
+	collisions();
 }
 
 void ScenePlay::movement(const float& dt) {
@@ -47,6 +50,18 @@ void ScenePlay::movement(const float& dt) {
 			if (entity->has<CBoundingBox>()) {
 				entity->get<CBoundingBox>().rect.x += velocity.x;
 				entity->get<CBoundingBox>().rect.y += velocity.y;
+			}
+		}
+	}
+}
+
+void ScenePlay::collisions() {
+	CBoundingBox bb = _ball.getEntity()->get<CBoundingBox>();
+	for (auto& entity : _entity_manager.getEntities()) {
+		if (entity->has<CBoundingBox>() && entity->id() != _ball.getEntity()->id()) {
+			CBoundingBox bb2 = entity->get<CBoundingBox>();
+			if (CheckCollisionRecs(bb.rect, bb2.rect)) {
+				_ball.collision(entity);
 			}
 		}
 	}
@@ -98,6 +113,9 @@ void ScenePlay::doAction(const Action& action)
 		}
 		else if (action.getName() == ActionName::DOWN) {
 			_player.stopDown();
+		}
+		else if (action.getName() == ActionName::SPACE) {
+			_ball.init();
 		}
 	}
 }
