@@ -9,5 +9,4 @@ public:
 
 	void init();
 	void update(const float& dt);
-	void destroy();
 };
