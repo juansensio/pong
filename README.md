@@ -31,7 +31,7 @@ cp raylib/src/rcamera.h include/
 # ...
 ```
 
-Para ello, en función del sistema operativo, seguir los siguientes pasos.
+Para ello necesitarás tener instalado `g++` y `make` en tu sistema, y en función del sistema operativo tendrás que seguir los siguientes pasos.
 
 ## En Windows
 
