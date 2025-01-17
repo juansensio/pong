@@ -46,8 +46,10 @@ void ScenePlay::movement(const float& dt) {
 				velocity
 			);
 			if (entity->has<CBoundingBox>()) {
-				entity->get<CBoundingBox>().rect.x += velocity.x;
-				entity->get<CBoundingBox>().rect.y += velocity.y;
+				entity->get<CBoundingBox>().min.x += velocity.x;
+				entity->get<CBoundingBox>().min.y += velocity.y;
+				entity->get<CBoundingBox>().max.x += velocity.x;
+				entity->get<CBoundingBox>().max.y += velocity.y;
 			}
 		}
 	}
