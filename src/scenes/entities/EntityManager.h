@@ -2,7 +2,9 @@
 
 #include <vector>
 #include <map>
+
 #include "Entity.h"
+// #include "Player.h"
 
 using EntityList = std::vector<std::shared_ptr<Entity>>;
 using EntityMap = std::map<EntityType, EntityList>;
@@ -26,4 +28,7 @@ public:
 	EntityList& getEntities() { return _entities; }
 	EntityList& getEntities(const EntityType& tag) { return _entityMap[tag]; }
 	const std::map<EntityType, EntityList>& getEntityMap() const { return _entityMap; }
+
+	// reusable entities
+	// std::shared_ptr<Player> addPlayerEntity() { return std::static_pointer_cast<Player>(addEntity(EntityType::PLAYER)); }
 };

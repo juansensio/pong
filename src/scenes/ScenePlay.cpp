@@ -7,33 +7,31 @@ void ScenePlay::init()
 {
 	_entity_manager = EntityManager();
 
-	_player = _entity_manager.addEntity(EntityType::PLAYER);
-	_player->add<CTransform>(Vector2{20, (float)GetScreenHeight()/2}, Vector2{300, 0});
-	_player->add<CCircleShape>(10, WHITE);
+	_player = Player(_entity_manager.addEntity(EntityType::PLAYER));
+	_player.init();
+	
+	_wall = Wall(_entity_manager.addEntity(EntityType::WALL));
+	_wall.init();
 
-	_wall = _entity_manager.addEntity(EntityType::WALL);
-	_wall->add<CTransform>(Vector2{(float)GetScreenWidth()/2, (float)GetScreenHeight()/2}, Vector2{0, 0});
-	_wall->add<CRectShape>(20, 200, WHITE);
 }
 
 void ScenePlay::update(const float& dt)
 {
 	_entity_manager.update();
-	
+	_player.update(dt);
+	// Colisión
 	float screenWidth = GetScreenWidth();
 	float screenHeight = GetScreenHeight();
-	_player->get<CTransform>().position.x += _player->get<CTransform>().velocity.x * dt;
-	// Colisión
-	float playerX = _player->get<CTransform>().position.x;
-	float playerY = _player->get<CTransform>().position.y;
-	float wallX = _wall->get<CTransform>().position.x;
-	float wallY = _wall->get<CTransform>().position.y;
-	float wallWidth = _wall->get<CRectShape>().width;
-	float wallHeight = _wall->get<CRectShape>().height;
-	float playerRadius = _player->get<CCircleShape>().radius;
+	float playerX = _player.position().x;
+	float playerY = _player.position().y;
+	float wallX = _wall.position().x;
+	float wallY = _wall.position().y;
+	float wallWidth = _wall.getEntity()->get<CRectShape>().width;
+	float wallHeight = _wall.getEntity()->get<CRectShape>().height;
+	float playerRadius = _player.getEntity()->get<CCircleShape>().radius;
 	if (playerX >= wallX - wallWidth && playerX <= wallX - wallWidth + 10 &&
 		playerY + playerRadius >= wallY - wallHeight/2 && playerY - playerRadius <= wallY + wallHeight/2) {
-		_player->destroy();
+		_player.destroy();
 	}
 }
 

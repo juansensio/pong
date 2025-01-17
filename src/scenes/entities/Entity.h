@@ -18,16 +18,16 @@ using ComponentTuple = std::tuple<
 
 class Entity
 {
-	friend class EntityManager; // de esta manera es la unica clase que puede crear entidades
+	// friend class EntityManager; // de esta manera es la unica clase que puede crear entidades
 
 	ComponentTuple 		_components;
 	EntityType 			_tag;
 	size_t 				_id;
 	bool 				_isAlive;
 
-	Entity(const size_t& id, const EntityType& tag) : _tag(tag), _id(id), _isAlive(true) {}
 
 public:
+	Entity(const size_t& id, const EntityType& tag) : _tag(tag), _id(id), _isAlive(true) {}
 
 	const EntityType& tag() const { return _tag; }
 	size_t id() const { return _id; }
@@ -61,4 +61,7 @@ public:
 	void remove() { 
 		std::get<T>(_components) = T(); 
 	}
+
+	// virtual void init() {}
+	// virtual void update(const float& dt) {}
 };

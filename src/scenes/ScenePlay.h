@@ -1,11 +1,12 @@
 #pragma once
 
 #include "Scene.h"
+#include "entities/Entities.h"
 
 class ScenePlay : public Scene
 {
-	std::shared_ptr<Entity> _player;
-	std::shared_ptr<Entity> _wall;
+	Player 	_player;
+	Wall 	_wall;
 	
 public:
 	ScenePlay(GameEngine& game_engine) : Scene(game_engine) {}
