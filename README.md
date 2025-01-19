@@ -111,6 +111,16 @@ rm -rf raygui
 
 # Publicación
 
+## Windows
+
+Para publicar el juego en Windows, ejecuta el siguiente comando:
+
+```
+make windows
+```
+
+Esto creará un archivo `.zip` que puedes distribuir. Sólo hay que descomprimirlo y ejecutar el ejecutable.
+
 ## macOS
 
 Para publicar el juego en macOS, modifica el archivo `Info.plist` con tu información y luego ejecuta el siguiente comando:
@@ -134,3 +144,5 @@ Arrastra tu aplicación al dmg que aparece en el escritorio. Luego ejecuta esto,
 hdiutil detach /dev/disk999
 hdiutil convert my_app_writeable.dmg -format UDZO -o my_app.dmg
 ```
+
+La primera vez que se ejecute el dmg puede que se te pida que le des permisos de ejecución. Hay que ir a `System Preferences > Security & Privacy` y darle permisos.
