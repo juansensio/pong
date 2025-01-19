@@ -100,10 +100,11 @@ void ScenePlay::render()
 		}
 	}
 
-	DrawText(TextFormat("Lives: %d", _player.getLives()), GetScreenWidth()/2 - 50, 20, 20, WHITE);
-	DrawText(TextFormat("Score: %d", _player.getScore()), GetScreenWidth()/2 - 50, 40, 20, WHITE);
+	DrawText(TextFormat("Lives: %d", _player.getLives()), GetScreenWidth()/2 - 150, 30, 20, WHITE);
+	DrawText(TextFormat("Score: %d", _player.getScore()), GetScreenWidth()/2 + 50, 30, 20, WHITE);
 
-	if (GuiButton(Rectangle{(float)GetScreenWidth() - 60, 10, 50, 25}, "MENU")) {
+	GuiSetStyle(DEFAULT, TEXT_SIZE, 10);  // Set consistent text size
+	if (GuiButton(Rectangle{(float)GetScreenWidth() - 60, 30, 50, 25}, "MENU")) {
 		_game_engine.changeScene<SceneMenu>("menu");
 	}
 }

@@ -11,8 +11,7 @@ void GameEngine::run() {
 	init();
 	_assets.load();
 	// changeScene<SceneLoading>("loading");
-	// changeScene<ScenePlay>("play");
-	changeScene<SceneMenu>("menu");
+	changeScene<ScenePlay>("play");
 	int frame = 0;
 	float lastTime = GetTime();
 	float lag = 0.0f;
