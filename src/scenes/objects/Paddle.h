@@ -8,7 +8,7 @@ protected:
 	
 public:
 	Paddle() = default;
-	Paddle(const std::shared_ptr<Entity>& entity) : Object(entity) {}
+	Paddle(const std::shared_ptr<Entity>& entity) : Object(entity), _speed(0.0f) {}
 
 	void init(const float& x, const float& y);
 	void update(const float& dt);

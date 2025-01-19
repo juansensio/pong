@@ -2,6 +2,7 @@
 
 #include <map>
 #include "raylib.h"
+#include <string>
 
 class Assets
 {
