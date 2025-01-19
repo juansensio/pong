@@ -48,12 +48,6 @@ mac: clean all
 	@cp -r assets pong.app/Contents/Resources/
 	@cp Info.plist pong.app/Contents/
 
-dmg: 
-    hdiutil create -size 32m -fs HFS+ -volname "Pong" pong_writeable.dmg
-    hdiutil attach pong_writeable.dmg
-    hdiutil convert pong_writeable.dmg -format UDZO -o pong.dmg
-
-
 windows: $(TARGET)
 	@mkdir -p dist
 	@cp $(TARGET) dist/

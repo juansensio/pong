@@ -108,3 +108,29 @@ rm -rf raygui
     - [objects](src/scenes/objects): Objetos del juego (jugador, enemigos, ...)
     - [entities](src/scenes/entities): Funcionalidad para crear entidades y objectos
       - [components](src/scenes/entities/components): Componentes de las entidades
+
+# Publicación
+
+## macOS
+
+Para publicar el juego en macOS, puedes usar el siguiente comando:
+
+```
+make mac
+```
+
+Esto creará un archivo `.app` que puedes ejecutar directamente.
+
+Para crear un archivo `.dmg` que puedas distribuir, seguir los siguientes pasos:
+
+```
+hdiutil create -size 32m -fs HFS+ -volname "My App" my_app_writeable.dmg
+hdiutil attach my_app_writeable.dmg
+```
+
+Arrastra tu aplicación al dmg que aparece en el escritorio. Luego ejecuta esto, reemplazando disk999 con el /dev/disk que se especificó en el paso anterior.
+
+```
+hdiutil detach /dev/disk999
+hdiutil convert my_app_writeable.dmg -format UDZO -o my_app.dmg
+```

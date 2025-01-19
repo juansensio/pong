@@ -1,13 +1,13 @@
 #include "GameEngine.h"
 
 void GameEngine::init() {
-	// Try development path (./assets) first on all platforms
+	// en desarrollo, queremos usar el directorio assets en el directorio actual
 	if (DirectoryExists("assets")) {
-		// We're in development mode, assets directory is in current path
 		TraceLog(LOG_INFO, "Using development assets path");
 	} else {
+		// en produccion, depende de la plataforma, buscaremos los assets donde toque
 		#if defined(__APPLE__)
-			// macOS .app bundle case
+			// macOS .app bundle
 			const char* basePath = GetApplicationDirectory();
 			if (basePath != nullptr) {
 				std::string resourcePath = std::string(basePath) + "/../Resources";
@@ -17,7 +17,7 @@ void GameEngine::init() {
 				TraceLog(LOG_ERROR, "Failed to find assets directory");
 			}
 		#elif defined(_WIN32)
-			// Windows exe case - assets should be next to executable
+			// Windows exe case
 			const char* basePath = GetApplicationDirectory();
 			if (basePath != nullptr) {
 				ChangeDirectory(basePath);
