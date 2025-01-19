@@ -52,6 +52,7 @@ run: $(TARGET)
 	./$(TARGET)
 
 mac: clean all
+	@rm -rf pong.app
 	@mkdir -p pong.app/Contents/MacOS
 	@mkdir -p pong.app/Contents/Resources
 	@cp $(TARGET) pong.app/Contents/MacOS/
@@ -59,8 +60,11 @@ mac: clean all
 	@cp -r assets pong.app/Contents/Resources/
 	@cp Info.plist pong.app/Contents/
 
-windows: $(TARGET)
-	@mkdir -p dist
-	@cp $(TARGET) dist/
-	@cp -r assets dist/
+windows: clean all
+	@rm -rf dist
+	@mkdir -p dist/pong
+	@cp $(TARGET) dist/pong/
+	@cp -r assets dist/pong/
+	@cp assets.txt dist/pong/
+	@powershell Compress-Archive -Path "dist/*" -DestinationPath "pong.zip" -Force
 
