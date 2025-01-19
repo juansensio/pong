@@ -3,6 +3,10 @@
 #include "raylib.h"
 #include "raygui.h"
 #include "raymath.h"
+#ifdef _DEBUG    
+    #include "imgui.h"
+    #include "rlImGui.h"
+#endif
 #include <map>
 
 #include "Assets.h"

@@ -6,7 +6,7 @@ class Player : public Paddle {
 	int 	_score = 0;
 	int 	_lives = 3;
 public:
-	Player() = default;
+	Player() {}
 	Player(const std::shared_ptr<Entity>& entity) : Paddle(entity) {}
 
 	void init();

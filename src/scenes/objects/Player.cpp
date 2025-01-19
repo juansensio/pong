@@ -1,19 +1,30 @@
 #include "Player.h"
+#include "../../GameEngine.h"
 
 void Player::init()
 {
 	Paddle::init(10, (float)GetScreenHeight() / 2);
+	_entity->add<CAI>();
 }
 
 void Player::update(const float& dt)
 {
-	const auto& input = _entity->get<CInput>();
-	if (input.up) {
-		_entity->get<CTransform>().velocity.y = - _speed;
-	} else if (input.down) {
-		_entity->get<CTransform>().velocity.y = _speed;
+	if (_entity->has<CAI>()) {
+		auto ball = GameEngine::instance().getCurrentScene()->getBall();
+		Vector2 velocity = Vector2Subtract(ball.getEntity()->get<CTransform>().position, _entity->get<CTransform>().position);
+		velocity.x = 0;
+		velocity = Vector2Normalize(velocity);
+		velocity = Vector2Scale(velocity, _speed);
+		_entity->get<CTransform>().velocity = velocity;
 	} else {
-		_entity->get<CTransform>().velocity.y = 0;
+		const auto& input = _entity->get<CInput>();
+		if (input.up) {
+			_entity->get<CTransform>().velocity.y = - _speed;
+		} else if (input.down) {
+			_entity->get<CTransform>().velocity.y = _speed;
+		} else {
+			_entity->get<CTransform>().velocity.y = 0;
+		}
 	}
 }
 
@@ -38,10 +49,11 @@ void Player::stopDown()
 	_entity->get<CInput>().down = false;
 }
 
-#include <iostream>
-
 void Player::score() {
 	_score++;
+	if (_score >= GameEngine::instance().getCurrentScene()->getLevel().getGoalsForNextLevel()) {
+		GameEngine::instance().getCurrentScene()->loadNextLevel();
+	}
 }
 
 void Player::die() {

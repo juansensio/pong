@@ -19,7 +19,8 @@ using ComponentTuple = std::tuple<
 	CCircleShape,
 	CRectShape,
 	CInput,
-	CBoundingBox
+	CBoundingBox,
+	CAI
 >;
 
 class Entity

@@ -86,14 +86,25 @@ Esto instalará `raylib` en `usr/local/lib` y `usr/local/include`.
 
 Puedes ver en el `Makefille` como se ha configurado el proyecto para que se compile tanto en Windows como en macOS, usando `raylib` de la carpeta `lib` y `include` en windows y `raylib` de la carpeta `usr/local/lib` y `usr/local/include` en macOS.
 
-# Instalación `raygui`
+# Instalación `raygui`, `imgui` y `rlImGui`
 
-En cualquier plataforma, puedes instalar `raygui` de la siguiente manera:
+En cualquier plataforma, puedes instalar `raygui`, `imgui` y `rlImGui` de la siguiente manera:
 
 ```
 git clone https://github.com/raysan5/raygui.git
+git clone https://github.com/raylib-extras/rlImGui.git
+git clone https://github.com/ocornut/imgui.git
+
 cp raygui/src/*.h include/
+cp rlImGui/*.h include/
+cp rlImGui/*.cpp src/
+cp -r rlImGui/extras include/
+cp imgui/*.h include/
+cp imgui/*imgui*.cpp src/
+
 rm -rf raygui
+rm -rf imgui
+rm -rf rlImGui
 ```
 
 # Arquitectura

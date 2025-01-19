@@ -6,13 +6,15 @@
 #include "entities/EntityManager.h"
 #include "Actions.h"
 #include "Physics.h"
+#include "Level.h"
+#include "objects/Objects.h"
+
 // Forward declare GameEngine to break circular dependency
 class GameEngine;
 
 using ActionMap = std::map<int, ActionName>;
 
-class Scene
-{
+class Scene {
 protected:
 	GameEngine& 				_game_engine;
 	EntityManager 				_entity_manager;
@@ -29,4 +31,9 @@ public:
 
 	void registerAction(int key, const ActionName& name) {_action_map[key] = name;}
 	const ActionMap& getActionMap() const { return _action_map; }
+
+	virtual const Level& getLevel() const {}
+	virtual void loadNextLevel() {}
+	virtual const Player& getPlayer() const {}
+	virtual const Ball& getBall() const {}
 };

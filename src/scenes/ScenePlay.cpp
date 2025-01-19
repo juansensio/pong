@@ -1,16 +1,14 @@
 #include "ScenePlay.h"
 #include "../GameEngine.h"
 
-#include <iostream>
-
 void ScenePlay::init()
 {
 	_entity_manager = EntityManager();
 
-	// game objects
-	_player = Player(_entity_manager.addEntity(EntityType::PLAYER));
-	_ball = Ball(_entity_manager.addEntity(EntityType::BALL), _player);
-	_enemy = Enemy(_entity_manager.addEntity(EntityType::ENEMY), _ball);
+	//game objects
+	_player = Player(_entity_manager.addEntity(EntityType::PLAYER));  
+	_ball = Ball(_entity_manager.addEntity(EntityType::BALL));  
+	_enemy = Enemy(_entity_manager.addEntity(EntityType::ENEMY));  
 	_walls = {
 		Wall(_entity_manager.addEntity(EntityType::WALL)),
 		Wall(_entity_manager.addEntity(EntityType::WALL)),
@@ -32,6 +30,14 @@ void ScenePlay::init()
 	registerAction(KEY_DOWN, ActionName::DOWN);
 	registerAction(KEY_SPACE, ActionName::SPACE);
 	registerAction(KEY_ENTER, ActionName::ENTER);
+
+	_currentLevel = 0;
+	_numLevels = 3;
+	for (int i = 0; i < _numLevels; i++) {
+		_levels.push_back(Level(i+1));
+	}
+
+	fpsBuffer.resize(100);
 }
 
 void ScenePlay::update(const float& dt)
@@ -100,13 +106,27 @@ void ScenePlay::render()
 		}
 	}
 
-	DrawText(TextFormat("Lives: %d", _player.getLives()), GetScreenWidth()/2 - 150, 30, 20, WHITE);
-	DrawText(TextFormat("Score: %d", _player.getScore()), GetScreenWidth()/2 + 50, 30, 20, WHITE);
+	const char* livesText = TextFormat("Lives: %d", _player.getLives());
+	const char* levelText = TextFormat("Level: %d", _currentLevel); 
+	const char* scoreText = TextFormat("Score: %d", _player.getScore());
+	
+	int livesWidth = MeasureText(livesText, 20);
+	int levelWidth = MeasureText(levelText, 20);
+	int scoreWidth = MeasureText(scoreText, 20);
+	
+	int totalWidth = livesWidth + levelWidth + scoreWidth + 40; // 40 for spacing between texts
+	int startX = GetScreenWidth()/2 - totalWidth/2;
+	
+	DrawText(livesText, startX, 30, 20, WHITE);
+	DrawText(levelText, startX + livesWidth + 20, 30, 20, WHITE);
+	DrawText(scoreText, startX + livesWidth + levelWidth + 40, 30, 20, WHITE);
 
 	GuiSetStyle(DEFAULT, TEXT_SIZE, 10);  // Set consistent text size
 	if (GuiButton(Rectangle{(float)GetScreenWidth() - 60, 30, 50, 25}, "MENU")) {
 		_game_engine.changeScene<SceneMenu>("menu");
 	}
+
+	renderGUI();
 }
 
 void ScenePlay::doAction(const Action& action)
@@ -130,7 +150,57 @@ void ScenePlay::doAction(const Action& action)
 			_player.stopDown();
 		}
 		else if (action.getName() == ActionName::SPACE) {
-			_ball.init();
+			restart();
 		}
 	}
+}
+
+void ScenePlay::restart() {
+	_ball.init();
+}
+
+void ScenePlay::renderGUI()
+{
+	#ifdef _DEBUG
+		char fps_text[10];
+		ImGui::Begin("Pong");
+		if (ImGui::BeginTabBar("TabBar"))
+    {
+		if (ImGui::BeginTabItem("Game"))
+        {
+			float enemySpeed = _enemy.getSpeed();
+			if (ImGui::SliderFloat("Enemy speed", &enemySpeed, 10.f, 200.f)) _enemy.setSpeed(enemySpeed);
+			float playerSpeed = _player.getSpeed();
+			if (ImGui::SliderFloat("Player speed", &playerSpeed, 10.f, 200.f)) _player.setSpeed(playerSpeed);
+			float ballSpeed = _ball.getSpeed();
+			if (ImGui::SliderFloat("Ball speed", &ballSpeed, 10.f, 200.f)) _ball.setSpeed(ballSpeed);
+			if (ImGui::Button("Toggle AI")) _player.getEntity()->get<CAI>().exists = !_player.getEntity()->get<CAI>().exists;
+			if (ImGui::Button("Restart Game")) restart();
+			if (ImGui::Button("Next Level")) loadNextLevel();
+			ImGui::EndTabItem();
+		}
+        if (ImGui::BeginTabItem("Debug"))
+        {
+			fpsBuffer.erase(fpsBuffer.begin());
+			float current_fps = GetFPS();
+			fpsBuffer.push_back(current_fps);
+			sprintf(fps_text, "%.1f", current_fps);
+			ImGui::PlotLines("FPS", &fpsBuffer[0], fpsBuffer.size(), 0, fps_text, 0.0f, 120.0f, ImVec2(0, 80));
+			ImGui::Text("Entities (%d):", _entity_manager.getEntities().size());
+			for (auto e : _entity_manager.getEntities())
+			{
+				ImGui::Text("Entity %d: (%.1f, %.1f)", e->id(), e->get<CTransform>().position.x, e->get<CTransform>().position.y);
+			}
+			ImGui::EndTabItem();
+		}
+			ImGui::EndTabBar();
+		}
+		ImGui::End();
+	#endif
+}
+
+void ScenePlay::loadNextLevel() {
+	if (_currentLevel >= _numLevels - 1) _game_engine.changeScene<SceneMenu>("menu");
+	_currentLevel++;
+	_levels[_currentLevel].init();
 }

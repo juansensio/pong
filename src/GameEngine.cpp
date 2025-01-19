@@ -30,14 +30,18 @@ void GameEngine::init() {
 	SetConfigFlags(FLAG_MSAA_4X_HINT | FLAG_VSYNC_HINT | FLAG_WINDOW_RESIZABLE);
 	InitWindow(1270, 720, "pong");
 	InitAudioDevice();
-    SetTargetFPS(60);               
+    SetTargetFPS(60);    
+	#ifdef _DEBUG
+		rlImGuiSetup(true);
+	#endif
+       
 }
 
 void GameEngine::run() {
 	init();
 	_assets.load();
-	changeScene<SceneLoading>("loading");
-	// changeScene<ScenePlay>("play");
+	// changeScene<SceneLoading>("loading");
+	changeScene<ScenePlay>("play");
 	int frame = 0;
 	float lastTime = GetTime();
 	float lag = 0.0f;
@@ -47,6 +51,9 @@ void GameEngine::run() {
 		inputs();
 		BeginDrawing();
         ClearBackground(BLACK);
+		#ifdef _DEBUG
+			rlImGuiBegin();
+		#endif
 		float currentTime = GetTime();
 		float deltaTime = currentTime - lastTime;
 		lastTime = currentTime;
@@ -64,8 +71,14 @@ void GameEngine::run() {
 		}
 		frame += 1;
 		getCurrentScene()->render();
+		#ifdef _DEBUG
+			rlImGuiEnd();
+		#endif
         EndDrawing();
     }
+	#ifdef _DEBUG
+		rlImGuiShutdown();
+	#endif
     CloseWindow();                  
 }
 

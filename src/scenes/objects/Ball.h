@@ -1,17 +1,18 @@
 #pragma once
 
 #include "Object.h"
-#include "Player.h"
+
+class Player;
 
 class Ball : public Object {
-	float 		_speed;
-	Player*		_player;
-	
+	float 		_speed = 600;
 public:
-	Ball() : _player(nullptr) {}
-	Ball(const std::shared_ptr<Entity>& entity, Player& player) 
-		: Object(entity), _player(&player) {}
+	Ball() = default;
+	Ball(const std::shared_ptr<Entity>& entity) : Object(entity) {}
 
 	void init();
 	void collision(const std::shared_ptr<Entity>& entity, const Vector2& prevOverlap);
+
+	void setSpeed(float speed) { _speed = speed; }
+	float getSpeed() const { return _speed; }
 };

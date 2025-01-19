@@ -1,3 +1,4 @@
+DEBUG ?= 1
 ifeq ($(OS),Windows_NT)
     EXT = .exe
     INCLUDES = -I./include
@@ -16,6 +17,9 @@ endif
 
 CC = g++
 CFLAGS = -Wall -std=c++20 -O3 -Wno-unused-result
+ifeq ($(DEBUG),1)
+    CFLAGS += -D_DEBUG -g
+endif
 
 TARGET = main$(EXT)
 
@@ -51,7 +55,9 @@ clean:
 run: $(TARGET)
 	./$(TARGET)
 
-mac: clean all
+mac: 
+	$(MAKE) clean
+	$(MAKE) DEBUG=0 all
 	@rm -rf pong.app
 	@mkdir -p pong.app/Contents/MacOS
 	@mkdir -p pong.app/Contents/Resources
@@ -61,7 +67,9 @@ mac: clean all
 	@cp Info.plist pong.app/Contents/
 	@codesign --force --deep --sign - pong.app
 
-windows: clean all
+windows:
+	$(MAKE) clean
+	$(MAKE) DEBUG=0 all
 	@rm -rf dist
 	@mkdir -p dist/pong
 	@cp $(TARGET) dist/pong/
