@@ -1,4 +1,5 @@
 #include "EntityManager.h"
+#include <algorithm>
 
 std::shared_ptr<Entity> EntityManager::addEntity(const EntityType& tag) 
 {
