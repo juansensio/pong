@@ -11,12 +11,13 @@ void GameEngine::run() {
 	init();
 	_assets.load();
 	// changeScene<SceneLoading>("loading");
-	changeScene<ScenePlay>("play");
+	// changeScene<ScenePlay>("play");
+	changeScene<SceneMenu>("menu");
 	int frame = 0;
 	float lastTime = GetTime();
 	float lag = 0.0f;
 	float SECONDS_PER_UPDATE = 1.0f / 60.0f; // fps
-    while (!WindowShouldClose())   
+    while (!WindowShouldClose() && !_should_quit)   
     {
 		inputs();
 		BeginDrawing();

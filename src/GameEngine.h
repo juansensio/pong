@@ -17,7 +17,8 @@ private:
     
     SceneMap         _scenes;
     std::string      _current_scene;
-    Assets          _assets;
+    Assets           _assets;
+    bool             _should_quit = false;
 
 public:
     // Static method to get the singleton instance
@@ -39,4 +40,6 @@ public:
         _scenes[name]->init();
         _current_scene = name;
     }
+    void quit() { _should_quit = true; }
+    bool shouldQuit() const { return _should_quit; }
 };
