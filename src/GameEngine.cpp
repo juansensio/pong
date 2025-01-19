@@ -3,11 +3,14 @@
 void GameEngine::init() {
 	SetConfigFlags(FLAG_MSAA_4X_HINT | FLAG_VSYNC_HINT | FLAG_WINDOW_RESIZABLE);
 	InitWindow(1270, 720, "pong");
+	InitAudioDevice();
     SetTargetFPS(60);               
 }
 
 void GameEngine::run() {
 	init();
+	_assets.load();
+	// changeScene<SceneLoading>("loading");
 	changeScene<ScenePlay>("play");
 	int frame = 0;
 	float lastTime = GetTime();
@@ -35,7 +38,6 @@ void GameEngine::run() {
 		}
 		frame += 1;
 		getCurrentScene()->render();
-        DrawFPS(10, 10);
         EndDrawing();
     }
     CloseWindow();                  

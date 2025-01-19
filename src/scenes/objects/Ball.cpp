@@ -1,4 +1,5 @@
 #include "Ball.h"
+#include "../../GameEngine.h"
 
 void Ball::init()
 {
@@ -23,7 +24,9 @@ void Ball::collision(const std::shared_ptr<Entity>& entity, const Vector2& prevO
 		Vector2 velocity = _entity->get<CTransform>().velocity;
 		velocity.y = -velocity.y;
 		_entity->get<CTransform>().velocity = velocity;
+		PlaySound(GameEngine::instance().getAssets().getSound("Bounce"));
 	} else if (entity->tag() == EntityType::PLAYER || entity->tag() == EntityType::ENEMY) {
+		PlaySound(GameEngine::instance().getAssets().getSound("Bounce"));
 		if (prevOverlap.x > 0 && prevOverlap.y <= 0) { // top/bottom collision
 			Vector2 velocity = _entity->get<CTransform>().velocity;
 			velocity.y = -velocity.y;
@@ -35,9 +38,11 @@ void Ball::collision(const std::shared_ptr<Entity>& entity, const Vector2& prevO
 		}
 	} else if (entity->tag() == EntityType::GOAL) {
 		_player->score(); // pq esta al reves ??
+		PlaySound(GameEngine::instance().getAssets().getSound("Goal"));
 		init();
 	} else if (entity->tag() == EntityType::DEATH) {
 		_player->die();
+		PlaySound(GameEngine::instance().getAssets().getSound("Dead"));
 		init();
 		
 	}

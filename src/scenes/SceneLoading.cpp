@@ -6,6 +6,7 @@ void SceneLoading::init()
 	_elapsedTime = 0.0f;
 	// TODO: asset manager en GameEngine
 	_texture = LoadTexture("assets/janus.png");
+	PlaySound(_game_engine.getAssets().getSound("Logo"));
 }
 
 void SceneLoading::update(const float& elapsed)

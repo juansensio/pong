@@ -1,7 +1,6 @@
 #include "GameEngine.h"
 
 int main() {
-    GameEngine game;
-    game.run();
+    GameEngine::instance().run();
     return 0;
 }

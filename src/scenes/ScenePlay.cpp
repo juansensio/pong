@@ -36,7 +36,6 @@ void ScenePlay::init()
 
 void ScenePlay::update(const float& dt)
 {
-	_entity_manager.update(); 
 	_player.update(dt);
 	if (_player.getLives() <= 0) {
 		_game_engine.changeScene<SceneMenu>("menu");
@@ -45,6 +44,7 @@ void ScenePlay::update(const float& dt)
 	_enemy.update(dt);
 	movement(dt);
 	collisions();
+	_entity_manager.update(); 
 }
 
 void ScenePlay::movement(const float& dt) {
