@@ -36,7 +36,6 @@ void LevelManager::init() {
 }
 
 void LevelManager::loadNextLevel() {
-	std::cout << "loadNextLevel" << std::endl;
 	if (_currentLevel >= _numLevels - 1) {
 		GameEngine::instance().changeScene<SceneMenu>("menu");
 	}
