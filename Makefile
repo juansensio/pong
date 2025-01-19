@@ -59,6 +59,7 @@ mac: clean all
 	@cp assets.txt pong.app/Contents/Resources/
 	@cp -r assets pong.app/Contents/Resources/
 	@cp Info.plist pong.app/Contents/
+	@codesign --force --deep --sign - pong.app
 
 windows: clean all
 	@rm -rf dist

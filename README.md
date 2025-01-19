@@ -113,7 +113,7 @@ rm -rf raygui
 
 ## macOS
 
-Para publicar el juego en macOS, puedes usar el siguiente comando:
+Para publicar el juego en macOS, modifica el archivo `Info.plist` con tu información y luego ejecuta el siguiente comando:
 
 ```
 make mac
