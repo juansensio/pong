@@ -22,3 +22,8 @@ rlImGui/
 *.obj
 *.exe
 main
+
+
+*.app
+*.dmg
+*.plist

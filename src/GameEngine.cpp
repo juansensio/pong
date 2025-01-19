@@ -1,6 +1,32 @@
 #include "GameEngine.h"
 
 void GameEngine::init() {
+	// Try development path (./assets) first on all platforms
+	if (DirectoryExists("assets")) {
+		// We're in development mode, assets directory is in current path
+		TraceLog(LOG_INFO, "Using development assets path");
+	} else {
+		#if defined(__APPLE__)
+			// macOS .app bundle case
+			const char* basePath = GetApplicationDirectory();
+			if (basePath != nullptr) {
+				std::string resourcePath = std::string(basePath) + "/../Resources";
+				ChangeDirectory(resourcePath.c_str());
+				TraceLog(LOG_INFO, "Using production assets path: %s", resourcePath.c_str());
+			} else {
+				TraceLog(LOG_ERROR, "Failed to find assets directory");
+			}
+		#elif defined(_WIN32)
+			// Windows exe case - assets should be next to executable
+			const char* basePath = GetApplicationDirectory();
+			if (basePath != nullptr) {
+				ChangeDirectory(basePath);
+				TraceLog(LOG_INFO, "Using production assets path: %s", basePath);
+			} else {
+				TraceLog(LOG_ERROR, "Failed to find assets directory");
+			}
+		#endif
+	}
 	SetConfigFlags(FLAG_MSAA_4X_HINT | FLAG_VSYNC_HINT | FLAG_WINDOW_RESIZABLE);
 	InitWindow(1270, 720, "pong");
 	InitAudioDevice();
@@ -10,8 +36,8 @@ void GameEngine::init() {
 void GameEngine::run() {
 	init();
 	_assets.load();
-	// changeScene<SceneLoading>("loading");
-	changeScene<ScenePlay>("play");
+	changeScene<SceneLoading>("loading");
+	// changeScene<ScenePlay>("play");
 	int frame = 0;
 	float lastTime = GetTime();
 	float lag = 0.0f;
