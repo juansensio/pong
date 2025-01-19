@@ -6,8 +6,8 @@
 #include "entities/EntityManager.h"
 #include "Actions.h"
 #include "Physics.h"
-#include "Level.h"
 #include "objects/Objects.h"
+#include "LevelManager.h"
 
 // Forward declare GameEngine to break circular dependency
 class GameEngine;
@@ -32,8 +32,7 @@ public:
 	void registerAction(int key, const ActionName& name) {_action_map[key] = name;}
 	const ActionMap& getActionMap() const { return _action_map; }
 
-	virtual const Level& getLevel() const {}
-	virtual void loadNextLevel() {}
-	virtual const Player& getPlayer() const {}
-	virtual const Ball& getBall() const {}
+	virtual Player& getPlayer() {}
+	virtual Ball& getBall() {}
+	virtual LevelManager& getLevelManager() {}
 };

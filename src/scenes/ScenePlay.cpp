@@ -5,6 +5,9 @@ void ScenePlay::init()
 {
 	_entity_manager = EntityManager();
 
+	_levelManager = LevelManager();
+	_levelManager.init();
+
 	//game objects
 	_player = Player(_entity_manager.addEntity(EntityType::PLAYER));  
 	_ball = Ball(_entity_manager.addEntity(EntityType::BALL));  
@@ -30,12 +33,6 @@ void ScenePlay::init()
 	registerAction(KEY_DOWN, ActionName::DOWN);
 	registerAction(KEY_SPACE, ActionName::SPACE);
 	registerAction(KEY_ENTER, ActionName::ENTER);
-
-	_currentLevel = 0;
-	_numLevels = 3;
-	for (int i = 0; i < _numLevels; i++) {
-		_levels.push_back(Level(i+1));
-	}
 
 	fpsBuffer.resize(100);
 }
@@ -107,9 +104,9 @@ void ScenePlay::render()
 	}
 
 	const char* livesText = TextFormat("Lives: %d", _player.getLives());
-	const char* levelText = TextFormat("Level: %d", _currentLevel); 
+	const char* levelText = TextFormat("Level: %d", _levelManager.getCurrentLevel()); 
 	const char* scoreText = TextFormat("Score: %d", _player.getScore());
-	
+
 	int livesWidth = MeasureText(livesText, 20);
 	int levelWidth = MeasureText(levelText, 20);
 	int scoreWidth = MeasureText(scoreText, 20);
@@ -176,7 +173,7 @@ void ScenePlay::renderGUI()
 			if (ImGui::SliderFloat("Ball speed", &ballSpeed, 10.f, 200.f)) _ball.setSpeed(ballSpeed);
 			if (ImGui::Button("Toggle AI")) _player.getEntity()->get<CAI>().exists = !_player.getEntity()->get<CAI>().exists;
 			if (ImGui::Button("Restart Game")) restart();
-			if (ImGui::Button("Next Level")) loadNextLevel();
+			if (ImGui::Button("Next Level")) _levelManager.loadNextLevel();
 			ImGui::EndTabItem();
 		}
         if (ImGui::BeginTabItem("Debug"))
@@ -199,8 +196,3 @@ void ScenePlay::renderGUI()
 	#endif
 }
 
-void ScenePlay::loadNextLevel() {
-	if (_currentLevel >= _numLevels - 1) _game_engine.changeScene<SceneMenu>("menu");
-	_currentLevel++;
-	_levels[_currentLevel].init();
-}

@@ -1,12 +1,10 @@
 #pragma once
 
 #include "Scene.h"
-#include "Level.h"
 
 class ScenePlay : public Scene
 {
 	// game objects
-
 	Player 					_player;
 	Enemy 					_enemy;
 	Ball 					_ball;
@@ -14,10 +12,9 @@ class ScenePlay : public Scene
 	Goal 					_goal;
 	Death 					_death;
 
-	std::vector<Level> 		_levels;
-	int 					_currentLevel;
-	int 					_numLevels;
+	LevelManager 			_levelManager;
 
+	// debug
 	std::vector<float>       fpsBuffer;
 
 public:
@@ -34,9 +31,8 @@ public:
 	void restart();
 	void renderGUI();
 
-	const Level& getLevel() const override { return _levels[_currentLevel]; }
-	void loadNextLevel() override;
+	Player& getPlayer() override { return _player; }
+	Ball& getBall() override { return _ball; }
 
-	const Player& getPlayer() const override { return _player; }
-	const Ball& getBall() const override { return _ball; }
+	LevelManager& getLevelManager() { return _levelManager; }
 };

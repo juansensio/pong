@@ -16,7 +16,7 @@ void Ball::init()
 }
 
 void Ball::collision(const std::shared_ptr<Entity>& entity, const Vector2& prevOverlap) {
-	auto player = GameEngine::instance().getCurrentScene()->getPlayer();
+	auto& player = GameEngine::instance().getCurrentScene()->getPlayer();
 	if (entity->tag() == EntityType::WALL) {
 		Vector2 velocity = _entity->get<CTransform>().velocity;
 		velocity.y = -velocity.y;
@@ -34,7 +34,7 @@ void Ball::collision(const std::shared_ptr<Entity>& entity, const Vector2& prevO
 			_entity->get<CTransform>().velocity = velocity;
 		}
 	} else if (entity->tag() == EntityType::GOAL) {
-		player.score(); // pq esta al reves ??
+		player.score(); 
 		PlaySound(GameEngine::instance().getAssets().getSound("Goal"));
 		init();
 	} else if (entity->tag() == EntityType::DEATH) {

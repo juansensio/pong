@@ -50,9 +50,10 @@ void Player::stopDown()
 }
 
 void Player::score() {
+	auto& levelManager = GameEngine::instance().getCurrentScene()->getLevelManager();
 	_score++;
-	if (_score >= GameEngine::instance().getCurrentScene()->getLevel().getGoalsForNextLevel()) {
-		GameEngine::instance().getCurrentScene()->loadNextLevel();
+	if (_score >= levelManager.getLevel().getGoalsForNextLevel()) {
+		levelManager.loadNextLevel();
 	}
 }
 

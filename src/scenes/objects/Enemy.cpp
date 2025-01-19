@@ -11,7 +11,7 @@ void Enemy::init()
 void Enemy::update(const float& dt)
 {
 	if (_entity->has<CAI>()) {
-		auto ball = GameEngine::instance().getCurrentScene()->getBall();
+		auto& ball = GameEngine::instance().getCurrentScene()->getBall();
 		Vector2 velocity = Vector2Subtract(ball.getEntity()->get<CTransform>().position, _entity->get<CTransform>().position);
 		velocity.x = 0;
 		velocity = Vector2Normalize(velocity);
