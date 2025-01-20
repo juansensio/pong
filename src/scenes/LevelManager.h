@@ -17,6 +17,7 @@ public:
 	void loadLevelsFile();
 
 	const int getCurrentLevel() const { return _currentLevel; }
+	const int getNumLevels() const { return _numLevels; }
 	const Level& getLevel() const { return _levels[_currentLevel]; }
 	void loadNextLevel();
 };

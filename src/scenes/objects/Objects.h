@@ -6,3 +6,4 @@
 #include "Wall.h"
 #include "Goal.h"
 #include "Death.h"
+#include "Shop.h"

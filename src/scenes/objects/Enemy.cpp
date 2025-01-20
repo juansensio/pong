@@ -4,8 +4,9 @@
 void Enemy::init()
 {
 	_entity->add<CAI>();
-	Paddle::init(GetScreenWidth() - 10, (float)GetScreenHeight()/2);
-	_speed = 10;
+	// Paddle::init(GetScreenWidth() - 10, (float)GetScreenHeight()/2);
+	Paddle::init(GetScreenWidth() - 10, 100);
+	_speed = 0;
 }
 
 void Enemy::update(const float& dt)

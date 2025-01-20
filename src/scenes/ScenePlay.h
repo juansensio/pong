@@ -4,13 +4,18 @@
 
 class ScenePlay : public Scene
 {
+
+	bool 					_paused = false;
+
 	// game objects
+
 	Player 					_player;
 	Enemy 					_enemy;
 	Ball 					_ball;
 	std::vector<Wall> 		_walls;
 	Goal 					_goal;
 	Death 					_death;
+	Shop					_shop;
 
 	LevelManager 			_levelManager;
 
@@ -30,6 +35,8 @@ public:
 
 	void restart();
 	void renderGUI();
+	void pause() { _paused = true; }
+	void resume() { _paused = false; }
 
 	Player& getPlayer() override { return _player; }
 	Ball& getBall() override { return _ball; }

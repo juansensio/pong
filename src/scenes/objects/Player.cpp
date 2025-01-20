@@ -5,6 +5,7 @@ void Player::init()
 {
 	Paddle::init(10, (float)GetScreenHeight() / 2);
 	_entity->add<CAI>();
+	_speed = 1000;
 }
 
 void Player::update(const float& dt)
@@ -50,11 +51,7 @@ void Player::stopDown()
 }
 
 void Player::score() {
-	auto& levelManager = GameEngine::instance().getCurrentScene()->getLevelManager();
 	_score++;
-	if (_score >= levelManager.getLevel().getGoalsForNextLevel()) {
-		levelManager.loadNextLevel();
-	}
 }
 
 void Player::die() {

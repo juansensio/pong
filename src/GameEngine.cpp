@@ -41,6 +41,7 @@ void GameEngine::run() {
 	init();
 	_assets.load();
 	// changeScene<SceneLoading>("loading");
+	// changeScene<SceneMenu>("menu");
 	changeScene<ScenePlay>("play");
 	int frame = 0;
 	float lastTime = GetTime();
@@ -85,7 +86,11 @@ void GameEngine::run() {
 void GameEngine::inputs() {
 	for (auto& [key, action]: getCurrentScene()->getActionMap())
 	{
-		if (IsKeyPressed(key) || IsKeyReleased(key)) {
+		if (IsMouseButtonPressed(key) || IsMouseButtonReleased(key)) {
+			ActionType type = IsMouseButtonPressed(key) ? ActionType::START : ActionType::END;
+			Action action(getCurrentScene()->getActionMap().at(key), type);
+			getCurrentScene()->doAction(action);
+		} else if (IsKeyPressed(key) || IsKeyReleased(key)) {
 			ActionType type = IsKeyPressed(key) ? ActionType::START : ActionType::END;
 			Action action(getCurrentScene()->getActionMap().at(key), type);
 			getCurrentScene()->doAction(action);

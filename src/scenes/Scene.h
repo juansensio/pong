@@ -35,4 +35,7 @@ public:
 	virtual Player& getPlayer() {}
 	virtual Ball& getBall() {}
 	virtual LevelManager& getLevelManager() {}
+
+	virtual void pause() {}
+	virtual void resume() {}
 };

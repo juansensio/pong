@@ -33,21 +33,39 @@ void ScenePlay::init()
 	registerAction(KEY_DOWN, ActionName::DOWN);
 	registerAction(KEY_SPACE, ActionName::SPACE);
 	registerAction(KEY_ENTER, ActionName::ENTER);
+	registerAction(MOUSE_LEFT_BUTTON, ActionName::CLICK);
 
 	fpsBuffer.resize(100);
+
 }
 
+// cuando quiero cambiar de escena, no puede pasar nada después (si no me peta el juego)
 void ScenePlay::update(const float& dt)
 {
-	_player.update(dt);
-	if (_player.getLives() <= 0) {
-		_game_engine.changeScene<SceneMenu>("menu");
+	if (!_paused) {
+		_player.update(dt);
+		_ball.update(dt);
+		_enemy.update(dt);
+		movement(dt);
+		collisions();
+		_entity_manager.update(); 
+
+		// si no lo pongo al final me peta el juego
+		if (_player.getLives() <= 0) {
+			_game_engine.changeScene<SceneMenu>("menu");
+		}
+
+		if (_player.getScore() >= _levelManager.getLevel().getGoalsForNextLevel()) {
+			if (_levelManager.getCurrentLevel() >= _levelManager.getNumLevels() - 1) {
+				_game_engine.changeScene<SceneMenu>("menu");
+			} else {
+				_shop.init();
+				_paused = true;
+				_levelManager.loadNextLevel();
+			}
+		}
 	}
-	_ball.update(dt);
-	_enemy.update(dt);
-	movement(dt);
-	collisions();
-	_entity_manager.update(); 
+	
 }
 
 void ScenePlay::movement(const float& dt) {
@@ -123,8 +141,13 @@ void ScenePlay::render()
 		_game_engine.changeScene<SceneMenu>("menu");
 	}
 
+	if(_shop.isActive()) {
+		_shop.render();
+	}
+
 	renderGUI();
 }
+
 
 void ScenePlay::doAction(const Action& action)
 {
@@ -137,6 +160,11 @@ void ScenePlay::doAction(const Action& action)
 		}
 		else if (action.getName() == ActionName::ENTER) {
 			_game_engine.changeScene<SceneMenu>("menu");
+		}
+		else if (action.getName() == ActionName::CLICK) {
+			if (_shop.isActive()) {
+				_shop.click(GetMousePosition());
+			}
 		}
 	}
 	else if (action.getType() == ActionType::END) {
