@@ -22,4 +22,6 @@ public:
 	
 	const int getLives() const { return _lives; }
 	const int getScore() const { return _score; }
+
+	void increaseHealth(int health) { _lives += health; }
 };

@@ -40,11 +40,6 @@ public:
     Assets& getAssets() { return _assets; }
     template<typename T> 
     void changeScene(const std::string& name) {
-        // creamos siempre nueva escena, pero podríamos reutilizarla si ya existe
-
-        std::cout << "change scene: " << name << std::endl;
-               
-        // Create new scene
         _scenes[name] = std::make_shared<T>(*this);
         _scenes[name]->init();
         _current_scene = name;

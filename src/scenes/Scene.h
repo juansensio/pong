@@ -34,6 +34,7 @@ public:
 
 	virtual Player& getPlayer() {}
 	virtual Ball& getBall() {}
+	virtual Enemy& getEnemy() {}
 	virtual LevelManager& getLevelManager() {}
 
 	virtual void pause() {}

@@ -18,6 +18,7 @@ void ScenePlay::init()
 	};
 	_goal = Goal(_entity_manager.addEntity(EntityType::GOAL));
 	_death = Death(_entity_manager.addEntity(EntityType::DEATH));
+	_shop = Shop();
 
 	// init game objects
 	_player.init();
@@ -27,6 +28,7 @@ void ScenePlay::init()
 	_walls[1].init(GetScreenHeight() - 10);
 	_goal.init();
 	_death.init();
+	_shop.init(_levelManager); // si intento acceder a _levelManager desde game engine, me da error
 
 	// register actions
 	registerAction(KEY_UP, ActionName::UP);
@@ -36,7 +38,6 @@ void ScenePlay::init()
 	registerAction(MOUSE_LEFT_BUTTON, ActionName::CLICK);
 
 	fpsBuffer.resize(100);
-
 }
 
 // cuando quiero cambiar de escena, no puede pasar nada después (si no me peta el juego)
@@ -59,7 +60,7 @@ void ScenePlay::update(const float& dt)
 			if (_levelManager.getCurrentLevel() >= _levelManager.getNumLevels() - 1) {
 				_game_engine.changeScene<SceneMenu>("menu");
 			} else {
-				_shop.init();
+				_shop.enable();
 				_paused = true;
 				_levelManager.loadNextLevel();
 			}
@@ -122,7 +123,7 @@ void ScenePlay::render()
 	}
 
 	const char* livesText = TextFormat("Lives: %d", _player.getLives());
-	const char* levelText = TextFormat("Level: %d", _levelManager.getCurrentLevel()); 
+	const char* levelText = TextFormat("Level: %d", _levelManager.getCurrentLevel() + 1); 
 	const char* scoreText = TextFormat("Score: %d", _player.getScore());
 
 	int livesWidth = MeasureText(livesText, 20);

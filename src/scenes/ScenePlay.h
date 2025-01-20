@@ -40,6 +40,7 @@ public:
 
 	Player& getPlayer() override { return _player; }
 	Ball& getBall() override { return _ball; }
+	Enemy& getEnemy() override { return _enemy; }
 
 	LevelManager& getLevelManager() { return _levelManager; }
 };

@@ -1,6 +1,6 @@
 #include <fstream>
 #include <iostream>
-
+#include <sstream>
 #include "LevelManager.h"
 #include "../GameEngine.h"
 #include "SceneMenu.h"
@@ -18,8 +18,12 @@ void LevelManager::loadLevelsFile() {
 		if (line.empty() || line[0] == '#') {
 			continue;
 		}
-		int goalCount = std::stoi(line);
-		auto level = Level(levelId, goalCount);
+		// Read space-separated values from line
+		std::istringstream iss(line);
+		int goalCount, numItems;
+		float proba1, proba2, proba3, proba4;
+		iss >> goalCount >> numItems >> proba1 >> proba2 >> proba3 >> proba4;
+		auto level = Level(levelId, goalCount, numItems, {proba1, proba2, proba3, proba4});
 		_levels.push_back(level);
 		levelId++;
 	}
