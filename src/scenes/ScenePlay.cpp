@@ -7,6 +7,8 @@ void ScenePlay::init()
 
 	_levelManager = LevelManager();
 	_levelManager.init();
+	_resultsManager = ResultsManager();
+	_resultsManager.loadScores();
 
 	//game objects
 	_player = Player(_entity_manager.addEntity(EntityType::PLAYER));  
@@ -60,6 +62,7 @@ void ScenePlay::update(const float& dt)
 
 		if (_player.getScore() >= _levelManager.getLevel().getGoalsForNextLevel()) {
 			if (_levelManager.getCurrentLevel() >= _levelManager.getNumLevels() - 1) {
+				_resultsManager.addScore(_time);
 				_game_engine.changeScene<SceneMenu>("menu");
 			} else {
 				_shop.enable();

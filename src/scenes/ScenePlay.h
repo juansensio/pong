@@ -7,7 +7,7 @@ class ScenePlay : public Scene
 
 	bool 					_paused = false;
 	bool					_hud = true;
-	float						_time = 0;
+	float					_time = 0;
 
 	// game objects
 
@@ -20,6 +20,7 @@ class ScenePlay : public Scene
 	Shop					_shop;
 
 	LevelManager 			_levelManager;
+	ResultsManager			_resultsManager;
 
 	// debug
 	std::vector<float>       fpsBuffer;

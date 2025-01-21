@@ -8,6 +8,7 @@
 #include "Physics.h"
 #include "objects/Objects.h"
 #include "LevelManager.h"
+#include "ResultsManager.h"
 
 // Forward declare GameEngine to break circular dependency
 class GameEngine;

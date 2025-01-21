@@ -41,12 +41,13 @@ void SceneMenu::render()
 	if (GuiButton(Rectangle{buttonX, buttonY, buttonWidth, buttonHeight}, "PLAY")) {
 		_game_engine.changeScene<ScenePlay>("play");
 	}
-	
-	if (GuiButton(Rectangle{buttonX, buttonY + buttonHeight + buttonSpacing, buttonWidth, buttonHeight}, "CREDITS")) {
+	if (GuiButton(Rectangle{buttonX, buttonY + 1*(buttonHeight + buttonSpacing), buttonWidth, buttonHeight}, "RESULTS")) {
+		_game_engine.changeScene<SceneResults>("results");
+	}
+	if (GuiButton(Rectangle{buttonX, buttonY + 2*(buttonHeight + buttonSpacing), buttonWidth, buttonHeight}, "CREDITS")) {
 		_game_engine.changeScene<SceneCredits>("credits");
 	}
-
-	if (GuiButton(Rectangle{buttonX, buttonY + 2*(buttonHeight + buttonSpacing), buttonWidth, buttonHeight}, "QUIT")) {
+	if (GuiButton(Rectangle{buttonX, buttonY + 3*(buttonHeight + buttonSpacing), buttonWidth, buttonHeight}, "QUIT")) {
 		_game_engine.quit();
 	}
 }
