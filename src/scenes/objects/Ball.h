@@ -5,7 +5,7 @@
 class Player;
 
 class Ball : public Object {
-	float 		_speed = 600;
+	float 		_speed = 300;
 public:
 	Ball() = default;
 	Ball(const std::shared_ptr<Entity>& entity) : Object(entity) {}

@@ -13,6 +13,10 @@ void Ball::init()
 	);
 	_entity->add<CCircleShape>(radius, WHITE);
 	_entity->add<CBoundingBox>(Vector2{radius*2, radius*2});
+
+	#if _DEBUG
+		_speed = 600;
+	#endif
 }
 
 void Ball::collision(const std::shared_ptr<Entity>& entity, const Vector2& prevOverlap) {

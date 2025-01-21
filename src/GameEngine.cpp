@@ -40,9 +40,11 @@ void GameEngine::init() {
 void GameEngine::run() {
 	init();
 	_assets.load();
-	// changeScene<SceneLoading>("loading");
-	// changeScene<SceneMenu>("menu");
-	changeScene<ScenePlay>("play");
+	#if _DEBUG
+		changeScene<ScenePlay>("play");
+	#else
+		changeScene<SceneLoading>("loading");
+	#endif
 	int frame = 0;
 	float lastTime = GetTime();
 	float lag = 0.0f;

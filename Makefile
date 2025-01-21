@@ -62,7 +62,8 @@ mac:
 	@mkdir -p pong.app/Contents/MacOS
 	@mkdir -p pong.app/Contents/Resources
 	@cp $(TARGET) pong.app/Contents/MacOS/
-	@cp assets.txt pong.app/Contents/Resources/
+	@cp *.txt pong.app/Contents/Resources/
+	@rm -rf pong.app/Contents/Resources/results.txt
 	@cp -r assets pong.app/Contents/Resources/
 	@cp Info.plist pong.app/Contents/
 	@codesign --force --deep --sign - pong.app
@@ -74,6 +75,7 @@ windows:
 	@mkdir -p dist/pong
 	@cp $(TARGET) dist/pong/
 	@cp -r assets dist/pong/
-	@cp assets.txt dist/pong/
+	@cp *.txt dist/pong/
+	@rm -rf dist/pong/results.txt
 	@powershell Compress-Archive -Path "dist/*" -DestinationPath "pong.zip" -Force
 

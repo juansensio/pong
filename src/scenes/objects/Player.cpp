@@ -4,8 +4,10 @@
 void Player::init()
 {
 	Paddle::init(10, (float)GetScreenHeight() / 2);
-	_entity->add<CAI>();
-	_speed = 1000;
+	#if _DEBUG
+		_entity->add<CAI>();
+		_speed = 1000;
+	#endif
 }
 
 void Player::update(const float& dt)
