@@ -2,6 +2,7 @@
 
 #include "raylib.h"
 #include <vector>
+#include <string>
 
 enum ShopItemTier {
 	COMMON = 0,

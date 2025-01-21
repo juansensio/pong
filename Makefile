@@ -57,7 +57,7 @@ run: $(TARGET)
 
 mac: 
 	$(MAKE) clean
-	$(MAKE) DEBUG=0 all
+	$(MAKE) DEBUG=0 all -j 8
 	@rm -rf pong.app
 	@mkdir -p pong.app/Contents/MacOS
 	@mkdir -p pong.app/Contents/Resources
@@ -68,9 +68,9 @@ mac:
 	@cp Info.plist pong.app/Contents/
 	@codesign --force --deep --sign - pong.app
 
-windows:
+win:
 	$(MAKE) clean
-	$(MAKE) DEBUG=0 all
+	$(MAKE) DEBUG=0 all -j 8
 	@rm -rf dist
 	@mkdir -p dist/pong
 	@cp $(TARGET) dist/pong/

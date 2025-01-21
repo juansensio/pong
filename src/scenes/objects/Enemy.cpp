@@ -8,6 +8,8 @@ void Enemy::init()
 	Paddle::init(GetScreenWidth() - 10, 100);
 	#if _DEBUG
 		_speed = 0;
+	#else
+		_speed = 100;
 	#endif
 }
 
