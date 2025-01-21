@@ -6,6 +6,8 @@ class ScenePlay : public Scene
 {
 
 	bool 					_paused = false;
+	bool					_hud = true;
+	float						_time = 0;
 
 	// game objects
 

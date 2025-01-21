@@ -36,6 +36,7 @@ void ScenePlay::init()
 	registerAction(KEY_SPACE, ActionName::SPACE);
 	registerAction(KEY_ENTER, ActionName::ENTER);
 	registerAction(MOUSE_LEFT_BUTTON, ActionName::CLICK);
+	registerAction(KEY_H, ActionName::HUD);
 
 	fpsBuffer.resize(100);
 }
@@ -44,6 +45,7 @@ void ScenePlay::init()
 void ScenePlay::update(const float& dt)
 {
 	if (!_paused) {
+		_time += dt;
 		_player.update(dt);
 		_ball.update(dt);
 		_enemy.update(dt);
@@ -130,12 +132,16 @@ void ScenePlay::render()
 	int levelWidth = MeasureText(levelText, 20);
 	int scoreWidth = MeasureText(scoreText, 20);
 	
-	int totalWidth = livesWidth + levelWidth + scoreWidth + 40; // 40 for spacing between texts
+	int totalWidth = livesWidth + levelWidth + scoreWidth + 25; 
 	int startX = GetScreenWidth()/2 - totalWidth/2;
 	
-	DrawText(livesText, startX, 30, 20, WHITE);
-	DrawText(levelText, startX + livesWidth + 20, 30, 20, WHITE);
-	DrawText(scoreText, startX + livesWidth + levelWidth + 40, 30, 20, WHITE);
+	DrawText(livesText, startX, 30, 20, Fade(WHITE, 0.5f));
+	DrawText(levelText, GetScreenWidth()/2 - levelWidth/2, 30, 20, Fade(WHITE, 0.5f));
+	DrawText(scoreText, startX + livesWidth + levelWidth + 30, 30, 20, Fade(WHITE, 0.5f));
+
+	const char* nextLevelText = TextFormat("Next: %d", _levelManager.getLevel().getGoalsForNextLevel());
+	int nextLevelWidth = MeasureText(nextLevelText, 15);
+	DrawText(nextLevelText, GetScreenWidth()/2 - nextLevelWidth/2, 60, 15, Fade(WHITE, 0.5f));
 
 	GuiSetStyle(DEFAULT, TEXT_SIZE, 10);  // Set consistent text size
 	if (GuiButton(Rectangle{(float)GetScreenWidth() - 60, 30, 50, 25}, "MENU")) {
@@ -145,24 +151,31 @@ void ScenePlay::render()
 	if(_shop.isActive()) {
 		_shop.render();
 	}
+	
+	if (_hud) {
+		// draw upgrades
+		int upgradeY = GetScreenHeight() - 60;
+		for (auto& upgrade : _player.getUpgrades()) {
+			std::string text = std::get<0>(upgrade) + ": " + (std::get<1>(upgrade) >= 0 ? "+" : "-") + std::to_string(abs(std::get<1>(upgrade)));
+			Color color = std::get<1>(upgrade) >= 0 ? Fade(GREEN, 0.5f) : Fade(RED, 0.5f);
+			DrawText(text.c_str(), 30, upgradeY, 12, color);
+			upgradeY -= 25; // Add spacing between each upgrade text
+		}
 
-	// draw upgrades
-	int upgradeY = GetScreenHeight() - 60;
-	for (auto& upgrade : _player.getUpgrades()) {
-		std::string text = std::get<0>(upgrade) + ": " + (std::get<1>(upgrade) >= 0 ? "+" : "-") + std::to_string(abs(std::get<1>(upgrade)));
-		Color color = std::get<1>(upgrade) >= 0 ? Fade(GREEN, 0.5f) : Fade(RED, 0.5f);
-		DrawText(text.c_str(), 30, upgradeY, 20, color);
-		upgradeY -= 25; // Add spacing between each upgrade text
+		// draw downgrades
+		int downgradeY = GetScreenHeight() - 60;
+		for (auto& downgrade : _player.getDowngrades()) {
+			std::string text = std::get<0>(downgrade) + ": " + (std::get<1>(downgrade) >= 0 ? "+" : "-") + std::to_string(abs(std::get<1>(downgrade)));
+			Color color = std::get<1>(downgrade) >= 0 ? Fade(RED, 0.5f) : Fade(GREEN, 0.5f);
+			DrawText(text.c_str(), GetScreenWidth() - MeasureText(text.c_str(), 12) - 30, downgradeY, 12, Fade(RED, 0.5f));
+			downgradeY -= 25; // Add spacing between each downgrade text
+		}
 	}
 
-	// draw downgrades
-	int downgradeY = GetScreenHeight() - 60;
-	for (auto& downgrade : _player.getDowngrades()) {
-		std::string text = std::get<0>(downgrade) + ": " + (std::get<1>(downgrade) >= 0 ? "+" : "-") + std::to_string(abs(std::get<1>(downgrade)));
-		Color color = std::get<1>(downgrade) >= 0 ? Fade(RED, 0.5f) : Fade(GREEN, 0.5f);
-		DrawText(text.c_str(), GetScreenWidth() - MeasureText(text.c_str(), 20) - 30, downgradeY, 20, Fade(RED, 0.5f));
-		downgradeY -= 25; // Add spacing between each downgrade text
-	}
+	// render time
+	const char* timeText = TextFormat("Time: %.0f", _time);
+	int timeWidth = MeasureText(timeText, 20);
+	DrawText(timeText, GetScreenWidth()/2 - timeWidth/2, GetScreenHeight() - 60, 20, Fade(WHITE, 0.5f));
 
 	renderGUI();
 }
@@ -184,6 +197,9 @@ void ScenePlay::doAction(const Action& action)
 			if (_shop.isActive()) {
 				_shop.click(GetMousePosition());
 			}
+		}
+		else if (action.getName() == ActionName::HUD) {
+			_hud = !_hud;
 		}
 	}
 	else if (action.getType() == ActionType::END) {

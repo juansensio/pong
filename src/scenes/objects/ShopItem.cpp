@@ -85,12 +85,13 @@ ShopItem::ShopItem(Vector2 position, int width, int height, const std::vector<fl
 }
 
 void ShopItem::render() {
-	DrawRectangle(_position.x, _position.y, _width, _height, _color);
+	DrawRectangle(_position.x, _position.y, _width, _height, BLACK);
+	DrawRectangleLines(_position.x, _position.y, _width, _height, _color);
 	int padding = 20;
-	DrawText(_tierText.c_str(), _position.x + padding, _position.y + padding, 20, WHITE);
-	DrawText(_upgradeText.c_str(), _position.x + padding, _position.y + padding + 30, 20, WHITE);
+	// DrawText(_tierText.c_str(), _position.x + padding, _position.y + padding, 20, WHITE);
+	DrawText(_upgradeText.c_str(), _position.x + padding, _position.y + padding, 16, WHITE);
 	if (_downgrade != NONE) {
-		DrawText(_downgradeText.c_str(), _position.x + padding, _position.y + padding + 60, 20, WHITE);
+		DrawText(_downgradeText.c_str(), _position.x + padding, _position.y + padding + 25, 16, WHITE);
 	}
 }
 
@@ -113,11 +114,11 @@ void ShopItem::apply() {
 	switch (_downgrade) {
 		case ENEMY_SPEED:
 			enemies.increaseSpeed(_downgradeValue);
-			player.addDowngrade("Enemy Speed", _downgradeValue);
+			player.addDowngrade("Speed", _downgradeValue);
 			break;
 		case ENEMY_SIZE:
 			enemies.increaseSize(_downgradeValue);
-			player.addDowngrade("Enemy Size", _downgradeValue);
+			player.addDowngrade("Size", _downgradeValue);
 			break;
 	}
 }

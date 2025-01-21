@@ -8,7 +8,8 @@ enum ActionName
 	DOWN = 1,
 	ENTER = 2,
 	SPACE = 3,
-	CLICK = 4
+	CLICK = 4,
+	HUD = 5
 };
 
 enum ActionType
