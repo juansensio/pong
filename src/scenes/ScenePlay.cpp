@@ -146,6 +146,24 @@ void ScenePlay::render()
 		_shop.render();
 	}
 
+	// draw upgrades
+	int upgradeY = GetScreenHeight() - 60;
+	for (auto& upgrade : _player.getUpgrades()) {
+		std::string text = std::get<0>(upgrade) + ": " + (std::get<1>(upgrade) >= 0 ? "+" : "-") + std::to_string(abs(std::get<1>(upgrade)));
+		Color color = std::get<1>(upgrade) >= 0 ? Fade(GREEN, 0.5f) : Fade(RED, 0.5f);
+		DrawText(text.c_str(), 30, upgradeY, 20, color);
+		upgradeY -= 25; // Add spacing between each upgrade text
+	}
+
+	// draw downgrades
+	int downgradeY = GetScreenHeight() - 60;
+	for (auto& downgrade : _player.getDowngrades()) {
+		std::string text = std::get<0>(downgrade) + ": " + (std::get<1>(downgrade) >= 0 ? "+" : "-") + std::to_string(abs(std::get<1>(downgrade)));
+		Color color = std::get<1>(downgrade) >= 0 ? Fade(RED, 0.5f) : Fade(GREEN, 0.5f);
+		DrawText(text.c_str(), GetScreenWidth() - MeasureText(text.c_str(), 20) - 30, downgradeY, 20, Fade(RED, 0.5f));
+		downgradeY -= 25; // Add spacing between each downgrade text
+	}
+
 	renderGUI();
 }
 

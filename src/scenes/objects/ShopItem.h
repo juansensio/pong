@@ -36,8 +36,8 @@ class ShopItem {
 	std::string			_upgradeText;
 	ShopItemDowngrade 	_downgrade;
 	std::string			_downgradeText;
-	int				_upgradeValue;
-	int				_downgradeValue;
+	int					_upgradeValue;
+	int					_downgradeValue;
 public:
 	ShopItem(Vector2 position, int width, int height, const std::vector<float>& probasTiers, const ShopItemModifiers& upgrades, const ShopItemModifiers& downgrades);
 	~ShopItem() = default;

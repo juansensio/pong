@@ -102,18 +102,22 @@ void ShopItem::apply() {
 			break;
 		case SPEED:
 			player.increaseSpeed(_upgradeValue);
+			player.addUpgrade("Speed", _upgradeValue);
 			break;
 		case SIZE:
 			player.increaseSize(_upgradeValue);
+			player.addUpgrade("Size", _upgradeValue);
 			break;
 	}
 	auto& enemies = GameEngine::instance().getCurrentScene()->getEnemy();
 	switch (_downgrade) {
 		case ENEMY_SPEED:
 			enemies.increaseSpeed(_downgradeValue);
+			player.addDowngrade("Enemy Speed", _downgradeValue);
 			break;
 		case ENEMY_SIZE:
 			enemies.increaseSize(_downgradeValue);
+			player.addDowngrade("Enemy Size", _downgradeValue);
 			break;
 	}
 }
