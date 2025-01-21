@@ -155,7 +155,7 @@ void ScenePlay::render()
 		_shop.render();
 	}
 	
-	if (_hud) {
+	// if (_hud) {
 		// draw upgrades
 		int upgradeY = GetScreenHeight() - 60;
 		for (auto& upgrade : _player.getUpgrades()) {
@@ -173,7 +173,7 @@ void ScenePlay::render()
 			DrawText(text.c_str(), GetScreenWidth() - MeasureText(text.c_str(), 12) - 30, downgradeY, 12, Fade(RED, 0.5f));
 			downgradeY -= 25; // Add spacing between each downgrade text
 		}
-	}
+	// }
 
 	// render time
 	const char* timeText = TextFormat("Time: %.0f", _time);
