@@ -1,5 +1,9 @@
 #include "Wall.h"
 
+Wall::Wall(Entity* entity) : Object(entity) {}
+
+Wall::~Wall() {}
+
 void Wall::init()
 {
 	_entity->add<CTransform>(Vector2{(float)GetScreenWidth()/2, (float)GetScreenHeight()/2}, Vector2{0, 0});
@@ -8,6 +12,8 @@ void Wall::init()
 
 	_wall_speed = 300;
 }
+
+#include <iostream>
 
 void Wall::update(const float& dt)
 {
@@ -24,6 +30,7 @@ void Wall::update(const float& dt)
 
 void Wall::moveUp()
 {
+	std::cout << "moveUp" << std::endl;
 	_entity->get<CInput>().up = true;
 }
 

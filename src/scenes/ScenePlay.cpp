@@ -1,13 +1,18 @@
 #include "ScenePlay.h"
 #include "../GameEngine.h"
 
-#include <iostream>
+ScenePlay::ScenePlay(GameEngine& game_engine)
+	: Scene(game_engine)
+	, _ball(nullptr)
+	, _wall(nullptr) {}
+
+ScenePlay::~ScenePlay() {}
 
 void ScenePlay::init()
 {
 	_entity_manager = EntityManager();
 
-	_ball = Ball(_entity_manager.addEntity(EntityType::PLAYER));
+	_ball = Ball(_entity_manager.addEntity(EntityType::BALL));
 	_ball.init();
 	
 	_wall = Wall(_entity_manager.addEntity(EntityType::WALL));
@@ -19,10 +24,6 @@ void ScenePlay::init()
 
 void ScenePlay::update(const float& dt)
 {
-	// add and remove entities from previous frame
-	_entity_manager.update(); 
-	// update entities (move, inputs, etc)
-	_ball.update(dt);
 	_wall.update(dt);
 	movement(dt);
 	// Colisión
@@ -32,22 +33,23 @@ void ScenePlay::update(const float& dt)
 	float playerY = _ball.position().y;
 	float wallX = _wall.position().x;
 	float wallY = _wall.position().y;
-	float wallWidth = _wall.getEntity()->get<CRectShape>().width;
-	float wallHeight = _wall.getEntity()->get<CRectShape>().height;
-	float playerRadius = _ball.getEntity()->get<CCircleShape>().radius;
+	float wallWidth = _wall.getEntity().get<CRectShape>().width;
+	float wallHeight = _wall.getEntity().get<CRectShape>().height;
+	float playerRadius = _ball.getEntity().get<CCircleShape>().radius;
 	if (playerX >= wallX - wallWidth && playerX <= wallX - wallWidth + 10 &&
 		playerY + playerRadius >= wallY - wallHeight/2 && playerY - playerRadius <= wallY + wallHeight/2) {
 		_ball.destroy();
 	}
+	_entity_manager.update(); // add and remove entities 
 }
 
-void ScenePlay::movement(const float& dt) {
+void ScenePlay::movement(const float& dt)
+{
 	for (auto& entity : _entity_manager.getEntities()) {
 		if (entity->has<CTransform>()) {
-			entity->get<CTransform>().position = Vector2Add(
-				entity->get<CTransform>().position,
-				Vector2Scale(entity->get<CTransform>().velocity, dt)
-			);
+			CTransform transform = entity->get<CTransform>();
+			transform.position += transform.velocity * dt;
+			entity->get<CTransform>() = transform;
 		}
 	}
 }
@@ -67,24 +69,27 @@ void ScenePlay::render()
 	}
 
 	if (GuiButton(Rectangle{(float)GetScreenWidth() - 60, 10, 50, 25}, "MENU")) {
-		_game_engine.changeScene<SceneMenu>("menu");
+		_game_engine.changeScene<SceneMenu>(SceneType::MENU);
 	}
 
 	// DEBUG
 	DrawText(TextFormat("Entities: %d", _entity_manager.getEntities().size()), 10, 30, 20, RED);
 }
 
+#include <iostream>
+
 void ScenePlay::doAction(const Action& action)
 {
 	if (action.getType() == ActionType::START) {
 		if (action.getName() == ActionName::UP) {
+			std::cout << "UP" << std::endl;
 			_wall.moveUp();
 		}
 		else if (action.getName() == ActionName::DOWN) {
 			_wall.moveDown();
 		}
 		else if (action.getName() == ActionName::ENTER) {
-			_game_engine.changeScene<SceneMenu>("menu");
+			_game_engine.changeScene<SceneMenu>(SceneType::MENU);
 		}
 	}
 	else if (action.getType() == ActionType::END) {

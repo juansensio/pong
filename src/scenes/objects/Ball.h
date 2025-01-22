@@ -4,8 +4,8 @@
 
 class Ball : public Object {
 public:
-	Ball() = default;
-	Ball(const std::shared_ptr<Entity>& entity) : Object(entity) {}
+	Ball(Entity* entity);
+	~Ball();
 
 	void init();
 };
