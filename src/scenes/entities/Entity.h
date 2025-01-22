@@ -3,68 +3,57 @@
 #include <memory>
 #include <tuple>
 
-#include "components/Components.h"
+#include "EntityMemoryPool.h"
 
-enum EntityType {
-	PLAYER = 0,
-	WALL = 1,
-	ENEMY = 2,
-	BALL = 3,
-	GOAL = 4,
-	DEATH = 5
-};
+class Entity {
+	friend class EntityManager; // unica clase que puede crear/destruir entidades
 
-using ComponentTuple = std::tuple<
-	CTransform,
-	CCircleShape,
-	CRectShape,
-	CInput,
-	CBoundingBox
->;
+	size_t _id; // al usar memory pool, la entidad simplemente es un id
 
-class Entity
-{
-	// friend class EntityManager; // de esta manera es la unica clase que puede crear entidades
-
-	ComponentTuple 		_components;
-	EntityType 			_tag;
-	size_t 				_id;
-	bool 				_isAlive;
-
+	Entity(const size_t id): _id(id) {}
 
 public:
-	Entity(const size_t& id, const EntityType& tag) : _tag(tag), _id(id), _isAlive(true) {}
+	template<typename T>
+	T& get() {
+		return EntityMemoryPool::Instance().getComponent<T>(_id);
+	}
 
-	const EntityType& tag() const { return _tag; }
-	size_t id() const { return _id; }
-	bool isAlive() const { return _isAlive; }
-	void destroy() { _isAlive = false; }
+	template<typename T>
+	bool has() {
+		return EntityMemoryPool::Instance().hasComponent<T>(_id);
+	}
 
-	template<typename T, typename... TArgs> 
+	template<typename T, typename... TArgs>
 	T& add(TArgs&&... args) {
-		auto& component = std::get<T>(_components);
+		auto& component = EntityMemoryPool::Instance().getComponent<T>(_id);
 		component = T(std::forward<TArgs>(args)...);
 		component.exists = true;
 		return component;
 	}
 
-	template<typename T> 
-	T& get() { 
-		return std::get<T>(_components); 
+	template<typename T>
+	void removeComponent() {
+		EntityMemoryPool::Instance().removeComponent<T>(_id);
 	}
 
-	template<typename T> 
-	const T& get() const { 
-		return std::get<T>(_components); 
+	void destroy() {
+		EntityMemoryPool::Instance().destroy(_id);
 	}
 
-	template<typename T> 
-	bool has() const { 
-		return std::get<T>(_components).exists; 
+	const EntityType& tag() const {
+		return EntityMemoryPool::Instance().getTag(_id);
 	}
-	
-	template<typename T> 
-	void remove() { 
-		std::get<T>(_components) = T(); 
+
+	bool isAlive() const {
+		return EntityMemoryPool::Instance().isActive(_id);
+	}
+
+	size_t id() const {
+		return _id;
+	}
+
+	// required for std::find (on delete e)
+	friend bool operator==(const Entity& lhs, const Entity& rhs) {
+		return lhs._id == rhs._id;
 	}
 };

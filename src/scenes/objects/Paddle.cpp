@@ -1,5 +1,9 @@
 #include "Paddle.h"
 
+Paddle::Paddle(Entity* entity) : Object(entity) {}
+
+Paddle::~Paddle() {}
+
 void Paddle::init(const float& x, const float& y)
 {
 	float width = 10;
@@ -13,6 +17,4 @@ void Paddle::init(const float& x, const float& y)
 	_paddle_speed = 300;
 }
 
-void Paddle::update(const float& dt)
-{
-}
+void Paddle::update(const float& dt) {}

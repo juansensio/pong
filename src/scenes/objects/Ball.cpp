@@ -1,5 +1,9 @@
 #include "Ball.h"
 
+Ball::Ball(Entity* entity) : Object(entity) {}
+
+Ball::~Ball() {}
+
 void Ball::init()
 {
 	float x = (float)GetScreenWidth()/2;
