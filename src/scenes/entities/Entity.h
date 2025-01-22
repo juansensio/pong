@@ -3,7 +3,7 @@
 #include <memory>
 
 enum EntityType {
-	PLAYER = 0,
+	BALL = 0,
 };
 
 class Entity

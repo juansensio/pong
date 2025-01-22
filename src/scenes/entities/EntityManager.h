@@ -2,9 +2,10 @@
 
 #include <vector>
 #include <map>
+
 #include "Entity.h"
 
-using EntityList = std::vector<std::shared_ptr<Entity>>;
+using EntityList = std::vector<Entity*>;
 using EntityMap = std::map<EntityType, EntityList>;
 
 class EntityManager
@@ -17,12 +18,12 @@ class EntityManager
 	void removeDeadEntities(EntityList& entities);
 
 public:
-	EntityManager() = default;
-	~EntityManager() = default;
+	EntityManager();
+	~EntityManager();
 
 	void update();
 
-	std::shared_ptr<Entity> addEntity(const EntityType& tag);
+	Entity* addEntity(const EntityType& tag);
 	EntityList& getEntities() { return _entities; }
 	EntityList& getEntities(const EntityType& tag) { return _entityMap[tag]; }
 	const std::map<EntityType, EntityList>& getEntityMap() const { return _entityMap; }
