@@ -1,5 +1,9 @@
 #include "Paddle.h"
 
+Paddle::Paddle(Entity* entity) : Object(entity) {}
+
+Paddle::~Paddle() {}
+
 void Paddle::init()
 {
 	float screen_width = (float)GetScreenWidth();
@@ -18,6 +22,4 @@ void Paddle::init()
 	_paddle_speed = 300;
 }
 
-void Paddle::update(const float& dt)
-{
-}
+void Paddle::update(const float& dt) {}

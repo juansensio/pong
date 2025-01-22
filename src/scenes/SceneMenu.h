@@ -7,8 +7,8 @@ class SceneMenu : public Scene
 
 
 public:
-	SceneMenu(GameEngine& game_engine) : Scene(game_engine) {}
-	~SceneMenu() = default;
+	SceneMenu(GameEngine& game_engine);
+	~SceneMenu();
 
 	void init() override;
 	void update(const float& elapsed) override;
