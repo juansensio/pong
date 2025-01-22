@@ -43,12 +43,8 @@ void GameEngine::run() {
 			updates++;
 		}
 		frame += 1;
-<<<<<<< HEAD
-		getCurrentScene()->render();
-=======
 		getCurrentScene().render();
 		// DrawText(TextFormat("Frame %d", frame), 10, 10, 20, WHITE);
->>>>>>> actions
         DrawFPS(10, 10);
         EndDrawing();
     }

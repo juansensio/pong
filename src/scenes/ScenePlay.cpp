@@ -1,7 +1,14 @@
 #include "ScenePlay.h"
 #include "../GameEngine.h"
 
-ScenePlay::ScenePlay(GameEngine& game_engine) : Scene(game_engine) {}
+ScenePlay::ScenePlay(GameEngine& game_engine) 
+	: Scene(game_engine)
+	, _player(nullptr)
+	, _enemy(nullptr)
+	, _ball(nullptr)
+	, _walls({nullptr, nullptr})
+	, _goal(nullptr)
+	, _death(nullptr) {}
 
 ScenePlay::~ScenePlay() {}
 
