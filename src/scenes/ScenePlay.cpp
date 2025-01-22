@@ -1,7 +1,16 @@
 #include "ScenePlay.h"
 #include "../GameEngine.h"
 
-#include <iostream>
+ScenePlay::ScenePlay(GameEngine& game_engine) 
+	: Scene(game_engine)
+	, _player(nullptr)
+	, _enemy(nullptr)
+	, _ball(nullptr, _player)
+	, _walls({nullptr, nullptr})
+	, _goal(nullptr)
+	, _death(nullptr) {}
+
+ScenePlay::~ScenePlay() {}
 
 void ScenePlay::init()
 {
@@ -33,24 +42,22 @@ void ScenePlay::init()
 
 void ScenePlay::update(const float& dt)
 {
-	_entity_manager.update(); 
 	_player.update(dt);
 	if (_player.getLives() <= 0) {
-		_game_engine.changeScene<SceneMenu>("menu");
+		_game_engine.changeScene<SceneMenu>(SceneType::MENU);
 	}
 	movement(dt);
 	collisions();
+	_entity_manager.update(); 
 }
 
-void ScenePlay::movement(const float& dt) {
+void ScenePlay::movement(const float& dt)
+{
 	for (auto& entity : _entity_manager.getEntities()) {
 		if (entity->has<CTransform>()) {
-			auto velocity = Vector2Scale(entity->get<CTransform>().velocity, dt);
-			entity->get<CTransform>().prevPosition = entity->get<CTransform>().position;
-			entity->get<CTransform>().position = Vector2Add(
-				entity->get<CTransform>().position,
-				velocity
-			);
+			auto& transform = entity->get<CTransform>();
+			transform.prevPosition = transform.position;
+			transform.position += transform.velocity * dt;
 		}
 	}
 }
@@ -58,8 +65,8 @@ void ScenePlay::movement(const float& dt) {
 void ScenePlay::collisions() {
 	// ball vs walls / paddles
 	for (auto& entity : _entity_manager.getEntities()) {
-		if (entity->has<CBoundingBox>() && entity->id() != _ball.getEntity()->id()) {
-			auto overlaps = Physics::BoundingBoxOverlap(_ball.getEntity(), entity);
+		if (entity->has<CBoundingBox>() && entity->id() != _ball.getEntity().id()) {
+			auto overlaps = Physics::BoundingBoxOverlap(_ball.getEntity(), *entity);
 			if (overlaps.overlap.x > 0 && overlaps.overlap.y > 0) {
 				_ball.collision(entity, overlaps.prevOverlap);
 			}
@@ -68,14 +75,14 @@ void ScenePlay::collisions() {
 	// paddles vs walls
 	for (auto& entity : _entity_manager.getEntities(EntityType::WALL)) {
 		// player
-		auto overlaps = Physics::BoundingBoxOverlap(_player.getEntity(), entity);
+		auto overlaps = Physics::BoundingBoxOverlap(_player.getEntity(), *entity);
 		if (overlaps.overlap.x > 0 && overlaps.overlap.y > 0) {
-			_player.collision(entity);
+			_player.collision(*entity);
 		}
 		// enemy
-		overlaps = Physics::BoundingBoxOverlap(_enemy.getEntity(), entity);
+		overlaps = Physics::BoundingBoxOverlap(_enemy.getEntity(), *entity);
 		if (overlaps.overlap.x > 0 && overlaps.overlap.y > 0) {
-			_enemy.collision(entity);
+			_enemy.collision(*entity);
 		}
 	}
 
@@ -99,7 +106,7 @@ void ScenePlay::render()
 	DrawText(TextFormat("Score: %d", _player.getScore()), GetScreenWidth()/2 - 50, 40, 20, WHITE);
 
 	if (GuiButton(Rectangle{(float)GetScreenWidth() - 60, 10, 50, 25}, "MENU")) {
-		_game_engine.changeScene<SceneMenu>("menu");
+		_game_engine.changeScene<SceneMenu>(SceneType::MENU);
 	}
 
 	// DEBUG: render bounding boxes
@@ -122,7 +129,7 @@ void ScenePlay::doAction(const Action& action)
 			_player.moveDown();
 		}
 		else if (action.getName() == ActionName::ENTER) {
-			_game_engine.changeScene<SceneMenu>("menu");
+			_game_engine.changeScene<SceneMenu>(SceneType::MENU);
 		}
 	}
 	else if (action.getType() == ActionType::END) {

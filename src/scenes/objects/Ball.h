@@ -8,10 +8,9 @@ class Ball : public Object {
 	Player*		_player;
 	
 public:
-	Ball() : _player(nullptr) {}
-	Ball(const std::shared_ptr<Entity>& entity, Player& player) 
-		: Object(entity), _player(&player) {}
+	Ball(Entity* entity, Player& player);
+	~Ball();
 
 	void init();
-	void collision(const std::shared_ptr<Entity>& entity, const Vector2& prevOverlap);
+	void collision(const Entity* entity, const Vector2& prevOverlap);
 };
