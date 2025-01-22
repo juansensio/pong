@@ -4,12 +4,12 @@
 
 class ScenePlay : public Scene
 {
-	std::shared_ptr<Entity> _player;
-	std::shared_ptr<Entity> _wall;
-	
+	Entity* _ball = nullptr;
+	Entity* _wall = nullptr;
+
 public:
-	ScenePlay(GameEngine& game_engine) : Scene(game_engine) {}
-	~ScenePlay() = default;
+	ScenePlay(GameEngine& game_engine);
+	~ScenePlay();
 
 	void init() override;
 	void update(const float& elapsed) override;

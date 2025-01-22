@@ -6,8 +6,8 @@
 #include "components/Components.h"
 
 enum EntityType {
-	PLAYER = 0,
-	WALL = 1
+	BALL = 0,
+	WALL = 1,
 };
 
 using ComponentTuple = std::tuple<
