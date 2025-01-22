@@ -17,7 +17,7 @@ void SceneLoading::update(const float& elapsed)
 {
 	_elapsedTime += GetFrameTime();
 	if (_elapsedTime >= 3.0f) {
-		_game_engine.changeScene<SceneMenu>("menu");
+		_game_engine.changeScene<SceneMenu>(SceneType::MENU);
 	}
 }
 

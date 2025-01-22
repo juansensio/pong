@@ -6,12 +6,17 @@
 
 #include "scenes/Scenes.h"
 
+enum SceneType {
+	LOADING = 0,
+	MENU = 1,
+	PLAY = 2
+};
 
-using SceneMap = std::map<std::string, Scene*>;
+using SceneMap = std::map<SceneType, Scene*>;
 
 class GameEngine {
     SceneMap         _scenes;
-    std::string      _current_scene;
+    SceneType        _current_scene;
 
     // TODO: config, assets, ...
 
@@ -25,11 +30,11 @@ public:
     Scene& getCurrentScene() { return *_scenes.at(_current_scene); }
     
     template<typename T> 
-    void changeScene(const std::string& name) {
+    void changeScene(const SceneType& sceneType) {
         // creamos siempre nueva escena, pero podríamos reutilizarla si ya existe
-        // _scenes[name] = std::make_shared<T>(*this);
-        _scenes[name] = new T(*this);
-        _scenes[name]->init();
-        _current_scene = name;
+        // _scenes[sceneType] = std::make_shared<T>(*this);
+        _scenes[sceneType] = new T(*this);
+        _scenes[sceneType]->init();
+        _current_scene = sceneType;
     }
 };
