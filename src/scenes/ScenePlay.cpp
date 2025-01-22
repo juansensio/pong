@@ -3,8 +3,8 @@
 
 ScenePlay::ScenePlay(GameEngine& game_engine)
 	: Scene(game_engine)
-	, _ball(nullptr),
-	_wall(nullptr) {}
+	, _ball(nullptr)
+	, _wall(nullptr) {}
 
 ScenePlay::~ScenePlay() {}
 
