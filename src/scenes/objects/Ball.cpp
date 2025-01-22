@@ -1,5 +1,9 @@
 #include "Ball.h"
 
+Ball::Ball(Entity* entity) : Object(entity) {}
+
+Ball::~Ball() {}
+
 void Ball::init()
 {
 	float x = (float)GetScreenWidth()/2;
@@ -18,7 +22,7 @@ void Ball::init()
 
 
 
-void Ball::collision(const std::shared_ptr<Entity>& entity, const Vector2& prevOverlap) {
+void Ball::collision(const Entity* entity, const Vector2& prevOverlap) {
 	if (entity->tag() == EntityType::WALL) {
 		Vector2 velocity = _entity->get<CTransform>().velocity;
 		velocity.y = -velocity.y;

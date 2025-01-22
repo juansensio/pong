@@ -5,9 +5,9 @@
 class Ball : public Object {
 	float _speed;
 public:
-	Ball() = default;
-	Ball(const std::shared_ptr<Entity>& entity) : Object(entity) {}
+	Ball(Entity* entity);
+	~Ball();
 
 	void init();
-	void collision(const std::shared_ptr<Entity>& entity, const Vector2& prevOverlap);
+	void collision(const Entity* entity, const Vector2& prevOverlap);
 };

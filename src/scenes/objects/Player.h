@@ -4,8 +4,8 @@
 
 class Player : public Paddle {
 public:
-	Player() = default;
-	Player(const std::shared_ptr<Entity>& entity) : Paddle(entity) {}
+	Player(Entity* entity);
+	~Player();
 
 	void init();
 	void update(const float& dt);
