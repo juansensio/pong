@@ -5,12 +5,12 @@
 
 class ScenePlay : public Scene
 {
-	Player 	_player;
-	Wall 	_wall;
-	
+	Ball _ball;
+	Wall _wall;
+
 public:
-	ScenePlay(GameEngine& game_engine) : Scene(game_engine) {}
-	~ScenePlay() = default;
+	ScenePlay(GameEngine& game_engine);
+	~ScenePlay();
 
 	void init() override;
 	void update(const float& elapsed) override;

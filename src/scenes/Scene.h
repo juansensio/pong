@@ -19,7 +19,7 @@ protected:
 
 public:
 	Scene(GameEngine& game_engine) : _game_engine(game_engine) {}
-	virtual ~Scene() = default;
+	virtual ~Scene() {}
 
 	virtual void init() = 0;
 	virtual void update(const float& elapsed) = 0;
