@@ -1,6 +1,11 @@
 #include "SceneMenu.h"
 #include "../GameEngine.h"
 
+SceneMenu::SceneMenu(GameEngine& game_engine)
+	: Scene(game_engine) {}
+
+SceneMenu::~SceneMenu() {}
+
 void SceneMenu::init()
 {
 }

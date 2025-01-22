@@ -1,6 +1,11 @@
 #include "SceneLoading.h"
 #include "../GameEngine.h"
 
+SceneLoading::SceneLoading(GameEngine& game_engine) 
+	: Scene(game_engine) {}
+
+SceneLoading::~SceneLoading() {}
+
 void SceneLoading::init()
 {
 	_elapsedTime = 0.0f;

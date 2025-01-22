@@ -1,6 +1,11 @@
 #include "ScenePlay.h"
 #include "../GameEngine.h"
 
+ScenePlay::ScenePlay(GameEngine& game_engine)
+	: Scene(game_engine) {}
+
+ScenePlay::~ScenePlay() {}
+
 void ScenePlay::init()
 {
 	x = 20;

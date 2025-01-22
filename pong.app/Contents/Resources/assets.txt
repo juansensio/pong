@@ -1,0 +1,5 @@
+Sound Bounce bounce.wav
+Sound Goal goal.wav
+Sound Dead dead.wav
+Sound Logo synth.wav
+Texture Logo janus.png
