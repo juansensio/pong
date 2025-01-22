@@ -6,10 +6,7 @@ ScenePlay::ScenePlay(GameEngine& game_engine)
 	, _ball(nullptr),
 	_wall(nullptr) {}
 
-ScenePlay::~ScenePlay() 
-{
-	delete _ball;
-}
+ScenePlay::~ScenePlay() {}
 
 void ScenePlay::init()
 {
