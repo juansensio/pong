@@ -11,9 +11,9 @@ using EntityMap = std::map<EntityType, EntityList>;
 class EntityManager
 {
 	EntityList 	_entities;
-	EntityList 	_newEntities;
-	EntityMap 	_entityMap;
-	size_t 		_numEntities = 0;
+	EntityList 	_new_entities;
+	EntityMap 	_entity_map;
+	size_t 		_num_entities = 0;
 
 	void removeDeadEntities(EntityList& entities);
 
@@ -25,6 +25,6 @@ public:
 
 	Entity* addEntity(const EntityType& tag);
 	EntityList& getEntities() { return _entities; }
-	EntityList& getEntities(const EntityType& tag) { return _entityMap[tag]; }
-	const std::map<EntityType, EntityList>& getEntityMap() const { return _entityMap; }
+	EntityList& getEntities(const EntityType& tag) { return _entity_map[tag]; }
+	const std::map<EntityType, EntityList>& getEntityMap() const { return _entity_map; }
 };
