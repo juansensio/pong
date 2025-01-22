@@ -9,8 +9,8 @@ class SceneLoading : public Scene
 	Texture2D 	_texture;
 
 public:
-	SceneLoading(GameEngine& game_engine) : Scene(game_engine) {}
-	~SceneLoading() = default;
+	SceneLoading(GameEngine& game_engine);
+	~SceneLoading();
 
 	void init() override;
 	void update(const float& elapsed) override;

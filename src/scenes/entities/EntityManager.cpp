@@ -1,8 +1,17 @@
 #include "EntityManager.h"
 
-std::shared_ptr<Entity> EntityManager::addEntity(const EntityType& tag) 
+EntityManager::EntityManager() : _numEntities(0) {}
+
+EntityManager::~EntityManager() {
+	for (auto e : _entities) {
+		delete e;
+	}
+}
+
+Entity* EntityManager::addEntity(const EntityType& tag) 
 {
- 	auto e = std::shared_ptr<Entity>(new Entity(_numEntities++, tag));
+ 	// auto e = std::shared_ptr<Entity>(new Entity(_numEntities++, tag));
+	Entity* e = new Entity(_numEntities++, tag);
 	_newEntities.push_back(e);
 	return e;
 }
