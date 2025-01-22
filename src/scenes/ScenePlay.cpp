@@ -11,11 +11,9 @@ ScenePlay::~ScenePlay() {}
 void ScenePlay::init()
 {
 	_entity_manager = EntityManager();
-
 	_ball = Ball(_entity_manager.addEntity(EntityType::BALL));
-	_ball.init();
-	
 	_wall = Wall(_entity_manager.addEntity(EntityType::WALL));
+	_ball.init();
 	_wall.init();
 
 	registerAction(KEY_UP, ActionName::UP);
@@ -47,9 +45,8 @@ void ScenePlay::movement(const float& dt)
 {
 	for (auto& entity : _entity_manager.getEntities()) {
 		if (entity->has<CTransform>()) {
-			CTransform transform = entity->get<CTransform>();
+			auto& transform = entity->get<CTransform>();
 			transform.position += transform.velocity * dt;
-			entity->get<CTransform>() = transform;
 		}
 	}
 }
