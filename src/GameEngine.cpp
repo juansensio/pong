@@ -1,17 +1,24 @@
 #include "GameEngine.h"
 
+GameEngine::GameEngine() {}
+
+GameEngine::~GameEngine() {
+	for (auto& scene : _scenes) {
+		delete scene.second;
+	}
+}
+
 void GameEngine::init() {
-	SetConfigFlags(FLAG_MSAA_4X_HINT | FLAG_VSYNC_HINT | FLAG_WINDOW_RESIZABLE);
-	InitWindow(1270, 720, "pong");
-	InitAudioDevice();
+	SetConfigFlags(FLAG_MSAA_4X_HINT | FLAG_VSYNC_HINT);
+	InitWindow(1270, 720, "PONG");
     SetTargetFPS(60);               
 }
 
 void GameEngine::run() {
 	init();
 	_assets.load();
-	// changeScene<SceneLoading>("loading");
-	changeScene<ScenePlay>("play");
+	// changeScene<SceneLoading>(SceneType::LOADING);
+	changeScene<ScenePlay>(SceneType::PLAY);
 	int frame = 0;
 	float lastTime = GetTime();
 	float lag = 0.0f;
@@ -27,29 +34,31 @@ void GameEngine::run() {
 		lag += deltaTime;
 		int updates = 0;
 		while (lag >= SECONDS_PER_UPDATE) {
-			getCurrentScene()->update(SECONDS_PER_UPDATE);
+			getCurrentScene().update(SECONDS_PER_UPDATE);
 			lag -= SECONDS_PER_UPDATE;
 			updates++;
 		}
 		if (updates == 0 && lag > 0.0f) {
-			getCurrentScene()->update(lag);
+			getCurrentScene().update(lag);
 			lag = 0.0f;
 			updates++;
 		}
 		frame += 1;
-		getCurrentScene()->render();
+		getCurrentScene().render();
+		// DrawText(TextFormat("Frame %d", frame), 10, 10, 20, WHITE);
+        DrawFPS(10, 10);
         EndDrawing();
     }
     CloseWindow();                  
 }
 
 void GameEngine::inputs() {
-	for (auto& [key, action]: getCurrentScene()->getActionMap())
+	for (auto& [key, action]: getCurrentScene().getActionMap())
 	{
 		if (IsKeyPressed(key) || IsKeyReleased(key)) {
 			ActionType type = IsKeyPressed(key) ? ActionType::START : ActionType::END;
-			Action action(getCurrentScene()->getActionMap().at(key), type);
-			getCurrentScene()->doAction(action);
+			Action action(getCurrentScene().getActionMap().at(key), type);
+			getCurrentScene().doAction(action);
 		}
 	}
 }

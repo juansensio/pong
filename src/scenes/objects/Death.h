@@ -5,8 +5,8 @@
 class Death : public Object {
 	
 public:
-	Death() = default;
-	Death(const std::shared_ptr<Entity>& entity) : Object(entity) {}
+	Death(Entity* entity);
+	~Death();
 
 	void init();
 };
