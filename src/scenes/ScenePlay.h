@@ -15,12 +15,12 @@ class ScenePlay : public Scene
 	Death 				_death;
 	
 public:
-	ScenePlay(GameEngine& game_engine) : Scene(game_engine) {}
-	~ScenePlay() = default;
+	ScenePlay(GameEngine& game_engine);
+	~ScenePlay();
 
 	void init() override;
 	void update(const float& elapsed) override;
-	void movement(const float& dt);
 	void render() override;
 	void doAction(const Action& action) override;
+	void movement(const float& dt);
 };

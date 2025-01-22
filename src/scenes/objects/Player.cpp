@@ -1,5 +1,9 @@
 #include "Player.h"
 
+Player::Player(Entity* entity) : Paddle(entity) {}
+
+Player::~Player() {}
+
 void Player::init()
 {
 	Paddle::init();

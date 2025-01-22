@@ -6,9 +6,9 @@ class Wall : public Object {
 	float _wall_speed;
 	
 public:
-	Wall() = default;
-	Wall(const std::shared_ptr<Entity>& entity) : Object(entity) {}
-
+	Wall(Entity* entity);
+	~Wall();
+	
 	void init();
 	void update(const float& dt);
 
