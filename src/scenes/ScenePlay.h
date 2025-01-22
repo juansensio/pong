@@ -15,4 +15,5 @@ public:
 	void init() override;
 	void update(const float& elapsed) override;
 	void render() override;
+	void movement(const float& dt);
 };

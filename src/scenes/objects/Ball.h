@@ -8,5 +8,4 @@ public:
 	~Ball();
 
 	void init();
-	void update(const float& dt);
 };

@@ -21,8 +21,7 @@ void ScenePlay::init()
 
 void ScenePlay::update(const float& dt)
 {
-	_entity_manager.update(); // add and remove entities from previous frame
-	_ball.update(dt);
+	movement(dt);
 	// Colisión
 	float screenWidth = GetScreenWidth();
 	float screenHeight = GetScreenHeight();
@@ -36,6 +35,18 @@ void ScenePlay::update(const float& dt)
 	if (playerX >= wallX - wallWidth && playerX <= wallX - wallWidth + 10 &&
 		playerY + playerRadius >= wallY - wallHeight/2 && playerY - playerRadius <= wallY + wallHeight/2) {
 		_ball.destroy();
+	}
+	_entity_manager.update(); // add and remove entities 
+}
+
+void ScenePlay::movement(const float& dt)
+{
+	for (auto& entity : _entity_manager.getEntities()) {
+		if (entity->has<CTransform>()) {
+			CTransform transform = entity->get<CTransform>();
+			transform.position.x += transform.velocity.x * dt;
+			entity->get<CTransform>() = transform;
+		}
 	}
 }
 
