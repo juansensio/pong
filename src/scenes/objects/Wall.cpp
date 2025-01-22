@@ -13,8 +13,6 @@ void Wall::init()
 	_wall_speed = 300;
 }
 
-#include <iostream>
-
 void Wall::update(const float& dt)
 {
 	const auto& input = _entity->get<CInput>();
@@ -27,10 +25,8 @@ void Wall::update(const float& dt)
 	}
 }
 
-
 void Wall::moveUp()
 {
-	std::cout << "moveUp" << std::endl;
 	_entity->get<CInput>().up = true;
 }
 

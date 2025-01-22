@@ -76,13 +76,10 @@ void ScenePlay::render()
 	DrawText(TextFormat("Entities: %d", _entity_manager.getEntities().size()), 10, 30, 20, RED);
 }
 
-#include <iostream>
-
 void ScenePlay::doAction(const Action& action)
 {
 	if (action.getType() == ActionType::START) {
 		if (action.getName() == ActionName::UP) {
-			std::cout << "UP" << std::endl;
 			_wall.moveUp();
 		}
 		else if (action.getName() == ActionName::DOWN) {
