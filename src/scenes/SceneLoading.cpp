@@ -1,6 +1,11 @@
 #include "SceneLoading.h"
 #include "../GameEngine.h"
 
+SceneLoading::SceneLoading(GameEngine& game_engine) 
+	: Scene(game_engine) {}
+
+SceneLoading::~SceneLoading() {}
+
 void SceneLoading::init()
 {
 	_elapsedTime = 0.0f;
@@ -12,7 +17,7 @@ void SceneLoading::update(const float& elapsed)
 {
 	_elapsedTime += GetFrameTime();
 	if (_elapsedTime >= 3.0f) {
-		_game_engine.changeScene<SceneMenu>("menu");
+		_game_engine.changeScene<SceneMenu>(SceneType::MENU);
 	}
 }
 
@@ -54,3 +59,5 @@ void SceneLoading::render()
 		tint
 	);
 }
+
+void SceneLoading::doAction(const Action& action) {}

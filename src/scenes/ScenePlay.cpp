@@ -1,7 +1,16 @@
 #include "ScenePlay.h"
 #include "../GameEngine.h"
 
-#include <iostream>
+ScenePlay::ScenePlay(GameEngine& game_engine) 
+	: Scene(game_engine)
+	, _player(nullptr)
+	, _enemy(nullptr)
+	, _ball(nullptr, _player)
+	, _walls({nullptr, nullptr})
+	, _goal(nullptr)
+	, _death(nullptr) {}
+
+ScenePlay::~ScenePlay() {}
 
 void ScenePlay::init()
 {
@@ -33,34 +42,32 @@ void ScenePlay::init()
 
 void ScenePlay::update(const float& dt)
 {
-	_entity_manager.update(); 
 	_player.update(dt);
 	if (_player.getLives() <= 0) {
-		_game_engine.changeScene<SceneMenu>("menu");
+		_game_engine.changeScene<SceneMenu>(SceneType::MENU);
 	}
 	movement(dt);
 	collisions();
+	_entity_manager.update(); 
 }
 
-void ScenePlay::movement(const float& dt) {
+void ScenePlay::movement(const float& dt)
+{
 	for (auto& entity : _entity_manager.getEntities()) {
 		if (entity->has<CTransform>()) {
-			auto velocity = Vector2Scale(entity->get<CTransform>().velocity, dt);
-			entity->get<CTransform>().prevPosition = entity->get<CTransform>().position;
-			entity->get<CTransform>().position = Vector2Add(
-				entity->get<CTransform>().position,
-				velocity
-			);
+			auto& transform = entity->get<CTransform>();
+			transform.prevPosition = transform.position;
+			transform.position += transform.velocity * dt;
 		}
 	}
 }
 
 void ScenePlay::collisions() {
-	CBoundingBox bb = _ball.getEntity()->get<CBoundingBox>();
+	CBoundingBox bb = _ball.getEntity().get<CBoundingBox>();
 	for (auto& entity : _entity_manager.getEntities()) {
-		if (entity->has<CBoundingBox>() && entity->id() != _ball.getEntity()->id()) {
+		if (entity->has<CBoundingBox>() && entity->id() != _ball.getEntity().id()) {
 			CBoundingBox bb2 = entity->get<CBoundingBox>();
-			auto position1 = _ball.getEntity()->get<CTransform>().position;
+			auto position1 = _ball.getEntity().get<CTransform>().position;
 			auto position2 = entity->get<CTransform>().position;
 			// detect collision
 			Vector2 delta = {
@@ -73,7 +80,7 @@ void ScenePlay::collisions() {
 			};
 			if (overlap.x > 0 && overlap.y > 0) {
 				// resolve collision
-				auto prevPos1 = _ball.getEntity()->get<CTransform>().prevPosition;
+				auto prevPos1 = _ball.getEntity().get<CTransform>().prevPosition;
 				auto prevPos2 = entity->get<CTransform>().prevPosition;
 				Vector2 prevDelta = {
 					abs(prevPos1.x - prevPos2.x),
@@ -85,22 +92,22 @@ void ScenePlay::collisions() {
 				};
 				if (prevOverlap.y > 0 && prevOverlap.x <= 0) { // side collision
 					if (prevPos1.x < prevPos2.x) {
-						_ball.getEntity()->get<CTransform>().position.x -= overlap.x;
+						_ball.getEntity().get<CTransform>().position.x -= overlap.x;
 					} else {
-						_ball.getEntity()->get<CTransform>().position.x += overlap.x;
+						_ball.getEntity().get<CTransform>().position.x += overlap.x;
 					}
 				} else if (prevOverlap.x > 0 && prevOverlap.y <= 0) { // top/bottom collision
 					if (prevPos1.y < prevPos2.y) { // bottom collision
-						_ball.getEntity()->get<CTransform>().position.y -= overlap.y;
+						_ball.getEntity().get<CTransform>().position.y -= overlap.y;
 					} else { // top collision
-						_ball.getEntity()->get<CTransform>().position.y += overlap.y;
+						_ball.getEntity().get<CTransform>().position.y += overlap.y;
 					}
 				} else { // diagonal collision
 					// move ball to the side since will always be a paddle
 					if (prevPos1.x < prevPos2.x) { 
-						_ball.getEntity()->get<CTransform>().position.x -= overlap.x;
+						_ball.getEntity().get<CTransform>().position.x -= overlap.x;
 					} else {
-						_ball.getEntity()->get<CTransform>().position.x += overlap.x;
+						_ball.getEntity().get<CTransform>().position.x += overlap.x;
 					}
 				}
 				_ball.collision(entity, prevOverlap);
@@ -127,7 +134,7 @@ void ScenePlay::render()
 	DrawText(TextFormat("Score: %d", _player.getScore()), GetScreenWidth()/2 - 50, 40, 20, WHITE);
 
 	if (GuiButton(Rectangle{(float)GetScreenWidth() - 60, 10, 50, 25}, "MENU")) {
-		_game_engine.changeScene<SceneMenu>("menu");
+		_game_engine.changeScene<SceneMenu>(SceneType::MENU);
 	}
 
 	// DEBUG: render bounding boxes
@@ -150,7 +157,7 @@ void ScenePlay::doAction(const Action& action)
 			_player.moveDown();
 		}
 		else if (action.getName() == ActionName::ENTER) {
-			_game_engine.changeScene<SceneMenu>("menu");
+			_game_engine.changeScene<SceneMenu>(SceneType::MENU);
 		}
 	}
 	else if (action.getType() == ActionType::END) {
