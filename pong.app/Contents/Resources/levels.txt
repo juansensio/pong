@@ -1,6 +1,0 @@
-# goalsForNextLevel, numItems, pt1, pt2, pt3, pt4 (en level 1 no afecta en nada, usar dummy values)
-1 0 0 0 0 0
-2 3 0.5 0.3 0.1 0.1
-4 3 0.4 0.4 0.1 0.1
-10 3 0.3 0.4 0.2 0.1
-15 3 0.2 0.4 0.2 0.2
