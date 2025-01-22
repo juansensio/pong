@@ -2,10 +2,14 @@
 
 #include "GameEngine.h"
 
+GameEngine::GameEngine() {}
+
+GameEngine::~GameEngine() {}
+
 void GameEngine::init() {
-	SetConfigFlags(FLAG_MSAA_4X_HINT | FLAG_VSYNC_HINT | FLAG_WINDOW_RESIZABLE);
-	InitWindow(1270, 720, "pong");
-    SetTargetFPS(3);               
+	SetConfigFlags(FLAG_MSAA_4X_HINT | FLAG_VSYNC_HINT);
+	InitWindow(1270, 720, "PONG");
+    SetTargetFPS(60);               
 }
 
 void GameEngine::run() {
