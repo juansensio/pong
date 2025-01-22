@@ -5,7 +5,8 @@ class GameEngine {
 	// TODO: config, assets, escenas, ...
 
 public:
-    GameEngine() = default;
+    GameEngine();
+    ~GameEngine();
 
     void init();
     void run();
