@@ -8,15 +8,15 @@
 #include "Assets.h"
 #include "scenes/Scenes.h"
 
-using SceneMap = std::map<std::string, std::shared_ptr<Scene>>;
+using SceneMap = std::map<SceneType, Scene*>;
 
 class GameEngine {
 private:
     // Private constructor for singleton
-    GameEngine() = default;
+    GameEngine();
     
     SceneMap         _scenes;
-    std::string      _current_scene;
+    SceneType        _current_scene;
     Assets           _assets;
     bool             _should_quit = false;
 
@@ -27,18 +27,23 @@ public:
         return instance;
     }
 
+    ~GameEngine();
+
     void init();
     void run();
     void inputs();
 
-    std::shared_ptr<Scene> getCurrentScene() const { return _scenes.at(_current_scene); }
+    // std::shared_ptr<Scene> getCurrentScene() const { return _scenes.at(_current_scene); }
+    Scene& getCurrentScene() { return *_scenes.at(_current_scene); }
     Assets& getAssets() { return _assets; }
+    
     template<typename T> 
-    void changeScene(const std::string& name) {
+    void changeScene(const SceneType& sceneType) {
         // creamos siempre nueva escena, pero podríamos reutilizarla si ya existe
-        _scenes[name] = std::make_shared<T>(*this);
-        _scenes[name]->init();
-        _current_scene = name;
+        // _scenes[sceneType] = std::make_shared<T>(*this);
+        _scenes[sceneType] = new T(*this);
+        _scenes[sceneType]->init();
+        _current_scene = sceneType;
     }
     void quit() { _should_quit = true; }
     bool shouldQuit() const { return _should_quit; }
