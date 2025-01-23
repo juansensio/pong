@@ -1,5 +1,9 @@
 #include "Death.h"
 
+Death::Death(Entity* entity) : Object(entity) {}
+
+Death::~Death() {}
+
 void Death::init()
 {
 	float screenHeight = GetScreenHeight();

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "raylib.h"
+
 #include "ShopItem.h"
 #include "../LevelManager.h"
 
@@ -16,8 +18,8 @@ class Shop {
 	ShopItemModifiers 			_downgrades;
 
 public:
-	Shop() {}
-	~Shop() = default;
+	Shop();
+	~Shop();
 
 	void init(const LevelManager& levelManager);
 	void render();

@@ -1,5 +1,9 @@
 #include "Paddle.h"
 
+Paddle::Paddle(Entity* entity) : Object(entity), _speed(300) {}
+
+Paddle::~Paddle() {}
+
 void Paddle::init(const float& x, const float& y)
 {
 	_height = 100;
@@ -13,9 +17,9 @@ void Paddle::init(const float& x, const float& y)
 	_speed = 300;
 }
 
-void Paddle::collision(const std::shared_ptr<Entity>& entity)
+void Paddle::collision(const Entity& entity)
 {
-	if (entity->tag() == EntityType::WALL) {
+	if (entity.tag() == EntityType::WALL) {
 		_entity->get<CTransform>().velocity.y = 0;
 	}
 }
@@ -25,3 +29,5 @@ void Paddle::increaseSize(float size) {
 	_entity->get<CRectShape>().height = _height;
 	_entity->get<CBoundingBox>().size = Vector2{_width, _height};
 }
+
+void Paddle::update(const float& dt) {}

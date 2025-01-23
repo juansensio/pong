@@ -4,8 +4,13 @@
 
 class Wall : public Object {
 public:
-	Wall() = default;
-	Wall(const std::shared_ptr<Entity>& entity) : Object(entity) {}
-
+	Wall(Entity* entity);
+	~Wall();
+	
 	void init(const float& y);
+	void update(const float& dt);
+
+	void moveUp();
+	void moveDown();
+	void stop();
 };

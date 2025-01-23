@@ -430,6 +430,9 @@ CODE
  When you are not sure about an old symbol or function name, try using the Search/Find function of your IDE to look for comments or references in all imgui files.
  You can read releases logs https://github.com/ocornut/imgui/releases for more details.
 
+ - 2025/01/22 (1.91.8) - removed ImGuiColorEditFlags_AlphaPreview (made value 0): it is now the default behavior.
+                         prior to 1.91.8: alpha was made opaque in the preview by default _unless_ using ImGuiColorEditFlags_AlphaPreview. We now display the preview as transparent by default. You can use ImGuiColorEditFlags_AlphaOpaque to use old behavior.
+                         the new flags (ImGuiColorEditFlags_AlphaOpaque, ImGuiColorEditFlags_AlphaNoBg + existing ImGuiColorEditFlags_AlphaPreviewHalf) may be combined better and allow finer controls:
  - 2025/01/14 (1.91.7) - renamed ImGuiTreeNodeFlags_SpanTextWidth to ImGuiTreeNodeFlags_SpanLabelWidth for consistency with other names. Kept redirection enum (will obsolete). (#6937)
  - 2024/11/27 (1.91.6) - changed CRC32 table from CRC32-adler to CRC32c polynomial in order to be compatible with the result of SSE 4.2 instructions.
                          As a result, old .ini data may be partially lost (docking and tables information particularly).
@@ -1334,11 +1337,11 @@ ImGuiStyle::ImGuiStyle()
     GrabMinSize                 = 12.0f;            // Minimum width/height of a grab box for slider/scrollbar
     GrabRounding                = 0.0f;             // Radius of grabs corners rounding. Set to 0.0f to have rectangular slider grabs.
     LogSliderDeadzone           = 4.0f;             // The size in pixels of the dead-zone around zero on logarithmic sliders that cross zero.
-    TabRounding                 = 4.0f;             // Radius of upper corners of a tab. Set to 0.0f to have rectangular tabs.
+    TabRounding                 = 5.0f;             // Radius of upper corners of a tab. Set to 0.0f to have rectangular tabs.
     TabBorderSize               = 0.0f;             // Thickness of border around tabs.
     TabMinWidthForCloseButton   = 0.0f;             // Minimum width for close button to appear on an unselected tab when hovered. Set to 0.0f to always show when hovering, set to FLT_MAX to never show close button unless selected.
     TabBarBorderSize            = 1.0f;             // Thickness of tab-bar separator, which takes on the tab active color to denote focus.
-    TabBarOverlineSize          = 2.0f;             // Thickness of tab-bar overline, which highlights the selected tab-bar.
+    TabBarOverlineSize          = 1.0f;             // Thickness of tab-bar overline, which highlights the selected tab-bar.
     TableAngledHeadersAngle     = 35.0f * (IM_PI / 180.0f); // Angle of angled headers (supported values range from -50 degrees to +50 degrees).
     TableAngledHeadersTextAlign = ImVec2(0.5f,0.0f);// Alignment of angled headers within the cell
     ColorButtonPosition         = ImGuiDir_Right;   // Side of the color button in the ColorEdit4 widget (left/right). Defaults to ImGuiDir_Right.
@@ -9210,6 +9213,17 @@ bool ImGui::IsMouseReleased(ImGuiMouseButton button, ImGuiID owner_id)
     return g.IO.MouseReleased[button] && TestKeyOwner(MouseButtonToKey(button), owner_id); // Should be same as IsKeyReleased(MouseButtonToKey(button), owner_id)
 }
 
+// Use if you absolutely need to distinguish single-click from double-click by introducing a delay.
+// Generally use with 'delay >= io.MouseDoubleClickTime' + combined with a 'io.MouseClickedLastCount == 1' test.
+// This is a very rarely used UI idiom, but some apps use this: e.g. MS Explorer single click on an icon to rename.
+bool ImGui::IsMouseReleasedWithDelay(ImGuiMouseButton button, float delay)
+{
+    ImGuiContext& g = *GImGui;
+    IM_ASSERT(button >= 0 && button < IM_ARRAYSIZE(g.IO.MouseDown));
+    const float time_since_release = (float)(g.Time - g.IO.MouseReleasedTime[button]);
+    return !IsMouseDown(button) && (time_since_release - g.IO.DeltaTime < delay) && (time_since_release >= delay);
+}
+
 bool ImGui::IsMouseDoubleClicked(ImGuiMouseButton button)
 {
     ImGuiContext& g = *GImGui;
@@ -9483,6 +9497,8 @@ static void ImGui::UpdateMouseInputs()
         io.MouseClicked[i] = io.MouseDown[i] && io.MouseDownDuration[i] < 0.0f;
         io.MouseClickedCount[i] = 0; // Will be filled below
         io.MouseReleased[i] = !io.MouseDown[i] && io.MouseDownDuration[i] >= 0.0f;
+        if (io.MouseReleased[i])
+            io.MouseReleasedTime[i] = g.Time;
         io.MouseDownDurationPrev[i] = io.MouseDownDuration[i];
         io.MouseDownDuration[i] = io.MouseDown[i] ? (io.MouseDownDuration[i] < 0.0f ? 0.0f : io.MouseDownDuration[i] + io.DeltaTime) : -1.0f;
         if (io.MouseClicked[i])
@@ -16131,18 +16147,24 @@ void ImGui::DebugNodeDrawCmdShowMeshAndBoundingBox(ImDrawList* out_draw_list, co
 // [DEBUG] Display details for a single font, called by ShowStyleEditor().
 void ImGui::DebugNodeFont(ImFont* font)
 {
-    bool opened = TreeNode(font, "Font: \"%s\"\n%.2f px, %d glyphs, %d file(s)",
+    bool opened = TreeNode(font, "Font: \"%s\": %.2f px, %d glyphs, %d sources(s)",
         font->ConfigData ? font->ConfigData[0].Name : "", font->FontSize, font->Glyphs.Size, font->ConfigDataCount);
-    SameLine();
-    if (SmallButton("Set as default"))
-        GetIO().FontDefault = font;
-    if (!opened)
-        return;
 
     // Display preview text
+    if (!opened)
+        Indent();
+    Indent();
     PushFont(font);
     Text("The quick brown fox jumps over the lazy dog");
     PopFont();
+    if (!opened)
+    {
+        Unindent();
+        Unindent();
+        return;
+    }
+    if (SmallButton("Set as default"))
+        GetIO().FontDefault = font;
 
     // Display details
     SetNextItemWidth(GetFontSize() * 8);
@@ -16166,57 +16188,60 @@ void ImGui::DebugNodeFont(ImFont* font)
                     config_i, cfg->Name, cfg->OversampleH, cfg->OversampleV, cfg->PixelSnapH, cfg->GlyphOffset.x, cfg->GlyphOffset.y);
 
     // Display all glyphs of the fonts in separate pages of 256 characters
-    if (TreeNode("Glyphs", "Glyphs (%d)", font->Glyphs.Size))
     {
-        ImDrawList* draw_list = GetWindowDrawList();
-        const ImU32 glyph_col = GetColorU32(ImGuiCol_Text);
-        const float cell_size = font->FontSize * 1;
-        const float cell_spacing = GetStyle().ItemSpacing.y;
-        for (unsigned int base = 0; base <= IM_UNICODE_CODEPOINT_MAX; base += 256)
+        if (TreeNode("Glyphs", "Glyphs (%d)", font->Glyphs.Size))
         {
-            // Skip ahead if a large bunch of glyphs are not present in the font (test in chunks of 4k)
-            // This is only a small optimization to reduce the number of iterations when IM_UNICODE_MAX_CODEPOINT
-            // is large // (if ImWchar==ImWchar32 we will do at least about 272 queries here)
-            if (!(base & 8191) && font->IsGlyphRangeUnused(base, base + 8191))
+            ImDrawList* draw_list = GetWindowDrawList();
+            const ImU32 glyph_col = GetColorU32(ImGuiCol_Text);
+            const float cell_size = font->FontSize * 1;
+            const float cell_spacing = GetStyle().ItemSpacing.y;
+            for (unsigned int base = 0; base <= IM_UNICODE_CODEPOINT_MAX; base += 256)
             {
-                base += 8192 - 256;
-                continue;
-            }
-
-            int count = 0;
-            for (unsigned int n = 0; n < 256; n++)
-                if (font->FindGlyphNoFallback((ImWchar)(base + n)))
-                    count++;
-            if (count <= 0)
-                continue;
-            if (!TreeNode((void*)(intptr_t)base, "U+%04X..U+%04X (%d %s)", base, base + 255, count, count > 1 ? "glyphs" : "glyph"))
-                continue;
-
-            // Draw a 16x16 grid of glyphs
-            ImVec2 base_pos = GetCursorScreenPos();
-            for (unsigned int n = 0; n < 256; n++)
-            {
-                // We use ImFont::RenderChar as a shortcut because we don't have UTF-8 conversion functions
-                // available here and thus cannot easily generate a zero-terminated UTF-8 encoded string.
-                ImVec2 cell_p1(base_pos.x + (n % 16) * (cell_size + cell_spacing), base_pos.y + (n / 16) * (cell_size + cell_spacing));
-                ImVec2 cell_p2(cell_p1.x + cell_size, cell_p1.y + cell_size);
-                const ImFontGlyph* glyph = font->FindGlyphNoFallback((ImWchar)(base + n));
-                draw_list->AddRect(cell_p1, cell_p2, glyph ? IM_COL32(255, 255, 255, 100) : IM_COL32(255, 255, 255, 50));
-                if (!glyph)
-                    continue;
-                font->RenderChar(draw_list, cell_size, cell_p1, glyph_col, (ImWchar)(base + n));
-                if (IsMouseHoveringRect(cell_p1, cell_p2) && BeginTooltip())
+                // Skip ahead if a large bunch of glyphs are not present in the font (test in chunks of 4k)
+                // This is only a small optimization to reduce the number of iterations when IM_UNICODE_MAX_CODEPOINT
+                // is large // (if ImWchar==ImWchar32 we will do at least about 272 queries here)
+                if (!(base & 8191) && font->IsGlyphRangeUnused(base, base + 8191))
                 {
-                    DebugNodeFontGlyph(font, glyph);
-                    EndTooltip();
+                    base += 8192 - 256;
+                    continue;
                 }
+
+                int count = 0;
+                for (unsigned int n = 0; n < 256; n++)
+                    if (font->FindGlyphNoFallback((ImWchar)(base + n)))
+                        count++;
+                if (count <= 0)
+                    continue;
+                if (!TreeNode((void*)(intptr_t)base, "U+%04X..U+%04X (%d %s)", base, base + 255, count, count > 1 ? "glyphs" : "glyph"))
+                    continue;
+
+                // Draw a 16x16 grid of glyphs
+                ImVec2 base_pos = GetCursorScreenPos();
+                for (unsigned int n = 0; n < 256; n++)
+                {
+                    // We use ImFont::RenderChar as a shortcut because we don't have UTF-8 conversion functions
+                    // available here and thus cannot easily generate a zero-terminated UTF-8 encoded string.
+                    ImVec2 cell_p1(base_pos.x + (n % 16) * (cell_size + cell_spacing), base_pos.y + (n / 16) * (cell_size + cell_spacing));
+                    ImVec2 cell_p2(cell_p1.x + cell_size, cell_p1.y + cell_size);
+                    const ImFontGlyph* glyph = font->FindGlyphNoFallback((ImWchar)(base + n));
+                    draw_list->AddRect(cell_p1, cell_p2, glyph ? IM_COL32(255, 255, 255, 100) : IM_COL32(255, 255, 255, 50));
+                    if (!glyph)
+                        continue;
+                    font->RenderChar(draw_list, cell_size, cell_p1, glyph_col, (ImWchar)(base + n));
+                    if (IsMouseHoveringRect(cell_p1, cell_p2) && BeginTooltip())
+                    {
+                        DebugNodeFontGlyph(font, glyph);
+                        EndTooltip();
+                    }
+                }
+                Dummy(ImVec2((cell_size + cell_spacing) * 16, (cell_size + cell_spacing) * 16));
+                TreePop();
             }
-            Dummy(ImVec2((cell_size + cell_spacing) * 16, (cell_size + cell_spacing) * 16));
             TreePop();
         }
-        TreePop();
     }
     TreePop();
+    Unindent();
 }
 
 void ImGui::DebugNodeFontGlyph(ImFont*, const ImFontGlyph* glyph)
