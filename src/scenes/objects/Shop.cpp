@@ -2,7 +2,7 @@
 #include "../../GameEngine.h"
 
 void Shop::init() {
-	auto& level = GameEngine::instance().getCurrentScene()->getLevelManager().getLevel();
+	auto& level = GameEngine::instance().getCurrentScene().getLevelManager().getLevel();
 
 	_active = true;
 }
@@ -21,7 +21,7 @@ void Shop::render() {
 void Shop::click(Vector2 position) {
 	if (position.x > GetScreenWidth()/2 - 150 && position.x < GetScreenWidth()/2 - 50 && position.y > GetScreenHeight()/2 - 50 && position.y < GetScreenHeight()/2 + 50) {
 		_active = false;
-		GameEngine::instance().getCurrentScene()->resume();
+		GameEngine::instance().getCurrentScene().resume();
 	}
 
 }

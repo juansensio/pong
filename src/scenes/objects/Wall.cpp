@@ -1,5 +1,9 @@
 #include "Wall.h"
 
+Wall::Wall(Entity* entity) : Object(entity) {}
+
+Wall::~Wall() {}
+
 void Wall::init(const float& y)
 {
 	float screenWidth = GetScreenWidth();
@@ -9,5 +13,4 @@ void Wall::init(const float& y)
 	_entity->add<CRectShape>(screenWidth, width, WHITE);
 	_entity->add<CBoundingBox>(Vector2{screenWidth, width});
 }
-
 

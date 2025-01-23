@@ -23,8 +23,8 @@ class ScenePlay : public Scene
 	std::vector<float>       fpsBuffer;
 
 public:
-	ScenePlay(GameEngine& game_engine) : Scene(game_engine) {}
-	~ScenePlay() = default;
+	ScenePlay(GameEngine& game_engine);
+	~ScenePlay();
 
 	void init() override;
 	void update(const float& elapsed) override;
