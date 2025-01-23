@@ -1,8 +1,13 @@
 #include <fstream>
 #include <sstream>
 
-// #include "Shop.h"
+#include "Shop.h"
 #include "../../GameEngine.h"
+
+
+Shop::Shop() {}
+
+Shop::~Shop() {}
 
 void Shop::init(const LevelManager& levelManager) {
 
@@ -56,14 +61,14 @@ void Shop::init(const LevelManager& levelManager) {
 
 	// esto peta porque por lo visto si el shop.init se llama en la misma función que el levelManager.init,
 	// el levelManager no está inicializado... 
-	// auto levelManager = GameEngine::instance().getCurrentScene()->getLevelManager();
+	// auto levelManager = GameEngine::instance().getCurrentScene().getLevelManager();
 	for (auto& level : levelManager.getLevels()) {
 		createItems(level.getNumItems(), level.getProbasTiers());
 	}
 }
 
 void Shop::render() {
-	int level = GameEngine::instance().getCurrentScene()->getLevelManager().getCurrentLevel();
+	int level = GameEngine::instance().getCurrentScene().getLevelManager().getCurrentLevel();
 	for (auto& item : _items[level]) {
 		item.render();
 	}
@@ -72,13 +77,13 @@ void Shop::render() {
 }
 
 void Shop::click(Vector2 position) {
-	int level = GameEngine::instance().getCurrentScene()->getLevelManager().getCurrentLevel();
+	int level = GameEngine::instance().getCurrentScene().getLevelManager().getCurrentLevel();
 	for (int i = 0; i < _items[level].size(); i++) {
 		auto item = _items[level][i];
 		if (position.x > item.getPosition().x && position.x < item.getPosition().x + item.getWidth() && position.y > item.getPosition().y && position.y < item.getPosition().y + item.getHeight()) {
 			item.apply();
 			_active = false;
-			GameEngine::instance().getCurrentScene()->resume();
+			GameEngine::instance().getCurrentScene().resume();
 		}
 	}
 }

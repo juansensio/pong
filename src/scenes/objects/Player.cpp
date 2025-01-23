@@ -1,6 +1,10 @@
 #include "Player.h"
 #include "../../GameEngine.h"
 
+Player::Player(Entity* entity) : Paddle(entity) {}
+
+Player::~Player() {}
+
 void Player::init()
 {
 	Paddle::init(10, (float)GetScreenHeight() / 2);
@@ -11,8 +15,8 @@ void Player::init()
 void Player::update(const float& dt)
 {
 	if (_entity->has<CAI>()) {
-		auto ball = GameEngine::instance().getCurrentScene()->getBall();
-		Vector2 velocity = Vector2Subtract(ball.getEntity()->get<CTransform>().position, _entity->get<CTransform>().position);
+		auto ball = GameEngine::instance().getCurrentScene().getBall();
+		Vector2 velocity = Vector2Subtract(ball.getEntity().get<CTransform>().position, _entity->get<CTransform>().position);
 		velocity.x = 0;
 		velocity = Vector2Normalize(velocity);
 		velocity = Vector2Scale(velocity, _speed);

@@ -4,8 +4,8 @@
 
 class Enemy : public Paddle {
 public:
-	Enemy() {}
-	Enemy(const std::shared_ptr<Entity>& entity) : Paddle(entity) {}
+	Enemy(Entity* entity);
+	~Enemy();
 
 	void init();
 	void update(const float& dt);

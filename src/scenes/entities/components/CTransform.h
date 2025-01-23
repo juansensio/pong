@@ -9,7 +9,8 @@ public:
     Vector2 prevPosition = { 0., 0. };
     Vector2 velocity = { 0., 0. };
 
-    CTransform() = default;
+    CTransform() {}
     CTransform(const Vector2& position, const Vector2& velocity) 
-        : position(position), velocity(velocity) {}
+        : position(position)
+        , velocity(velocity) {}
 }; 

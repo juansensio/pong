@@ -1,5 +1,9 @@
 #include "Goal.h"
 
+Goal::Goal(Entity* entity) : Object(entity) {}
+
+Goal::~Goal() {}
+
 void Goal::init()
 {
 	float screenHeight = GetScreenHeight();
