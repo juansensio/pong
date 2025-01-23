@@ -1,5 +1,13 @@
 #include "GameEngine.h"
 
+GameEngine::GameEngine() {}
+
+GameEngine::~GameEngine() {
+	for (auto& scene : _scenes) {
+		delete scene.second;
+	}
+}
+
 void GameEngine::init() {
 	// en desarrollo, queremos usar el directorio assets en el directorio actual
 	if (DirectoryExists("assets")) {
@@ -27,8 +35,8 @@ void GameEngine::init() {
 			}
 		#endif
 	}
-	SetConfigFlags(FLAG_MSAA_4X_HINT | FLAG_VSYNC_HINT | FLAG_WINDOW_RESIZABLE);
-	InitWindow(1270, 720, "pong");
+	SetConfigFlags(FLAG_MSAA_4X_HINT | FLAG_VSYNC_HINT);
+	InitWindow(1270, 720, "PONG");
 	InitAudioDevice();
     SetTargetFPS(60);    
 	#ifdef _DEBUG
@@ -40,10 +48,10 @@ void GameEngine::init() {
 void GameEngine::run() {
 	init();
 	_assets.load();
-	#if _DEBUG
-		changeScene<ScenePlay>("play");
+	#ifdef _DEBUG
+		changeScene<ScenePlay>(SceneType::PLAY);
 	#else
-		changeScene<SceneLoading>("loading");
+		changeScene<SceneLoading>(SceneType::LOADING);
 	#endif
 	int frame = 0;
 	float lastTime = GetTime();
@@ -52,28 +60,28 @@ void GameEngine::run() {
     while (!WindowShouldClose() && !_should_quit)   
     {
 		inputs();
-		BeginDrawing();
-        ClearBackground(BLACK);
-		#ifdef _DEBUG
-			rlImGuiBegin();
-		#endif
 		float currentTime = GetTime();
 		float deltaTime = currentTime - lastTime;
 		lastTime = currentTime;
 		lag += deltaTime;
 		int updates = 0;
 		while (lag >= SECONDS_PER_UPDATE) {
-			getCurrentScene()->update(SECONDS_PER_UPDATE);
+			getCurrentScene().update(SECONDS_PER_UPDATE);
 			lag -= SECONDS_PER_UPDATE;
 			updates++;
 		}
 		if (updates == 0 && lag > 0.0f) {
-			getCurrentScene()->update(lag);
+			getCurrentScene().update(lag);
 			lag = 0.0f;
 			updates++;
 		}
 		frame += 1;
-		getCurrentScene()->render();
+		BeginDrawing();
+        ClearBackground(BLACK);
+		#ifdef _DEBUG
+			rlImGuiBegin();
+		#endif
+		getCurrentScene().render();
 		#ifdef _DEBUG
 			rlImGuiEnd();
 		#endif
@@ -86,16 +94,16 @@ void GameEngine::run() {
 }
 
 void GameEngine::inputs() {
-	for (auto& [key, action]: getCurrentScene()->getActionMap())
+	for (auto& [key, action]: getCurrentScene().getActionMap())
 	{
 		if (IsMouseButtonPressed(key) || IsMouseButtonReleased(key)) {
 			ActionType type = IsMouseButtonPressed(key) ? ActionType::START : ActionType::END;
-			Action action(getCurrentScene()->getActionMap().at(key), type);
-			getCurrentScene()->doAction(action);
+			Action action(getCurrentScene().getActionMap().at(key), type);
+			getCurrentScene().doAction(action);
 		} else if (IsKeyPressed(key) || IsKeyReleased(key)) {
 			ActionType type = IsKeyPressed(key) ? ActionType::START : ActionType::END;
-			Action action(getCurrentScene()->getActionMap().at(key), type);
-			getCurrentScene()->doAction(action);
+			Action action(getCurrentScene().getActionMap().at(key), type);
+			getCurrentScene().doAction(action);
 		}
 	}
 }

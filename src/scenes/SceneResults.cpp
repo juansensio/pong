@@ -50,10 +50,10 @@ void SceneResults::render()
 
 	// Draw buttons centered in the group box
 	if (GuiButton(Rectangle{buttonX, buttonY, buttonWidth, buttonHeight}, "PLAY")) {
-		_game_engine.changeScene<ScenePlay>("play");
+		_game_engine.changeScene<ScenePlay>(SceneType::PLAY);
 	}
 	if (GuiButton(Rectangle{buttonX, buttonY + (buttonHeight + buttonSpacing), buttonWidth, buttonHeight}, "MENU")) {
-		_game_engine.changeScene<SceneMenu>("menu");
+		_game_engine.changeScene<SceneMenu>(SceneType::MENU);
 	}
 	
 }

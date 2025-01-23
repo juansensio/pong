@@ -8,12 +8,12 @@ protected:
 	float 	_width;
 	float 	_height;
 public:
-	Paddle() {}
-	Paddle(const std::shared_ptr<Entity>& entity) : Object(entity), _speed(0.0f) {}
+	Paddle(Entity* entity);
+	~Paddle();
 
 	void init(const float& x, const float& y);
 	void update(const float& dt);
-	void collision(const std::shared_ptr<Entity>& entity);
+	void collision(const Entity& entity);
 
 	void setSpeed(float speed) { _speed = speed; }
 	float getSpeed() const { return _speed; }

@@ -26,7 +26,7 @@ void SceneCredits::render()
 	                       100,
 	                       50},
 	              "MENU")) {
-		_game_engine.changeScene<SceneMenu>("menu");
+		_game_engine.changeScene<SceneMenu>(SceneType::MENU);
 	}
 
 	

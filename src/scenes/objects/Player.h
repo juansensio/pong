@@ -17,8 +17,8 @@ class Player : public Paddle {
 	Upgrades 	_upgrades;
 	Downgrades 	_downgrades;
 public:
-	Player() {}
-	Player(const std::shared_ptr<Entity>& entity) : Paddle(entity) {}
+	Player(Entity* entity);
+	~Player();
 
 	void init();
 	void update(const float& dt);
