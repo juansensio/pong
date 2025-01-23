@@ -8,7 +8,8 @@ public:
     Color color; 
     float radius;
 
-    CCircleShape() = default;
+    CCircleShape() {}
     CCircleShape(float radius, const Color& color) 
-        : color(color), radius(radius) {}
+        : color(color)
+        , radius(radius) {}
 }; 

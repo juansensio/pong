@@ -95,7 +95,7 @@ void ShopItem::render() {
 }
 
 void ShopItem::apply() {
-	auto& player = GameEngine::instance().getCurrentScene()->getPlayer();
+	auto& player = GameEngine::instance().getCurrentScene().getPlayer();
 	switch (_upgrade) {
 		case HEALTH:
 			player.increaseHealth((int)_upgradeValue);
@@ -107,7 +107,7 @@ void ShopItem::apply() {
 			player.increaseSize(_upgradeValue);
 			break;
 	}
-	auto& enemies = GameEngine::instance().getCurrentScene()->getEnemy();
+	auto& enemies = GameEngine::instance().getCurrentScene().getEnemy();
 	switch (_downgrade) {
 		case ENEMY_SPEED:
 			enemies.increaseSpeed(_downgradeValue);
