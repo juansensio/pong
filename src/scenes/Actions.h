@@ -22,8 +22,8 @@ class Action
 	ActionType _type;
 
 public:
-	Action() = default;
 	Action(const ActionName& name, const ActionType& type) : _name(name), _type(type) {}
+	~Action() {};
 
 	const ActionName& getName() const { return _name; }
 	const ActionType& getType() const { return _type; }

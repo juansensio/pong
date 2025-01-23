@@ -6,8 +6,8 @@ class Player : public Paddle {
 	int 	_score = 0;
 	int 	_lives = 3;
 public:
-	Player() {}
-	Player(const std::shared_ptr<Entity>& entity) : Paddle(entity) {}
+	Player(Entity* entity);
+	~Player();
 
 	void init();
 	void update(const float& dt);

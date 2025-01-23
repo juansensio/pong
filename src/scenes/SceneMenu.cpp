@@ -1,6 +1,11 @@
 #include "SceneMenu.h"
 #include "../GameEngine.h"
 
+SceneMenu::SceneMenu(GameEngine& game_engine)
+	: Scene(game_engine) {}
+
+SceneMenu::~SceneMenu() {}
+
 void SceneMenu::init()
 {
 }
@@ -39,11 +44,11 @@ void SceneMenu::render()
 
 	// Draw buttons centered in the group box
 	if (GuiButton(Rectangle{buttonX, buttonY, buttonWidth, buttonHeight}, "PLAY")) {
-		_game_engine.changeScene<ScenePlay>("play");
+		_game_engine.changeScene<ScenePlay>(SceneType::PLAY);
 	}
 	
 	if (GuiButton(Rectangle{buttonX, buttonY + buttonHeight + buttonSpacing, buttonWidth, buttonHeight}, "CREDITS")) {
-		_game_engine.changeScene<SceneCredits>("credits");
+		_game_engine.changeScene<SceneCredits>(SceneType::CREDITS);
 	}
 
 	if (GuiButton(Rectangle{buttonX, buttonY + 2*(buttonHeight + buttonSpacing), buttonWidth, buttonHeight}, "QUIT")) {

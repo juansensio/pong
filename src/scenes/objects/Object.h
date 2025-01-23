@@ -5,18 +5,18 @@
 
 class Object {
 protected:
-	std::shared_ptr<Entity> _entity;
+	Entity* _entity;
 
 public:
-	Object() = default;
-	Object(const std::shared_ptr<Entity>& entity) : _entity(entity) {}
-	virtual ~Object() = default;
+	Object(Entity* entity);
+	~Object();
 
-	void init() {}
-	void update(const float& dt) {}
-	void destroy() { _entity->destroy(); }
+	void init();
+	void update(const float& dt);
+	void destroy();
 
-	const std::shared_ptr<Entity> getEntity() const { return _entity; }
+	const Entity& getEntity() const { return *_entity; }
+	Entity& getEntity() { return *_entity; }
 	
 	const Vector2 position() const;
 	const Vector2 velocity() const;

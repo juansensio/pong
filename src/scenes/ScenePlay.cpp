@@ -1,11 +1,22 @@
 #include "ScenePlay.h"
 #include "../GameEngine.h"
 
+ScenePlay::ScenePlay(GameEngine& game_engine) 
+	: Scene(game_engine)
+	, _player(nullptr)
+	, _enemy(nullptr)
+	, _ball(nullptr)
+	, _walls({nullptr, nullptr})
+	, _goal(nullptr)
+	, _death(nullptr) {}
+
+ScenePlay::~ScenePlay() {}
+
 void ScenePlay::init()
 {
 	_entity_manager = EntityManager();
 
-	//game objects
+	// game objects
 	_player = Player(_entity_manager.addEntity(EntityType::PLAYER));  
 	_ball = Ball(_entity_manager.addEntity(EntityType::BALL));  
 	_enemy = Enemy(_entity_manager.addEntity(EntityType::ENEMY));  
@@ -44,7 +55,7 @@ void ScenePlay::update(const float& dt)
 {
 	_player.update(dt);
 	if (_player.getLives() <= 0) {
-		_game_engine.changeScene<SceneMenu>("menu");
+		_game_engine.changeScene<SceneMenu>(SceneType::MENU);
 	}
 	_ball.update(dt);
 	_enemy.update(dt);
@@ -53,15 +64,13 @@ void ScenePlay::update(const float& dt)
 	_entity_manager.update(); 
 }
 
-void ScenePlay::movement(const float& dt) {
+void ScenePlay::movement(const float& dt)
+{
 	for (auto& entity : _entity_manager.getEntities()) {
 		if (entity->has<CTransform>()) {
-			auto velocity = Vector2Scale(entity->get<CTransform>().velocity, dt);
-			entity->get<CTransform>().prevPosition = entity->get<CTransform>().position;
-			entity->get<CTransform>().position = Vector2Add(
-				entity->get<CTransform>().position,
-				velocity
-			);
+			auto& transform = entity->get<CTransform>();
+			transform.prevPosition = transform.position;
+			transform.position += transform.velocity * dt;
 		}
 	}
 }
@@ -69,8 +78,8 @@ void ScenePlay::movement(const float& dt) {
 void ScenePlay::collisions() {
 	// ball vs walls / paddles
 	for (auto& entity : _entity_manager.getEntities()) {
-		if (entity->has<CBoundingBox>() && entity->id() != _ball.getEntity()->id()) {
-			auto overlaps = Physics::BoundingBoxOverlap(_ball.getEntity(), entity);
+		if (entity->has<CBoundingBox>() && entity->id() != _ball.getEntity().id()) {
+			auto overlaps = Physics::BoundingBoxOverlap(_ball.getEntity(), *entity);
 			if (overlaps.overlap.x > 0 && overlaps.overlap.y > 0) {
 				_ball.collision(entity, overlaps.prevOverlap);
 			}
@@ -79,14 +88,14 @@ void ScenePlay::collisions() {
 	// paddles vs walls
 	for (auto& entity : _entity_manager.getEntities(EntityType::WALL)) {
 		// player
-		auto overlaps = Physics::BoundingBoxOverlap(_player.getEntity(), entity);
+		auto overlaps = Physics::BoundingBoxOverlap(_player.getEntity(), *entity);
 		if (overlaps.overlap.x > 0 && overlaps.overlap.y > 0) {
-			_player.collision(entity);
+			_player.collision(*entity);
 		}
 		// enemy
-		overlaps = Physics::BoundingBoxOverlap(_enemy.getEntity(), entity);
+		overlaps = Physics::BoundingBoxOverlap(_enemy.getEntity(), *entity);
 		if (overlaps.overlap.x > 0 && overlaps.overlap.y > 0) {
-			_enemy.collision(entity);
+			_enemy.collision(*entity);
 		}
 	}
 
@@ -123,7 +132,7 @@ void ScenePlay::render()
 
 	GuiSetStyle(DEFAULT, TEXT_SIZE, 10);  // Set consistent text size
 	if (GuiButton(Rectangle{(float)GetScreenWidth() - 60, 30, 50, 25}, "MENU")) {
-		_game_engine.changeScene<SceneMenu>("menu");
+		_game_engine.changeScene<SceneMenu>(SceneType::MENU);
 	}
 
 	renderGUI();
@@ -139,7 +148,7 @@ void ScenePlay::doAction(const Action& action)
 			_player.moveDown();
 		}
 		else if (action.getName() == ActionName::ENTER) {
-			_game_engine.changeScene<SceneMenu>("menu");
+			_game_engine.changeScene<SceneMenu>(SceneType::MENU);
 		}
 	}
 	else if (action.getType() == ActionType::END) {
@@ -165,34 +174,34 @@ void ScenePlay::renderGUI()
 		char fps_text[10];
 		ImGui::Begin("Pong");
 		if (ImGui::BeginTabBar("TabBar"))
-    {
-		if (ImGui::BeginTabItem("Game"))
-        {
-			float enemySpeed = _enemy.getSpeed();
-			if (ImGui::SliderFloat("Enemy speed", &enemySpeed, 10.f, 200.f)) _enemy.setSpeed(enemySpeed);
-			float playerSpeed = _player.getSpeed();
-			if (ImGui::SliderFloat("Player speed", &playerSpeed, 10.f, 200.f)) _player.setSpeed(playerSpeed);
-			float ballSpeed = _ball.getSpeed();
-			if (ImGui::SliderFloat("Ball speed", &ballSpeed, 10.f, 200.f)) _ball.setSpeed(ballSpeed);
-			if (ImGui::Button("Toggle AI")) _player.getEntity()->get<CAI>().exists = !_player.getEntity()->get<CAI>().exists;
-			if (ImGui::Button("Restart Game")) restart();
-			if (ImGui::Button("Next Level")) loadNextLevel();
-			ImGui::EndTabItem();
-		}
-        if (ImGui::BeginTabItem("Debug"))
-        {
-			fpsBuffer.erase(fpsBuffer.begin());
-			float current_fps = GetFPS();
-			fpsBuffer.push_back(current_fps);
-			sprintf(fps_text, "%.1f", current_fps);
-			ImGui::PlotLines("FPS", &fpsBuffer[0], fpsBuffer.size(), 0, fps_text, 0.0f, 120.0f, ImVec2(0, 80));
-			ImGui::Text("Entities (%d):", _entity_manager.getEntities().size());
-			for (auto e : _entity_manager.getEntities())
+		{
+			if (ImGui::BeginTabItem("Game"))
 			{
-				ImGui::Text("Entity %d: (%.1f, %.1f)", e->id(), e->get<CTransform>().position.x, e->get<CTransform>().position.y);
+				float enemySpeed = _enemy.getSpeed();
+				if (ImGui::SliderFloat("Enemy speed", &enemySpeed, 10.f, 200.f)) _enemy.setSpeed(enemySpeed);
+				float playerSpeed = _player.getSpeed();
+				if (ImGui::SliderFloat("Player speed", &playerSpeed, 10.f, 200.f)) _player.setSpeed(playerSpeed);
+				float ballSpeed = _ball.getSpeed();
+				if (ImGui::SliderFloat("Ball speed", &ballSpeed, 10.f, 200.f)) _ball.setSpeed(ballSpeed);
+				if (ImGui::Button("Toggle AI")) _player.getEntity().get<CAI>().exists = !_player.getEntity().get<CAI>().exists;
+				if (ImGui::Button("Restart Game")) restart();
+				if (ImGui::Button("Next Level")) loadNextLevel();
+				ImGui::EndTabItem();
 			}
-			ImGui::EndTabItem();
-		}
+			if (ImGui::BeginTabItem("Debug"))
+			{
+				fpsBuffer.erase(fpsBuffer.begin());
+				float current_fps = GetFPS();
+				fpsBuffer.push_back(current_fps);
+				sprintf(fps_text, "%.1f", current_fps);
+				ImGui::PlotLines("FPS", &fpsBuffer[0], fpsBuffer.size(), 0, fps_text, 0.0f, 120.0f, ImVec2(0, 80));
+				ImGui::Text("Entities (%d):", _entity_manager.getEntities().size());
+				for (auto e : _entity_manager.getEntities())
+				{
+					ImGui::Text("Entity %d: (%.1f, %.1f)", e->id(), e->get<CTransform>().position.x, e->get<CTransform>().position.y);
+				}
+				ImGui::EndTabItem();
+			}
 			ImGui::EndTabBar();
 		}
 		ImGui::End();
@@ -200,7 +209,7 @@ void ScenePlay::renderGUI()
 }
 
 void ScenePlay::loadNextLevel() {
-	if (_currentLevel >= _numLevels - 1) _game_engine.changeScene<SceneMenu>("menu");
+	if (_currentLevel >= _numLevels - 1) _game_engine.changeScene<SceneMenu>(SceneType::MENU);
 	_currentLevel++;
 	_levels[_currentLevel].init();
 }
