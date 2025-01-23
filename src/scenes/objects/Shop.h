@@ -1,9 +1,13 @@
+#pragma once
+
+#include "raylib.h"
+
 class Shop {
 
 	bool _active = false;
 public:
-	Shop() {}
-	~Shop() = default;
+	Shop();
+	~Shop();
 
 	void init();
 	void render();
