@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include "EntityManager.h"
 
 EntityManager::EntityManager() : _num_entities(0) {}
