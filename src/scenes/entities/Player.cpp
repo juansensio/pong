@@ -7,6 +7,7 @@ Player::~Player() {}
 void Player::init()
 {
 	Paddle::init(10, (float)GetScreenHeight() / 2);
+	_entity->add<CInput>();
 }
 
 void Player::update(const float& dt)

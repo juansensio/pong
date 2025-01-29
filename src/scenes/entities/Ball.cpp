@@ -1,3 +1,5 @@
+#include <random>
+
 #include "Ball.h"
 
 Ball::Ball(Entity* entity, Player& player) : Object(entity), _player(&player) {}
