@@ -1,3 +1,5 @@
+#include <random>
+
 #include "Ball.h"
 
 Ball::Ball(Entity* entity, Player& player) : Object(entity), _player(&player) {}
@@ -20,8 +22,6 @@ void Ball::init()
 	_entity->add<CBoundingBox>(Vector2{radius*2, radius*2});
 }
 
-#include <iostream>
-
 void Ball::collision(const Entity* entity, const Vector2& prevOverlap) {
 	if (entity->tag() == EntityType::WALL) {
 		Vector2 velocity = _entity->get<CTransform>().velocity;
@@ -38,12 +38,11 @@ void Ball::collision(const Entity* entity, const Vector2& prevOverlap) {
 			_entity->get<CTransform>().velocity = velocity;
 		}
 	} else if (entity->tag() == EntityType::GOAL) {
-		_player->score(); // pq esta al reves ??
+		_player->score(); 
 		init();
 	} else if (entity->tag() == EntityType::DEATH) {
 		_player->die();
 		init();
-		
 	}
 }
 	
