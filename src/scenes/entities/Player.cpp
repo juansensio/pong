@@ -7,6 +7,7 @@ Player::~Player() {}
 void Player::init()
 {
 	Paddle::init();
+	_entity->add<CInput>();
 }
 
 void Player::update(const float& dt)
