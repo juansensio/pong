@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Scene.h"
-#include "objects/Objects.h"
+#include "entities/Objects.h"
 
 class ScenePlay : public Scene
 {
