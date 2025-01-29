@@ -43,8 +43,6 @@ void Player::stopDown()
 	_entity->get<CInput>().down = false;
 }
 
-#include <iostream>
-
 void Player::score() {
 	_score++;
 }
