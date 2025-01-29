@@ -1,3 +1,5 @@
+#include <stdexcept>
+
 #include "Object.h"
 
 Object::Object(Entity* entity) : _entity(entity) {}
