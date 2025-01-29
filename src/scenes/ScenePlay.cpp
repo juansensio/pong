@@ -18,6 +18,7 @@ void ScenePlay::init()
 
 	registerAction(KEY_UP, ActionName::UP);
 	registerAction(KEY_DOWN, ActionName::DOWN);
+	registerAction(KEY_ENTER, ActionName::ENTER);
 }
 
 void ScenePlay::update(const float& dt)
