@@ -72,8 +72,6 @@ void GameEngine::run() {
 		}
 		frame += 1;
 		getCurrentScene().render();
-		// DrawText(TextFormat("Frame %d", frame), 10, 10, 20, WHITE);
-        DrawFPS(10, 10);
         EndDrawing();
     }
     CloseWindow();                  

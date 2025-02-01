@@ -1,3 +1,5 @@
+#include <random>
+
 #include "Ball.h"
 #include "../../GameEngine.h"
 
@@ -11,7 +13,7 @@ void Ball::init()
 	float y = (float)GetScreenHeight()/2;
 	float radius = 5;
 
-	_speed = 300;
+	_speed = 400;
 
 	_entity->add<CTransform>(
 		Vector2{x, y}, 
@@ -20,8 +22,6 @@ void Ball::init()
 	_entity->add<CCircleShape>(radius, WHITE);
 	_entity->add<CBoundingBox>(Vector2{radius*2, radius*2});
 }
-
-#include <iostream>
 
 void Ball::collision(const Entity* entity, const Vector2& prevOverlap) {
 	if (entity->tag() == EntityType::WALL) {
@@ -41,14 +41,13 @@ void Ball::collision(const Entity* entity, const Vector2& prevOverlap) {
 			_entity->get<CTransform>().velocity = velocity;
 		}
 	} else if (entity->tag() == EntityType::GOAL) {
-		_player->score(); // pq esta al reves ??
+		_player->score(); 
 		PlaySound(GameEngine::instance().getAssets().getSound("Goal"));
 		init();
 	} else if (entity->tag() == EntityType::DEATH) {
 		_player->die();
 		PlaySound(GameEngine::instance().getAssets().getSound("Dead"));
 		init();
-		
 	}
 }
 	

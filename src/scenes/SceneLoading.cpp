@@ -9,8 +9,8 @@ SceneLoading::~SceneLoading() {}
 void SceneLoading::init()
 {
 	_elapsedTime = 0.0f;
-	// TODO: asset manager en GameEngine
-	_texture = LoadTexture("assets/janus.png");
+	//_texture = LoadTexture("assets/janus.png");
+	_texture = _game_engine.getAssets().getTexture("Logo");
 	PlaySound(_game_engine.getAssets().getSound("Logo"));
 }
 

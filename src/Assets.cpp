@@ -1,7 +1,8 @@
-#include "Assets.h"
 #include <fstream>
 #include <sstream>
 #include <iostream>
+
+#include "Assets.h"
 
 void Assets::load()
 {

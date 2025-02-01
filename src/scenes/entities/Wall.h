@@ -9,8 +9,4 @@ public:
 	
 	void init(const float& y);
 	void update(const float& dt);
-
-	void moveUp();
-	void moveDown();
-	void stop();
 };
