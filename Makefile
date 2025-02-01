@@ -1,3 +1,4 @@
+DEBUG ?= 1
 ifeq ($(OS),Windows_NT)
     EXT = .exe
     INCLUDES = -I./include
@@ -16,21 +17,35 @@ endif
 
 CC = g++
 CFLAGS = -Wall -std=c++20 -O3 -Wno-unused-result
+ifeq ($(DEBUG),1)
+    CFLAGS += -D_DEBUG -g
+endif
 
 TARGET = main$(EXT)
-ifeq ($(OS),Windows_NT)
-    SRCS = $(subst /,\,$(shell dir /s /b src\*.cpp))
-else
-    SRCS = $(shell find src -name "*.cpp")
-endif
-OBJS = $(SRCS:.cpp=.o)
+
+# Recursive wildcard function to find all .cpp files in src/ directory and subdirectories
+rwildcard = $(foreach d,$(wildcard $1*), \
+	$(if $(wildcard $d/),$(call rwildcard,$d/,$2),) \
+	$(filter $(subst *,%,$2),$d))
+
+# Define the source files by finding all .cpp files recursively
+SRCS := $(call rwildcard,src/,*.cpp)
+
+# Generate object files from source files
+OBJS := $(SRCS:.cpp=.o)
+
+# Create output directories
+OBJDIRS := $(sort $(dir $(OBJS)))
+$(shell mkdir -p $(OBJDIRS))
 
 all: $(TARGET)
 
 $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) $(INCLUDES) $(OBJS) -o $(TARGET) $(LDFLAGS) $(LIBS)
 
+# Pattern rule for object files
 %.o: %.cpp
+	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 .PHONY: clean
@@ -39,4 +54,3 @@ clean:
 
 run: $(TARGET)
 	./$(TARGET)
-
