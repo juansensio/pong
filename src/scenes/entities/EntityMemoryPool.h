@@ -28,8 +28,10 @@ using EntityComponentVectorTuple = std::tuple<
 	std::vector<CCircleShape>,
 	std::vector<CRectShape>,
 	std::vector<CInput>,
-	std::vector<CBoundingBox>
+	std::vector<CBoundingBox>,
+	std::vector<CAI>
 >;
+
 
 const size_t MAX_ENTITIES = 100; // si se supera, se debe redimensionar el pool
 
@@ -50,7 +52,9 @@ class EntityMemoryPool {
 		std::get<std::vector<CRectShape>>(_pool).resize(num_entities);
 		std::get<std::vector<CInput>>(_pool).resize(num_entities);
 		std::get<std::vector<CBoundingBox>>(_pool).resize(num_entities);
+		std::get<std::vector<CAI>>(_pool).resize(num_entities);
 	}
+
 
 	friend class EntityManager;
 	friend class Entity;
@@ -59,6 +63,20 @@ private:
 	static EntityMemoryPool& Instance() { // singleton pattern
 		static EntityMemoryPool pool(MAX_ENTITIES);
 		return pool;
+	}
+
+	size_t addEntity(const EntityType& tag) {
+		size_t id = getNextId(); // if no space left, we should resize the pool
+		_active[id] = true;
+		_tags[id] = tag;
+		// reset components (si no se pueden quedar con los valores de la última entidad y dar problemas)
+		std::get<std::vector<CTransform>>(_pool)[id].exists = false;
+		std::get<std::vector<CCircleShape>>(_pool)[id].exists = false;
+		std::get<std::vector<CRectShape>>(_pool)[id].exists = false;
+		std::get<std::vector<CInput>>(_pool)[id].exists = false;
+		std::get<std::vector<CBoundingBox>>(_pool)[id].exists = false;
+		std::get<std::vector<CAI>>(_pool)[id].exists = false;
+		return id;
 	}
 
 	template<typename T>
@@ -86,14 +104,6 @@ private:
 
 	bool isActive(size_t entityId) const {
 		return _active[entityId];
-	}
-
-	size_t addEntity(const EntityType& tag) {
-		size_t id = getNextId(); // if no space left, we should resize the pool
-		_active[id] = true;
-		_tags[id] = tag;
-		// TODO: reset components (si no se pueden quedar con los valores de la última entidad y dar problemas)
-		return id;
 	}
 
 	size_t getNextId() { // encuentra el primer hueco libre en el pool

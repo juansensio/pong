@@ -8,6 +8,7 @@ void Player::init()
 {
 	Paddle::init(10, (float)GetScreenHeight() / 2);
 	_entity->add<CInput>();
+	_entity->add<CAI>(_speed);
 }
 
 void Player::update(const float& dt)

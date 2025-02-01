@@ -56,12 +56,23 @@ void ScenePlay::update(const float& dt)
 void ScenePlay::movement(const float& dt)
 {
 	for (auto& entity : _entity_manager.getEntities()) {
+		if (entity->has<CAI>()) {
+			Vector2 velocity = Vector2Subtract(
+				_ball.getEntity().get<CTransform>().position, 
+				entity->get<CTransform>().position
+			);
+			velocity.x = 0;
+			velocity = Vector2Normalize(velocity);
+			velocity = Vector2Scale(velocity, entity->get<CAI>().speed);
+			entity->get<CTransform>().velocity = velocity;
+		}
 		if (entity->has<CTransform>()) {
 			auto& transform = entity->get<CTransform>();
 			transform.prevPosition = transform.position;
 			transform.position += transform.velocity * dt;
 		}
 	}
+
 }
 
 void ScenePlay::collisions() {
