@@ -26,6 +26,5 @@ main
 
 *.app
 *.dmg
-*.plist
 dist
 *.zip
