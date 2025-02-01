@@ -1,6 +1,7 @@
 #pragma once
 
 #include <map>
+#include <string>
 #include "raylib.h"
 
 class Assets
@@ -18,6 +19,4 @@ public:
 
 	const Sound& getSound(const std::string& name) const { return _sounds.at(name); }
 	const Texture2D& getTexture(const std::string& name) const { return _textures.at(name); }
-	void addSound(const std::string& name, const Sound& sound) { _sounds[name] = sound; }
-	void addTexture(const std::string& name, const Texture2D& texture) { _textures[name] = texture; }
 };

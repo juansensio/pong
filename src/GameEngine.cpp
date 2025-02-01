@@ -11,14 +11,15 @@ GameEngine::~GameEngine() {
 void GameEngine::init() {
 	SetConfigFlags(FLAG_MSAA_4X_HINT | FLAG_VSYNC_HINT);
 	InitWindow(1270, 720, "PONG");
+	InitAudioDevice();
     SetTargetFPS(60);               
 }
 
 void GameEngine::run() {
 	init();
 	_assets.load();
-	// changeScene<SceneLoading>(SceneType::LOADING);
-	changeScene<ScenePlay>(SceneType::PLAY);
+	changeScene<SceneLoading>(SceneType::LOADING);
+	// changeScene<ScenePlay>(SceneType::PLAY);
 	int frame = 0;
 	float lastTime = GetTime();
 	float lag = 0.0f;
